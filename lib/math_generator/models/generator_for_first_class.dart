@@ -56,6 +56,7 @@ class GeneratorForFirstClass {
     }
     // ignore: unnecessary_null_comparison
     createAnswersNotCorrect(question);
+    question.saveListAnswers();
     return question;
   }
 
@@ -67,10 +68,10 @@ class GeneratorForFirstClass {
       now = new DateTime.now();
       rnd = new Random(now.microsecondsSinceEpoch);
       int result = getRandomPlusMinusOperator() == "+"
-          ? add(int.parse(question.answer), rnd.nextInt(5) + 0)
-          : sub(int.parse(question.answer), rnd.nextInt(5) + 0);
+          ? add(int.parse(question.answer!), rnd.nextInt(5) + 0)
+          : sub(int.parse(question.answer!), rnd.nextInt(5) + 0);
 
-      if (result != int.parse(question.answer) && result >= 0 && result <= 20) {
+      if (result != int.parse(question.answer!) && result >= 0 && result <= 20) {
         question.answerNotCorrect1 = result.toString();
         answerNotCorrect1Created = true;
       }
@@ -80,10 +81,10 @@ class GeneratorForFirstClass {
       now = new DateTime.now();
       rnd = new Random(now.microsecondsSinceEpoch);
       int result = getRandomPlusMinusOperator() == "+"
-          ? add(int.parse(question.answer), rnd.nextInt(5) + 1)
-          : sub(int.parse(question.answer), rnd.nextInt(5) + 1);
+          ? add(int.parse(question.answer!), rnd.nextInt(5) + 1)
+          : sub(int.parse(question.answer!), rnd.nextInt(5) + 1);
 
-      if (result != int.parse(question.answer) &&
+      if (result != int.parse(question.answer!) &&
           result >= 0 &&
           result <= 20 &&
           result.toString() != question.answerNotCorrect1) {
@@ -96,10 +97,10 @@ class GeneratorForFirstClass {
       now = new DateTime.now();
       rnd = new Random(now.microsecondsSinceEpoch);
       int result = getRandomPlusMinusOperator() == "+"
-          ? add(int.parse(question.answer), rnd.nextInt(5) + 1)
-          : sub(int.parse(question.answer), rnd.nextInt(5) + 1);
+          ? add(int.parse(question.answer!), rnd.nextInt(5) + 1)
+          : sub(int.parse(question.answer!), rnd.nextInt(5) + 1);
 
-      if (result != int.parse(question.answer) &&
+      if (result != int.parse(question.answer!) &&
           result >= 0 &&
           result <= 20 &&
           result.toString() != question.answerNotCorrect1 &&
@@ -139,13 +140,8 @@ class GeneratorForFirstClass {
     List<Question> listExercises = [];
     while (listExercises.length != amountExercises) {
       var question = getInsertNumbersExercise();
-      try {
-        listExercises
-            .firstWhere((element) => element.exercise == question.exercise);
-      } catch (Exeption) {
-        listExercises.add(question);
-      }
-    }
+      listExercises.add(question);
+     }
     return listExercises;
   }
 
@@ -201,7 +197,7 @@ class GeneratorForFirstClass {
     listComparison.remove(question.answer);
     question.answerNotCorrect1 = listComparison[0];
     question.answerNotCorrect2 = listComparison[1];
-
+    question.saveListAnswers();
     return question;
   }
 }

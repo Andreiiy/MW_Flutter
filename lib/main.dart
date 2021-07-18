@@ -115,7 +115,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // }else{
     Future.delayed(const Duration(milliseconds: 2000), () {
       //Navigator.popAndPushNamed(context, loginRoute);
-      Navigator.popAndPushNamed(context, startPage);
+      Navigator.popAndPushNamed(context, testPage);
     });
 
     //}

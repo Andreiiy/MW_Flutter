@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:math_world/pages/start_page.dart';
+import 'package:math_world/pages/test_page.dart';
 import 'package:math_world/router/route_constants.dart';
 
 class MathAppRouter {
@@ -8,6 +8,8 @@ class MathAppRouter {
     switch (settings.name) {
       case startPage:
         return MaterialPageRoute(builder: (_) => StartPage());
+      case testPage:
+        return MaterialPageRoute(builder: (_) => TestPage());
       // case registrationRoute:
       //   return MaterialPageRoute(
       //       builder: (_) => RegistrationPage(settings.arguments != null
