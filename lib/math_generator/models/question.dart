@@ -1,6 +1,7 @@
 import 'dart:math';
 
 class Question {
+   int? type;
    String? exercise;
    String? answer;
    String? answerNotCorrect1;

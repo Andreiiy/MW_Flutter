@@ -8,6 +8,7 @@ class GeneratorForFirstClass {
 
   Test generateTest(int amountExercises) {
     Test test = new Test();
+    test.numberClass = 1;
     test.exercises = createExercises(amountExercises);
     test.insertNumbersExercises = createInsertNumbersExercises(amountExercises);
     test.comparisonNumbersExercises =
@@ -19,6 +20,7 @@ class GeneratorForFirstClass {
     List<Question> listExercises = [];
     while (listExercises.length != numberExercises) {
       var question = getExercise(null);
+      question.type = 1;
       try {
         listExercises
             .firstWhere((element) => element.exercise == question.exercise);
@@ -140,6 +142,7 @@ class GeneratorForFirstClass {
     List<Question> listExercises = [];
     while (listExercises.length != amountExercises) {
       var question = getInsertNumbersExercise();
+      question.type = 2;
       listExercises.add(question);
      }
     return listExercises;
@@ -167,6 +170,7 @@ class GeneratorForFirstClass {
     List<Question> listExercises = [];
     while (listExercises.length != amountExercises) {
       var question = getComparisonNumbersExercise();
+      question.type = 3;
       try {
         listExercises
             .firstWhere((element) => element.exercise == question.exercise);
