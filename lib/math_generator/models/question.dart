@@ -7,11 +7,12 @@ class Question {
    String? answerNotCorrect1;
    String? answerNotCorrect2;
    String? answerNotCorrect3;
+   bool? answerFromUserIsCorrect;
 
    List<String>? listAnswers;
 
-  late List<String?> insertNumbersExercise;
-  late List<String?> answersInsertNumbersExercises;
+   List<int?>? insertNumbersExercise;
+   List<String?>? answersInsertNumbersExercises;
 
   void saveListAnswers() {
     List<String> answers = [];

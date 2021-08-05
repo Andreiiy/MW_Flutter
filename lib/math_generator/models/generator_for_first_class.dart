@@ -161,7 +161,7 @@ class GeneratorForFirstClass {
       listAnswers.add(insertNumber.toString());
     }
     question.answersInsertNumbersExercises = listAnswers.toList();
-    question.insertNumbersExercise = list.cast<String?>();
+    question.insertNumbersExercise = list;
 
     return question;
   }

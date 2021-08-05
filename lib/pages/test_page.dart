@@ -22,7 +22,7 @@ class _TestPageState extends State<TestPage>
 
   @override
   void initState() {
-    widget.test = widget.generator.createTest(1, 2);
+    widget.test = widget.generator.createTest(1, 10);
     widget.listQuestions = widget.test.getListQuestions();
     _tabController = TabController(
         initialIndex: 0, length: widget.listQuestions.length, vsync: this);
@@ -129,19 +129,7 @@ class _TestPageState extends State<TestPage>
         SizedBox(height: 10),
         Expanded(flex: 7, child: getQuestionWidget(question)),
         SizedBox(height: 10),
-        // Expanded(
-        //   flex: 7,
-        //   child: Row(children:[Text(getTranslated(context, "shifts")??" ",style: TextStyle(fontSize:28,color: Colors.deepOrange),)]),
-        // ),
-        //
-        // Expanded(
-        //   flex: 7,
-        //   child: Row(children: getColumnNames(schedule.getShifts())),
-        // ),
-        // Expanded(
-        //   flex: 88,
-        //   child: Row(children: getColumnLists(schedule.getShifts())),
-        // ),
+
       ],
     );
   }
@@ -149,6 +137,7 @@ class _TestPageState extends State<TestPage>
   Widget getQuestionWidget(Question question) {
     if (question.exercise != null) {
       var answers = question.listAnswers ?? [];
+
       if (widget.test.numberClass == 1)
         return getQuestionWidgetForFirstClass(question);
       else
@@ -178,7 +167,35 @@ class _TestPageState extends State<TestPage>
               ],
             ));
     }
-    return Container();
+    return Container(
+      child: Scrollbar(
+        child: Column(
+          children: getRows(question),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> getRows(Question question) {
+    int temp = 0;
+    List<Widget> rows = [];
+    for (int i = 0; i < 10; i++) {
+      rows.add(
+        Expanded(
+            child: Container(
+          margin: EdgeInsets.fromLTRB(15, 5, 15, 0),
+          child: Row(
+              children: getQuestionRaw([
+            question.insertNumbersExercise![temp++],
+            question.insertNumbersExercise![temp++],
+            question.insertNumbersExercise![temp++],
+            question.insertNumbersExercise![temp++],
+            question.insertNumbersExercise![temp++]
+          ])),
+        )),
+      );
+    }
+    return rows;
   }
 
   Widget getQuestionWidgetForFirstClass(Question question) {
@@ -221,9 +238,14 @@ class _TestPageState extends State<TestPage>
                           Expanded(
                             child: Container(
                               alignment: Alignment.center,
-                              child: Text(operator,style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                                  color: Colors.black,
-                                  fontSize: 36),),
+                              child: Text(
+                                operator,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle1!
+                                    .copyWith(
+                                        color: Colors.black, fontSize: 36),
+                              ),
                             ),
                           ),
                           Expanded(
@@ -284,30 +306,58 @@ class _TestPageState extends State<TestPage>
           alignment: Alignment.center,
           child: Column(
             children: <Widget>[
-              Text(question.exercise!,style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                  color: Colors.black,
-                  fontSize: 36),),
+              Text(
+                question.exercise!,
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle1!
+                    .copyWith(color: Colors.black, fontSize: 36),
+              ),
               for (int i = 0; i <= answers.length - 1; i++)
-               Expanded(child: ListTile(
-                 title: Text(
-                   answers[i],
-                   style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                       color: i == 5 ? Colors.black38 : Colors.black,
-                   fontSize: 24),
-                 ),
-                 leading: Radio(
-                   value: answers[i],
-                   groupValue: _value,
-                   activeColor: Colors.red,
-                   onChanged: (value) {
-                     setState(() {
-                       _value = value;
-                     });
-                   },
-                 ),
-               ),)
+                Expanded(
+                  child: ListTile(
+                    title: Text(
+                      answers[i],
+                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                          color: i == 5 ? Colors.black38 : Colors.black,
+                          fontSize: 24),
+                    ),
+                    leading: Radio(
+                      value: answers[i],
+                      groupValue: _value,
+                      activeColor: Colors.red,
+                      onChanged: (value) {
+                        setState(() {
+                          _value = value;
+                        });
+                      },
+                    ),
+                  ),
+                )
             ],
           ));
     }
   }
+
+  getQuestionRaw(List<int?> list) {
+    List<Widget> rowNames = [];
+    list.forEach((element) {
+      rowNames.add(Expanded(
+          child: Container(
+              alignment: Alignment.center,
+              child: element == null
+                  ? TextField(
+                      // controller: nameController,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                    )
+                  : Text(element.toString()))));
+    });
+    return rowNames;
+  }
 }
+
+//   }
+// }
