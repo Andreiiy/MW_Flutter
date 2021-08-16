@@ -14,6 +14,10 @@ class Question {
    List<int?>? insertNumbersExercise;
    List<String?>? answersInsertNumbersExercises;
 
+  bool isWordNumberQuestion = false;
+
+  bool isWordsAndNumbersQuestion = false;
+
   void saveListAnswers() {
     List<String> answers = [];
     if(answer != null)answers.add(answer!);
@@ -36,4 +40,12 @@ class Question {
 
     return items;
   }
+
+
 }
+
+const TYPE_EXERCISE = 1;
+const TYPE_INSERT_NUMBERS = 2;
+const TYPE_COMPARISON_NUMBERS = 3;
+const TYPE_WORD_NUMBER = 4;
+const TYPE_WORD_AND_NUMBER = 5;

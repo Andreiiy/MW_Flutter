@@ -34,12 +34,14 @@ class Test{
 
   int? numberClass;
   List<Question>? exercises = [];
+  List<Question>? questionsWordsAndNumbers = [];
+  List<Question>? questionsWordNumbers = [];
   List<Question>? insertNumbersExercises = [];
   List<Question>? comparisonNumbersExercises = [];
 
 
   List<Question> getListQuestions(){
-    return (exercises ?? []) + (insertNumbersExercises ?? []) + (comparisonNumbersExercises ?? []);
+    return (exercises ?? []) + (questionsWordNumbers ?? []) + (questionsWordsAndNumbers ?? []) +  (insertNumbersExercises ?? []) + (comparisonNumbersExercises ?? []);
   }
 }
 
