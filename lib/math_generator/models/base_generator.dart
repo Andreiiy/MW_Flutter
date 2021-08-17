@@ -54,12 +54,12 @@ abstract class BaseGenerator{
       }
     }
 
-    createAnswersNotCorrect(question);
+    createAnswersNotCorrect(question,maxNumberForClass * 2);
     question.saveListAnswers();
     return question;
   }
 
-  createAnswersNotCorrect(Question question) {
+  createAnswersNotCorrect(Question question,int maxNumberForExercise) {
     var now = new DateTime.now();
     Random rnd = new Random(now.microsecondsSinceEpoch);
     bool answerNotCorrect1Created = false;
@@ -70,7 +70,7 @@ abstract class BaseGenerator{
           ? add(int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 0)
           : sub(int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 0);
 
-      if (result != int.parse(question.answer!) && result >= 0 && result <= (maxNumberForClass * 2)) {
+      if (result != int.parse(question.answer!) && result >= 0 && result <= maxNumberForExercise) {
         question.answerNotCorrect1 = result.toString();
         answerNotCorrect1Created = true;
       }
@@ -85,7 +85,7 @@ abstract class BaseGenerator{
 
       if (result != int.parse(question.answer!) &&
           result >= 0 &&
-          result <= maxNumberForClass &&
+          result <= maxNumberForExercise &&
           result.toString() != question.answerNotCorrect1) {
         question.answerNotCorrect2 = result.toString();
         answerNotCorrect2Created = true;
@@ -101,7 +101,7 @@ abstract class BaseGenerator{
 
       if (result != int.parse(question.answer!) &&
           result >= 0 &&
-          result <= maxNumberForClass &&
+          result <= maxNumberForExercise &&
           result.toString() != question.answerNotCorrect1 &&
           result.toString() != question.answerNotCorrect2) {
         question.answerNotCorrect3 = result.toString();

@@ -46,7 +46,7 @@ class GeneratorForSecondClass extends BaseGenerator {
   List<Question>? createQuestionsWordsAndNumbers(int amountExercises) {
     List<Question> listExercises = [];
     while (listExercises.length != amountExercises) {
-      var question = getQuestionWordNumber(100);
+      var question = getQuestionWordsAndNumbers(100);
       question.type = TYPE_WORD_AND_NUMBER;
       try {
         listExercises
@@ -67,23 +67,21 @@ class GeneratorForSecondClass extends BaseGenerator {
 
     int resultUnits = 0;
     int resultTens = 0;
-    int? resultHundreds;
-    int? resultThousand;
+    int? resultHundreds = 0;
+    int? resultThousand = 0;
 
-    resultUnits = rnd.nextInt(9) + 0;
-    resultTens = rnd.nextInt(9) + 0;
+    resultUnits = rnd.nextInt(9) + 1;
+    resultTens = rnd.nextInt(9) + 1;
 
-    if (maxNumber == 1000) resultHundreds = rnd.nextInt(9) + 1;
+    if (maxNumber >= 1000) resultHundreds = rnd.nextInt(9) + 1;
     if (maxNumber == 10000) resultThousand = rnd.nextInt(9) + 0;
     if (maxNumber == 100000) resultThousand = rnd.nextInt(99) + 1;
 
-    question.exercise =
-        "${resultThousand != null ? "" : resultThousand!.toString() + "."}"
-            "${resultHundreds != null ? "" : resultHundreds!.toString() + "."}"
-            "${resultTens.toString() + "."}${resultUnits.toString()}";
+    question.exercise = resultThousand > 0? resultThousand.toString():"" + (resultThousand > 0? resultHundreds.toString():"") + resultTens.toString() + resultUnits.toString();
+
     question.answer = question.exercise;
 
-    createAnswersNotCorrect(question);
+    createAnswersNotCorrect(question,maxNumber*2);
     question.saveListAnswers();
     return question;
   }
@@ -101,7 +99,7 @@ class GeneratorForSecondClass extends BaseGenerator {
     question.exercise = result.toString();
     question.answer = question.exercise;
 
-    createAnswersNotCorrect(question);
+    createAnswersNotCorrect(question,maxNumber);
     question.saveListAnswers();
     return question;
   }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,13 +35,12 @@ class _TestPageState extends State<TestPage>
   }
 
   void _handleTabSelection() {
-    if (_tabController.indexIsChanging) {
-      switch (_tabController.index) {
-        case 0:
-          break;
-        case 1:
-          break;
-      }
+    switch (_tabController.index) {
+      case 0:
+        break;
+      case 1:
+        //_tabController.animateTo(5);
+        break;
     }
   }
 
@@ -112,6 +113,8 @@ class _TestPageState extends State<TestPage>
   }
 
   Widget widgetTestQuestion(Question question) {
+    var now = new DateTime.now();
+    Random rnd = new Random(now.millisecondsSinceEpoch);
     return Column(
       children: [
         Expanded(
@@ -122,7 +125,9 @@ class _TestPageState extends State<TestPage>
             margin: EdgeInsets.fromLTRB(15, 10, 15, 5),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/board.jpg"),
+                image: AssetImage(
+                    "assets/images/il_images/il${rnd.nextInt(9) + 1}.png"),
+                //image: AssetImage("assets/images/il_images/il9.png"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -153,7 +158,7 @@ class _TestPageState extends State<TestPage>
 
           case TYPE_WORD_NUMBER:
             {
-              return getWidgetQuestion(question);
+              return getWidgetWordNumberQuestion(question);
             }
 
           case TYPE_WORD_AND_NUMBER:
@@ -172,20 +177,26 @@ class _TestPageState extends State<TestPage>
         alignment: Alignment.center,
         child: Column(
           children: <Widget>[
-            Text(question.exercise!,style: GoogleFonts.pacifico(
-              //textStyle: Theme.of(context).textTheme.headline4,
-              fontSize: 48,
-             // fontWeight: FontWeight.w700,
-              //fontStyle: FontStyle.italic,
-            )),
+            Text(question.exercise!,
+                style: GoogleFonts.courgette(
+                  //textStyle: Theme.of(context).textTheme.headline4,
+                  fontSize: 30,
+                  color: Colors.white
+                  // fontWeight: FontWeight.w700,
+                  //fontStyle: FontStyle.italic,
+                )),
             for (int i = 0; i <= answers.length - 1; i++)
-              ListTile(
+              Expanded(
+                  child: ListTile(
                 title: Text(
                   answers[i],
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1!
-                      .copyWith(color: i == 5 ? Colors.black38 : Colors.black),
+                  style: GoogleFonts.courgette(
+                    //textStyle: Theme.of(context).textTheme.headline4,
+                      fontSize: 30,
+                      color: Colors.white
+                    // fontWeight: FontWeight.w700,
+                    //fontStyle: FontStyle.italic,
+                  ),
                 ),
                 leading: Radio(
                   value: answers[i],
@@ -197,25 +208,40 @@ class _TestPageState extends State<TestPage>
                     });
                   },
                 ),
-              ),
+              )),
           ],
         ));
   }
+
   Widget getWidgetWordNumberQuestion(Question question) {
     var answers = question.listAnswers ?? [];
+   var wordTranslation = MathGenerator.listStringNumbers[int.parse(question.exercise!)]??"";
     return Container(
         alignment: Alignment.center,
         child: Column(
           children: <Widget>[
-            Text(getStringWordsAndNumbersQuestion(question.exercise),style: TextStyle(fontSize: 28,color: Colors.white),),
+            Text(
+              getTranslated(context, wordTranslation)??"",
+                style: GoogleFonts.courgette(
+                  //textStyle: Theme.of(context).textTheme.headline4,
+                    fontSize: 30,
+                    color: Colors.white
+                  // fontWeight: FontWeight.w700,
+                  //fontStyle: FontStyle.italic,
+                )
+            ),
             for (int i = 0; i <= answers.length - 1; i++)
-              ListTile(
+              Expanded(
+                  child: ListTile(
                 title: Text(
                   answers[i],
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1!
-                      .copyWith(color: i == 5 ? Colors.black38 : Colors.black),
+                    style: GoogleFonts.courgette(
+                      //textStyle: Theme.of(context).textTheme.headline4,
+                        fontSize: 30,
+                        color: Colors.white
+                      // fontWeight: FontWeight.w700,
+                      //fontStyle: FontStyle.italic,
+                    )
                 ),
                 leading: Radio(
                   value: answers[i],
@@ -227,7 +253,7 @@ class _TestPageState extends State<TestPage>
                     });
                   },
                 ),
-              ),
+              )),
           ],
         ));
   }
@@ -239,28 +265,28 @@ class _TestPageState extends State<TestPage>
         child: Column(
           children: <Widget>[
             Container(
-             child: Text(
-                getStringWordsAndNumbersQuestion(question.exercise),style: GoogleFonts.merienda(
-                textStyle: Theme.of(context).textTheme.headline4,
-                fontSize: 30,
-                color: Colors.white
-              // fontWeight: FontWeight.w700,
-              //fontStyle: FontStyle.italic,
-            ), textAlign: TextAlign.center,),),
-
-            for (int i = 0; i <= answers.length - 1; i++)
-              ListTile(
-                title: Text(
-                  answers[i],
-
-    style: GoogleFonts.merienda(
-    textStyle: Theme.of(context).textTheme.headline4,
-    fontSize: 30,
-    color: Colors.white
-    // fontWeight: FontWeight.w700,
-    //fontStyle: FontStyle.italic,
-    )
+              child: Text(
+                getStringWordsAndNumbersQuestion(question.exercise),
+                style: GoogleFonts.courgette(
+                  //textStyle: Theme.of(context).textTheme.headline4,
+                    fontSize: 30,
+                    color: Colors.white
+                  // fontWeight: FontWeight.w700,
+                  //fontStyle: FontStyle.italic,
                 ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            for (int i = 0; i <= answers.length - 1; i++)
+              Expanded(child: ListTile(
+                title: Text(answers[i],
+                    style: GoogleFonts.courgette(
+                      //textStyle: Theme.of(context).textTheme.headline4,
+                        fontSize: 30,
+                        color: Colors.white
+                      // fontWeight: FontWeight.w700,
+                      //fontStyle: FontStyle.italic,
+                    )),
                 leading: Radio(
                   value: answers[i],
                   groupValue: _value,
@@ -271,7 +297,7 @@ class _TestPageState extends State<TestPage>
                     });
                   },
                 ),
-              ),
+              )),
           ],
         ));
   }
@@ -282,12 +308,18 @@ class _TestPageState extends State<TestPage>
       result = " ${(int.parse(exercise!) / 1000)} " +
           (getTranslated(context, "thousand") ?? "");
     }
-    if (exercise!.length  >= 3) {
-      result = result + " ${exercise[(exercise.length - 3)]} " + (getTranslated(context, "hundreds") ?? "");
+    if (exercise!.length >= 3) {
+      result = result +
+          " ${exercise[(exercise.length - 3)]} " +
+          (getTranslated(context, "hundreds") ?? "");
     }
 
-    result = result +" ${exercise[(exercise.length - 2)]} " + (getTranslated(context, "tens") ?? "");
-    result = result +" ${exercise[(exercise.length - 1)]} " +(getTranslated(context, "units") ?? "");
+    result = result +
+        " ${exercise[(exercise.length - 2)]} " +
+        (getTranslated(context, "tens") ?? "");
+    result = result +
+        " ${exercise[(exercise.length - 1)]} " +
+        (getTranslated(context, "units") ?? "");
     return result;
   }
 
@@ -365,11 +397,13 @@ class _TestPageState extends State<TestPage>
                               alignment: Alignment.center,
                               child: Text(
                                 operator,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle1!
-                                    .copyWith(
-                                        color: Colors.black, fontSize: 36),
+                                style: GoogleFonts.courgette(
+                                  //textStyle: Theme.of(context).textTheme.headline4,
+                                    fontSize: 30,
+                                    color: Colors.white
+                                  // fontWeight: FontWeight.w700,
+                                  //fontStyle: FontStyle.italic,
+                                ),
                               ),
                             ),
                           ),
@@ -413,6 +447,7 @@ class _TestPageState extends State<TestPage>
                                 value: answers[i],
                                 groupValue: _value,
                                 activeColor: Colors.red,
+                                hoverColor: Colors.white,
                                 onChanged: (value) {
                                   setState(() {
                                     _value = value;
@@ -436,16 +471,20 @@ class _TestPageState extends State<TestPage>
                 style: Theme.of(context)
                     .textTheme
                     .subtitle1!
-                    .copyWith(color: Colors.black, fontSize: 36),
+                    .copyWith(color: Colors.white, fontSize: 36),
               ),
               for (int i = 0; i <= answers.length - 1; i++)
                 Expanded(
                   child: ListTile(
                     title: Text(
                       answers[i],
-                      style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                          color: i == 5 ? Colors.black38 : Colors.black,
-                          fontSize: 24),
+                      style: GoogleFonts.courgette(
+                        //textStyle: Theme.of(context).textTheme.headline4,
+                          fontSize: 30,
+                          color: Colors.white
+                        // fontWeight: FontWeight.w700,
+                        //fontStyle: FontStyle.italic,
+                      ),
                     ),
                     leading: Radio(
                       value: answers[i],
@@ -473,12 +512,25 @@ class _TestPageState extends State<TestPage>
               child: element == null
                   ? TextField(
                       // controller: nameController,
+                style: GoogleFonts.courgette(
+                  //textStyle: Theme.of(context).textTheme.headline4,
+                    fontSize: 30,
+                    color: Colors.white
+                  // fontWeight: FontWeight.w700,
+                  //fontStyle: FontStyle.italic,
+                ) ,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                       ),
                     )
-                  : Text(element.toString()))));
+                  : Text(element.toString(),style: GoogleFonts.courgette(
+                //textStyle: Theme.of(context).textTheme.headline4,
+                  fontSize: 30,
+                  color: Colors.white
+                // fontWeight: FontWeight.w700,
+                //fontStyle: FontStyle.italic,
+              )))));
     });
     return rowNames;
   }
