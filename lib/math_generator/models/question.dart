@@ -8,6 +8,7 @@ class Question {
    String? answerNotCorrect2;
    String? answerNotCorrect3;
    bool? answerFromUserIsCorrect;
+   bool? isAnswered;
 
    List<String>? listAnswers;
 

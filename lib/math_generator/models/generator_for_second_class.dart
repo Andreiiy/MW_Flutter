@@ -1,7 +1,6 @@
 
 import 'dart:math';
 
-import 'package:math_world/localization/language_constants.dart';
 import 'package:math_world/math_generator/models/question.dart';
 import 'package:math_world/math_generator/models/test.dart';
 
@@ -97,7 +96,7 @@ class GeneratorForSecondClass extends BaseGenerator {
    var  result = rnd.nextInt(100) + 21;
 
     question.exercise = result.toString();
-    question.answer = question.exercise;
+    question.answer = result.toString();
 
     createAnswersNotCorrect(question,maxNumber);
     question.saveListAnswers();

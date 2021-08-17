@@ -12,7 +12,8 @@ import '../math_generator/models/test.dart';
 class TestPage extends StatefulWidget {
   MathGenerator generator = new MathGenerator();
   late Test test;
-  late List<Question> listQuestions;
+  List<Question> listQuestions = [];
+  bool buttonVisibility = false;
 
   @override
   _TestPageState createState() => _TestPageState();
@@ -35,25 +36,28 @@ class _TestPageState extends State<TestPage>
   }
 
   void _handleTabSelection() {
-    switch (_tabController.index) {
-      case 0:
-        break;
-      case 1:
-        //_tabController.animateTo(5);
-        break;
-    }
+    if(_tabController.index == (widget.listQuestions.length - 1))
+      setState(() {
+        widget.buttonVisibility = true;
+      });
+    if(_tabController.index != (widget.listQuestions.length - 1) && widget.buttonVisibility == true)
+      setState(() {
+        widget.buttonVisibility = false;
+      });
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[900],
+      backgroundColor: Colors.green[800],
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.green[900],
-        title: Column(
+        title: Row(
           children: [
-            Text("Test page"),
+            Text("Answered ${widget.listQuestions.where((q) => q.isAnswered == true).toList().length} from ${widget.listQuestions.length}"),
+            //Text("${widget.listQuestions.length}"),
           ],
         ),
         bottom: TabBar(
@@ -75,7 +79,7 @@ class _TestPageState extends State<TestPage>
         child: Column(
           children: [
             Expanded(
-              flex: 93,
+              flex: 90,
               child: TabBarView(
                 controller: _tabController,
                 children: widget.listQuestions
@@ -87,25 +91,25 @@ class _TestPageState extends State<TestPage>
                     .toList(),
               ),
             ),
-            // Visibility(
-            //   child: Expanded(
-            //     flex: 7,
-            //     child: Container(
-            //       margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
-            //       child: ElevatedButton.icon(
-            //         style: TextButton.styleFrom(
-            //           backgroundColor: Theme.of(context).accentColor,
-            //         ),
-            //         onPressed: () {
-            //
-            //         },
-            //         icon: Icon(Icons.add, size: 20),
-            //         label: Text(getTranslated(context, "new_schedule")??" ",style: TextStyle(color: Theme.of(context).buttonColor),),
-            //       ),
-            //     ),
-            //   ),
-            //   visible: WorkerMainPage.isManagerStatus,
-            // ),
+            Visibility(
+              child: Expanded(
+                flex: 10,
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
+                  child: ElevatedButton.icon(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Theme.of(context).accentColor,
+                    ),
+                    onPressed: () {
+
+                    },
+                    icon: Icon(Icons.add, size: 20),
+                    label: Text("Finish test",style: TextStyle(color: Colors.red,fontSize: 30)),
+                  ),
+                ),
+              ),
+              visible: widget.buttonVisibility,
+            ),
           ],
         ),
       ),
@@ -205,6 +209,9 @@ class _TestPageState extends State<TestPage>
                   onChanged: (value) {
                     setState(() {
                       _value = value;
+                      if(question.answer == value)
+                        question.answerFromUserIsCorrect = true;
+                      question.isAnswered = true;
                     });
                   },
                 ),
@@ -250,6 +257,9 @@ class _TestPageState extends State<TestPage>
                   onChanged: (value) {
                     setState(() {
                       _value = value;
+                      if(question.answer == value)
+                        question.answerFromUserIsCorrect = true;
+                      question.isAnswered = true;
                     });
                   },
                 ),
@@ -294,6 +304,9 @@ class _TestPageState extends State<TestPage>
                   onChanged: (value) {
                     setState(() {
                       _value = value;
+                      if(question.answer == value)
+                        question.answerFromUserIsCorrect = true;
+                      question.isAnswered = true;
                     });
                   },
                 ),
@@ -451,6 +464,9 @@ class _TestPageState extends State<TestPage>
                                 onChanged: (value) {
                                   setState(() {
                                     _value = value;
+                                    if(question.answer == value)
+                                      question.answerFromUserIsCorrect = true;
+                                    question.isAnswered = true;
                                   });
                                 },
                               ),
@@ -493,6 +509,9 @@ class _TestPageState extends State<TestPage>
                       onChanged: (value) {
                         setState(() {
                           _value = value;
+                          if(question.answer == value)
+                            question.answerFromUserIsCorrect = true;
+                          question.isAnswered = true;
                         });
                       },
                     ),
@@ -514,7 +533,7 @@ class _TestPageState extends State<TestPage>
                       // controller: nameController,
                 style: GoogleFonts.courgette(
                   //textStyle: Theme.of(context).textTheme.headline4,
-                    fontSize: 30,
+
                     color: Colors.white
                   // fontWeight: FontWeight.w700,
                   //fontStyle: FontStyle.italic,
@@ -526,7 +545,7 @@ class _TestPageState extends State<TestPage>
                     )
                   : Text(element.toString(),style: GoogleFonts.courgette(
                 //textStyle: Theme.of(context).textTheme.headline4,
-                  fontSize: 30,
+
                   color: Colors.white
                 // fontWeight: FontWeight.w700,
                 //fontStyle: FontStyle.italic,
