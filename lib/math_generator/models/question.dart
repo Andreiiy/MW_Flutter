@@ -1,32 +1,61 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
+
 class Question {
-   int? type;
-   String? exercise;
-   String? answer;
-   String? answerNotCorrect1;
-   String? answerNotCorrect2;
-   String? answerNotCorrect3;
-   bool? answerFromUserIsCorrect;
-   bool? isAnswered;
+  String questionImage = "";
 
-   List<String>? listAnswers;
+  int? type;
+  String? exercise;
+  String? answer;
+  String? answerNotCorrect1;
+  String? answerNotCorrect2;
+  String? answerNotCorrect3;
+  String? answerOfUser;
+  bool? answerFromUserIsCorrect;
+  bool? isAnswered;
 
-   List<int?>? insertNumbersExercise;
-   List<String?>? answersInsertNumbersExercises;
+  List<String>? listAnswers;
+
+  List<int?>? insertNumbersExercise;
+  List<String?>? answersInsertNumbersExercises;
+  late List<TextEditingController> insertNumberControllers;
 
   bool isWordNumberQuestion = false;
 
   bool isWordsAndNumbersQuestion = false;
 
+  void initControllers() {
+    insertNumberControllers =
+    [
+      new TextEditingController(),
+      new TextEditingController(),
+      new TextEditingController(),
+      new TextEditingController(),
+      new TextEditingController()
+    ];
+  }
+
+  bool checkInsertNumbersQuestionAnswers() {
+    bool result = true;
+    insertNumberControllers.forEach((element) {
+    try{
+    answersInsertNumbersExercises?.firstWhere((answer) => answer == element.text);
+    } catch(Exeption){
+      result = false;
+    }
+    });
+
+    return result;
+  }
+
   void saveListAnswers() {
     List<String> answers = [];
-    if(answer != null)answers.add(answer!);
-    if(answerNotCorrect1 != null)answers.add(answerNotCorrect1!);
-    if(answerNotCorrect2 != null)answers.add(answerNotCorrect2!);
-    if(answerNotCorrect3 != null)answers.add(answerNotCorrect3!);
+    if (answer != null) answers.add(answer!);
+    if (answerNotCorrect1 != null) answers.add(answerNotCorrect1!);
+    if (answerNotCorrect2 != null) answers.add(answerNotCorrect2!);
+    if (answerNotCorrect3 != null) answers.add(answerNotCorrect3!);
     listAnswers = _mix(answers);
-
   }
 
   List<String> _mix(List<String> items) {

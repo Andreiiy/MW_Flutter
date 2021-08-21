@@ -23,12 +23,15 @@ class _TestPageState extends State<TestPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  var _value;
+
 
   @override
   void initState() {
+    var now = new DateTime.now();
+    Random rnd = new Random(now.millisecondsSinceEpoch);
     widget.test = widget.generator.createTest(2, 2);
     widget.listQuestions = widget.test.getListQuestions();
+    widget.listQuestions.forEach((element) {element.questionImage = "assets/images/il_images/il${rnd.nextInt(9) + 1}.png";});
     _tabController = TabController(
         initialIndex: 0, length: widget.listQuestions.length, vsync: this);
 
@@ -117,8 +120,7 @@ class _TestPageState extends State<TestPage>
   }
 
   Widget widgetTestQuestion(Question question) {
-    var now = new DateTime.now();
-    Random rnd = new Random(now.millisecondsSinceEpoch);
+
     return Column(
       children: [
         Expanded(
@@ -129,9 +131,7 @@ class _TestPageState extends State<TestPage>
             margin: EdgeInsets.fromLTRB(15, 10, 15, 5),
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                    "assets/images/il_images/il${rnd.nextInt(9) + 1}.png"),
-                //image: AssetImage("assets/images/il_images/il9.png"),
+                image: AssetImage(question.questionImage),
                 fit: BoxFit.cover,
               ),
             ),
@@ -204,11 +204,11 @@ class _TestPageState extends State<TestPage>
                 ),
                 leading: Radio(
                   value: answers[i],
-                  groupValue: _value,
+                  groupValue: question.answerOfUser,
                   activeColor: Colors.red,
                   onChanged: (value) {
                     setState(() {
-                      _value = value;
+                      question.answerOfUser = value as String?;
                       if(question.answer == value)
                         question.answerFromUserIsCorrect = true;
                       question.isAnswered = true;
@@ -252,11 +252,11 @@ class _TestPageState extends State<TestPage>
                 ),
                 leading: Radio(
                   value: answers[i],
-                  groupValue: _value,
+                  groupValue: question.answerOfUser,
                   activeColor: Colors.red,
                   onChanged: (value) {
                     setState(() {
-                      _value = value;
+                      question.answerOfUser = value as String?;
                       if(question.answer == value)
                         question.answerFromUserIsCorrect = true;
                       question.isAnswered = true;
@@ -299,11 +299,11 @@ class _TestPageState extends State<TestPage>
                     )),
                 leading: Radio(
                   value: answers[i],
-                  groupValue: _value,
+                  groupValue: question.answerOfUser,
                   activeColor: Colors.red,
                   onChanged: (value) {
                     setState(() {
-                      _value = value;
+                      question.answerOfUser = value as String?;
                       if(question.answer == value)
                         question.answerFromUserIsCorrect = true;
                       question.isAnswered = true;
@@ -348,22 +348,28 @@ class _TestPageState extends State<TestPage>
 
   List<Widget> getRows(Question question) {
     int temp = 0;
+    int indexControllers = 0;
     List<Widget> rows = [];
     for (int i = 0; i < 10; i++) {
+      var listToRow = [
+        question.insertNumbersExercise![temp++],
+        question.insertNumbersExercise![temp++],
+        question.insertNumbersExercise![temp++],
+        question.insertNumbersExercise![temp++],
+        question.insertNumbersExercise![temp++]
+      ];
+
       rows.add(
         Expanded(
             child: Container(
           margin: EdgeInsets.fromLTRB(15, 5, 15, 0),
-          child: Row(
-              children: getQuestionRaw([
-            question.insertNumbersExercise![temp++],
-            question.insertNumbersExercise![temp++],
-            question.insertNumbersExercise![temp++],
-            question.insertNumbersExercise![temp++],
-            question.insertNumbersExercise![temp++]
-          ])),
+          child: Row(children: getQuestionRaw(listToRow,question,indexControllers)),
         )),
       );
+      listToRow.forEach((element) {
+        if(element == null)
+          indexControllers++;
+      });
     }
     return rows;
   }
@@ -458,12 +464,12 @@ class _TestPageState extends State<TestPage>
                               ),
                               leading: Radio(
                                 value: answers[i],
-                                groupValue: _value,
+                                groupValue: question.answerOfUser,
                                 activeColor: Colors.red,
                                 hoverColor: Colors.white,
                                 onChanged: (value) {
                                   setState(() {
-                                    _value = value;
+                                    question.answerOfUser = value as String?;
                                     if(question.answer == value)
                                       question.answerFromUserIsCorrect = true;
                                     question.isAnswered = true;
@@ -504,11 +510,11 @@ class _TestPageState extends State<TestPage>
                     ),
                     leading: Radio(
                       value: answers[i],
-                      groupValue: _value,
+                      groupValue: question.answerOfUser,
                       activeColor: Colors.red,
                       onChanged: (value) {
                         setState(() {
-                          _value = value;
+                          question.answerOfUser = value as String?;
                           if(question.answer == value)
                             question.answerFromUserIsCorrect = true;
                           question.isAnswered = true;
@@ -522,7 +528,7 @@ class _TestPageState extends State<TestPage>
     }
   }
 
-  List<Widget> getQuestionRaw(List<int?> list) {
+  List<Widget> getQuestionRaw(List<int?> list, Question question, int indexControllers) {
     List<Widget> rowNames = [];
     list.forEach((element) {
       rowNames.add(Expanded(
@@ -530,13 +536,9 @@ class _TestPageState extends State<TestPage>
               alignment: Alignment.center,
               child: element == null
                   ? TextField(
-                      // controller: nameController,
+                controller: question.insertNumberControllers[indexControllers++],
                 style: GoogleFonts.courgette(
-                  //textStyle: Theme.of(context).textTheme.headline4,
-
-                    color: Colors.white
-                  // fontWeight: FontWeight.w700,
-                  //fontStyle: FontStyle.italic,
+                color: Colors.white
                 ) ,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
