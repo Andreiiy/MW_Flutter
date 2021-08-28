@@ -14,6 +14,7 @@ class TestPage extends StatefulWidget {
   late Test test;
   List<Question> listQuestions = [];
   bool buttonVisibility = false;
+  bool isCheckTest = false;
 
   @override
   _TestPageState createState() => _TestPageState();
@@ -23,95 +24,83 @@ class _TestPageState extends State<TestPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-
-
   @override
   void initState() {
     var now = new DateTime.now();
     Random rnd = new Random(now.millisecondsSinceEpoch);
     widget.test = widget.generator.createTest(2, 2);
     widget.listQuestions = widget.test.getListQuestions();
-    widget.listQuestions.forEach((element) {element.questionImage = "assets/images/il_images/il${rnd.nextInt(9) + 1}.png";});
+    widget.listQuestions.forEach((element) {
+      element.questionImage =
+          "assets/images/il_images/il${rnd.nextInt(9) + 1}.png";
+    });
     _tabController = TabController(
-        initialIndex: 0, length: widget.listQuestions.length, vsync: this);
+        initialIndex: 0, length: widget.listQuestions.length + 1, vsync: this);
 
     _tabController.addListener(_handleTabSelection);
   }
 
   void _handleTabSelection() {
-    if(_tabController.index == (widget.listQuestions.length - 1))
+    if (_tabController.index == (widget.listQuestions.length))
       setState(() {
         widget.buttonVisibility = true;
       });
-    if(_tabController.index != (widget.listQuestions.length - 1) && widget.buttonVisibility == true)
+    if (_tabController.index != (widget.listQuestions.length) &&
+        widget.buttonVisibility == true)
       setState(() {
         widget.buttonVisibility = false;
       });
-
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      floatingActionButton: Visibility(
+        child: FloatingActionButton.extended(
+          backgroundColor: Colors.deepOrange,
+          onPressed: () {
+            setState(() {
+              widget.isCheckTest = true;
+            });
+            //Navigator.pushNamed(context, createMessagePage);
+          },
+          label: Text(
+            getTranslated(context, "finish_test") ?? " ",
+            style: TextStyle(color: Colors.white, fontSize: 30),
+          ),
+          icon: Icon(Icons.add, color: Theme.of(context).buttonColor),
+        ),
+        visible: widget.buttonVisibility,
+      ),
       backgroundColor: Colors.green[800],
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.green[900],
         title: Row(
           children: [
-            Text("Answered ${widget.listQuestions.where((q) => q.isAnswered == true).toList().length} from ${widget.listQuestions.length}"),
+            Text(
+                "Answered ${widget.listQuestions.where((q) => q.isAnswered == true).toList().length} from ${widget.listQuestions.length}"),
             //Text("${widget.listQuestions.length}"),
           ],
         ),
         bottom: TabBar(
-          isScrollable: true,
-          controller: _tabController,
-          unselectedLabelColor: Colors.green,
-          labelColor: Colors.red,
-          tabs: widget.listQuestions
-              .asMap()
-              .keys
-              .map((question) => Tab(
-                    text: "Question ${++question}",
-                  ))
-              .toList(),
-        ),
+            isScrollable: true,
+            controller: _tabController,
+            unselectedLabelColor: Colors.green,
+            labelColor: Colors.red,
+            tabs: getTabs()),
       ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(5, 0, 5, 15),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: Column(
           children: [
             Expanded(
               flex: 90,
               child: TabBarView(
                 controller: _tabController,
-                children: widget.listQuestions
-                    .map(
-                      (question) => Center(
-                        child: widgetTestQuestion(question),
-                      ),
-                    )
-                    .toList(),
+                children: getQuestionWidgets()
               ),
-            ),
-            Visibility(
-              child: Expanded(
-                flex: 10,
-                child: Container(
-                  margin: EdgeInsets.fromLTRB(0, 10, 10, 0),
-                  child: ElevatedButton.icon(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).accentColor,
-                    ),
-                    onPressed: () {
-
-                    },
-                    icon: Icon(Icons.add, size: 20),
-                    label: Text("Finish test",style: TextStyle(color: Colors.red,fontSize: 30)),
-                  ),
-                ),
-              ),
-              visible: widget.buttonVisibility,
             ),
           ],
         ),
@@ -120,7 +109,6 @@ class _TestPageState extends State<TestPage>
   }
 
   Widget widgetTestQuestion(Question question) {
-
     return Column(
       children: [
         Expanded(
@@ -183,24 +171,24 @@ class _TestPageState extends State<TestPage>
           children: <Widget>[
             Text(question.exercise!,
                 style: GoogleFonts.courgette(
-                  //textStyle: Theme.of(context).textTheme.headline4,
-                  fontSize: 30,
-                  color: Colors.white
-                  // fontWeight: FontWeight.w700,
-                  //fontStyle: FontStyle.italic,
-                )),
+                    //textStyle: Theme.of(context).textTheme.headline4,
+                    fontSize: 30,
+                    color: Colors.white
+                    // fontWeight: FontWeight.w700,
+                    //fontStyle: FontStyle.italic,
+                    )),
             for (int i = 0; i <= answers.length - 1; i++)
               Expanded(
                   child: ListTile(
                 title: Text(
                   answers[i],
                   style: GoogleFonts.courgette(
-                    //textStyle: Theme.of(context).textTheme.headline4,
+                      //textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 30,
                       color: Colors.white
-                    // fontWeight: FontWeight.w700,
-                    //fontStyle: FontStyle.italic,
-                  ),
+                      // fontWeight: FontWeight.w700,
+                      //fontStyle: FontStyle.italic,
+                      ),
                 ),
                 leading: Radio(
                   value: answers[i],
@@ -209,7 +197,7 @@ class _TestPageState extends State<TestPage>
                   onChanged: (value) {
                     setState(() {
                       question.answerOfUser = value as String?;
-                      if(question.answer == value)
+                      if (question.answer == value)
                         question.answerFromUserIsCorrect = true;
                       question.isAnswered = true;
                     });
@@ -222,34 +210,31 @@ class _TestPageState extends State<TestPage>
 
   Widget getWidgetWordNumberQuestion(Question question) {
     var answers = question.listAnswers ?? [];
-   var wordTranslation = MathGenerator.listStringNumbers[int.parse(question.exercise!)]??"";
+    var wordTranslation =
+        MathGenerator.listStringNumbers[int.parse(question.exercise!)] ?? "";
     return Container(
         alignment: Alignment.center,
         child: Column(
           children: <Widget>[
-            Text(
-              getTranslated(context, wordTranslation)??"",
+            Text(getTranslated(context, wordTranslation) ?? "",
                 style: GoogleFonts.courgette(
-                  //textStyle: Theme.of(context).textTheme.headline4,
+                    //textStyle: Theme.of(context).textTheme.headline4,
                     fontSize: 30,
                     color: Colors.white
-                  // fontWeight: FontWeight.w700,
-                  //fontStyle: FontStyle.italic,
-                )
-            ),
+                    // fontWeight: FontWeight.w700,
+                    //fontStyle: FontStyle.italic,
+                    )),
             for (int i = 0; i <= answers.length - 1; i++)
               Expanded(
                   child: ListTile(
-                title: Text(
-                  answers[i],
+                title: Text(answers[i],
                     style: GoogleFonts.courgette(
-                      //textStyle: Theme.of(context).textTheme.headline4,
+                        //textStyle: Theme.of(context).textTheme.headline4,
                         fontSize: 30,
                         color: Colors.white
-                      // fontWeight: FontWeight.w700,
-                      //fontStyle: FontStyle.italic,
-                    )
-                ),
+                        // fontWeight: FontWeight.w700,
+                        //fontStyle: FontStyle.italic,
+                        )),
                 leading: Radio(
                   value: answers[i],
                   groupValue: question.answerOfUser,
@@ -257,7 +242,7 @@ class _TestPageState extends State<TestPage>
                   onChanged: (value) {
                     setState(() {
                       question.answerOfUser = value as String?;
-                      if(question.answer == value)
+                      if (question.answer == value)
                         question.answerFromUserIsCorrect = true;
                       question.isAnswered = true;
                     });
@@ -278,25 +263,26 @@ class _TestPageState extends State<TestPage>
               child: Text(
                 getStringWordsAndNumbersQuestion(question.exercise),
                 style: GoogleFonts.courgette(
-                  //textStyle: Theme.of(context).textTheme.headline4,
+                    //textStyle: Theme.of(context).textTheme.headline4,
                     fontSize: 30,
                     color: Colors.white
-                  // fontWeight: FontWeight.w700,
-                  //fontStyle: FontStyle.italic,
-                ),
+                    // fontWeight: FontWeight.w700,
+                    //fontStyle: FontStyle.italic,
+                    ),
                 textAlign: TextAlign.center,
               ),
             ),
             for (int i = 0; i <= answers.length - 1; i++)
-              Expanded(child: ListTile(
+              Expanded(
+                  child: ListTile(
                 title: Text(answers[i],
                     style: GoogleFonts.courgette(
-                      //textStyle: Theme.of(context).textTheme.headline4,
+                        //textStyle: Theme.of(context).textTheme.headline4,
                         fontSize: 30,
                         color: Colors.white
-                      // fontWeight: FontWeight.w700,
-                      //fontStyle: FontStyle.italic,
-                    )),
+                        // fontWeight: FontWeight.w700,
+                        //fontStyle: FontStyle.italic,
+                        )),
                 leading: Radio(
                   value: answers[i],
                   groupValue: question.answerOfUser,
@@ -304,7 +290,7 @@ class _TestPageState extends State<TestPage>
                   onChanged: (value) {
                     setState(() {
                       question.answerOfUser = value as String?;
-                      if(question.answer == value)
+                      if (question.answer == value)
                         question.answerFromUserIsCorrect = true;
                       question.isAnswered = true;
                     });
@@ -363,12 +349,12 @@ class _TestPageState extends State<TestPage>
         Expanded(
             child: Container(
           margin: EdgeInsets.fromLTRB(15, 5, 15, 0),
-          child: Row(children: getQuestionRaw(listToRow,question,indexControllers)),
+          child: Row(
+              children: getQuestionRaw(listToRow, question, indexControllers)),
         )),
       );
       listToRow.forEach((element) {
-        if(element == null)
-          indexControllers++;
+        if (element == null) indexControllers++;
       });
     }
     return rows;
@@ -417,12 +403,12 @@ class _TestPageState extends State<TestPage>
                               child: Text(
                                 operator,
                                 style: GoogleFonts.courgette(
-                                  //textStyle: Theme.of(context).textTheme.headline4,
+                                    //textStyle: Theme.of(context).textTheme.headline4,
                                     fontSize: 30,
                                     color: Colors.white
-                                  // fontWeight: FontWeight.w700,
-                                  //fontStyle: FontStyle.italic,
-                                ),
+                                    // fontWeight: FontWeight.w700,
+                                    //fontStyle: FontStyle.italic,
+                                    ),
                               ),
                             ),
                           ),
@@ -470,7 +456,7 @@ class _TestPageState extends State<TestPage>
                                 onChanged: (value) {
                                   setState(() {
                                     question.answerOfUser = value as String?;
-                                    if(question.answer == value)
+                                    if (question.answer == value)
                                       question.answerFromUserIsCorrect = true;
                                     question.isAnswered = true;
                                   });
@@ -501,12 +487,12 @@ class _TestPageState extends State<TestPage>
                     title: Text(
                       answers[i],
                       style: GoogleFonts.courgette(
-                        //textStyle: Theme.of(context).textTheme.headline4,
+                          //textStyle: Theme.of(context).textTheme.headline4,
                           fontSize: 30,
                           color: Colors.white
-                        // fontWeight: FontWeight.w700,
-                        //fontStyle: FontStyle.italic,
-                      ),
+                          // fontWeight: FontWeight.w700,
+                          //fontStyle: FontStyle.italic,
+                          ),
                     ),
                     leading: Radio(
                       value: answers[i],
@@ -515,7 +501,7 @@ class _TestPageState extends State<TestPage>
                       onChanged: (value) {
                         setState(() {
                           question.answerOfUser = value as String?;
-                          if(question.answer == value)
+                          if (question.answer == value)
                             question.answerFromUserIsCorrect = true;
                           question.isAnswered = true;
                         });
@@ -528,7 +514,8 @@ class _TestPageState extends State<TestPage>
     }
   }
 
-  List<Widget> getQuestionRaw(List<int?> list, Question question, int indexControllers) {
+  List<Widget> getQuestionRaw(
+      List<int?> list, Question question, int indexControllers) {
     List<Widget> rowNames = [];
     list.forEach((element) {
       rowNames.add(Expanded(
@@ -536,26 +523,89 @@ class _TestPageState extends State<TestPage>
               alignment: Alignment.center,
               child: element == null
                   ? TextField(
-                controller: question.insertNumberControllers[indexControllers++],
-                style: GoogleFonts.courgette(
-                color: Colors.white
-                ) ,
+                      controller:
+                          question.insertNumberControllers[indexControllers++],
+                      onChanged: (value) {
+                        setState(() {
+                          question.answerFromUserIsCorrect =
+                              question.checkInsertNumbersQuestionAnswers();
+                          question.isAnswered =
+                              question.checkInsertNumbersQuestionIsAnswered();
+                        });
+                      },
+                      style: GoogleFonts.courgette(color: Colors.white),
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                       ),
                     )
-                  : Text(element.toString(),style: GoogleFonts.courgette(
-                //textStyle: Theme.of(context).textTheme.headline4,
+                  : Text(element.toString(),
+                      style: GoogleFonts.courgette(
+                          //textStyle: Theme.of(context).textTheme.headline4,
 
-                  color: Colors.white
-                // fontWeight: FontWeight.w700,
-                //fontStyle: FontStyle.italic,
-              )))));
+                          color: Colors.white
+                          // fontWeight: FontWeight.w700,
+                          //fontStyle: FontStyle.italic,
+                          )))));
     });
     return rowNames;
   }
-}
 
-//   }
-// }
+  List<Tab> getTabs() {
+    var listTabs = widget.listQuestions
+        .asMap()
+        .keys
+        .map((question) => Tab(
+              text: "Question ${++question}",
+            ))
+        .toList();
+
+      listTabs.add(Tab(
+        text: "Finish test",
+      ));
+      return listTabs;
+  }
+
+  getQuestionWidgets() {
+    var listWidgets =  widget.listQuestions
+        .map(
+          (question) => Center(
+        child: widgetTestQuestion(question),
+      )
+
+    ).toList();
+    listWidgets.add(getFinishTestWidget());
+
+    return listWidgets;
+  }
+
+  Center getFinishTestWidget() {
+    return Center(child: Expanded(
+        flex: 1,
+        child :Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/finish.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+        child:Column(
+          children: [
+           Center(child: Text("Congratulations"),) ,
+           Center(child: Text("Well done!"),) ,
+           Center(child: Text("Your points:"),) ,
+            Text(getResultPoints()),
+          ],
+        )
+        )
+        )
+    );
+
+  }
+
+  String getResultPoints() {
+   int sizeQuestions = widget.test.getListQuestions().length;
+   int amountQuestionsIsCorrect = widget.test.getListQuestions().map((e) => e.answerFromUserIsCorrect == true).length;
+   return ((100 / sizeQuestions) * amountQuestionsIsCorrect).toString();
+  }
+}

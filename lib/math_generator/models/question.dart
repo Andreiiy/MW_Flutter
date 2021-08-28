@@ -48,6 +48,17 @@ class Question {
 
     return result;
   }
+  bool checkInsertNumbersQuestionIsAnswered() {
+    bool result = true;
+    insertNumberControllers.forEach((element) {
+        if(element.text.toString() == "" ) {
+          result = false;
+        }
+
+    });
+
+    return result;
+  }
 
   void saveListAnswers() {
     List<String> answers = [];

@@ -1,13 +1,11 @@
-
-
 import 'dart:math';
 
 import 'question.dart';
 import 'test.dart';
 
-abstract class BaseGenerator{
+abstract class BaseGenerator {
 
-  abstract  int maxNumberForClass;
+  abstract int maxNumberForClass;
   abstract int maxNumberForInsertQuestion;
   abstract int differenceAnswers;
 
@@ -54,12 +52,12 @@ abstract class BaseGenerator{
       }
     }
 
-    createAnswersNotCorrect(question,maxNumberForClass * 2);
+    createAnswersNotCorrect(question, maxNumberForClass * 2);
     question.saveListAnswers();
     return question;
   }
 
-  createAnswersNotCorrect(Question question,int maxNumberForExercise) {
+  createAnswersNotCorrect(Question question, int maxNumberForExercise) {
     var now = new DateTime.now();
     Random rnd = new Random(now.microsecondsSinceEpoch);
     bool answerNotCorrect1Created = false;
@@ -68,9 +66,11 @@ abstract class BaseGenerator{
       rnd = new Random(now.microsecondsSinceEpoch);
       int result = getRandomPlusMinusOperator() == "+"
           ? add(int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 0)
-          : sub(int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 0);
+          : sub(
+          int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 0);
 
-      if (result != int.parse(question.answer!) && result >= 0 && result <= maxNumberForExercise) {
+      if (result != int.parse(question.answer!) && result >= 0 &&
+          result <= maxNumberForExercise) {
         question.answerNotCorrect1 = result.toString();
         answerNotCorrect1Created = true;
       }
@@ -81,7 +81,8 @@ abstract class BaseGenerator{
       rnd = new Random(now.microsecondsSinceEpoch);
       int result = getRandomPlusMinusOperator() == "+"
           ? add(int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1)
-          : sub(int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1);
+          : sub(
+          int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1);
 
       if (result != int.parse(question.answer!) &&
           result >= 0 &&
@@ -97,7 +98,8 @@ abstract class BaseGenerator{
       rnd = new Random(now.microsecondsSinceEpoch);
       int result = getRandomPlusMinusOperator() == "+"
           ? add(int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1)
-          : sub(int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1);
+          : sub(
+          int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1);
 
       if (result != int.parse(question.answer!) &&
           result >= 0 &&
@@ -150,22 +152,38 @@ abstract class BaseGenerator{
     var now = new DateTime.now();
     Random rnd = new Random(now.microsecondsSinceEpoch);
     question.answersInsertNumbersExercises = [];
-    int tempNumber = 0 ;
-    if(maxNumberForInsertQuestion == 100){
-      tempNumber = (rnd.nextInt(5) + 2) * 10;
+    int tempNumber = 0;
+    if (maxNumberForInsertQuestion == 100) {
+      while (tempNumber > 5 || tempNumber < 2) {
+        tempNumber = rnd.nextInt(5);
+      }
+      tempNumber = tempNumber * 10 + 1;
     }
-    var list = new List<int?>.generate(maxNumberForInsertQuestion, (i) => i + tempNumber + 1);
+    var list = new List<int?>.generate(50, (i) => i + tempNumber);
     Set<String> listAnswers = {};
     while (listAnswers.length != 5) {
-      int insertNumber = rnd.nextInt(50);
-      list[insertNumber] = null;
+      int insertNumber = 0;
+      bool numberNotCorrect = true;
+      while (numberNotCorrect) {
+        insertNumber = rnd.nextInt(maxNumberForInsertQuestion);
+        if (insertNumber <= (tempNumber + 50) && insertNumber >= tempNumber) {
+          var index = list.indexOf(insertNumber);
+          if (index > 0 && index <= 49) {
+            if (list[index] != null)
+              numberNotCorrect = false;
+          }
+        }
+      }
+      var index = list.indexOf(insertNumber);
+      list[index] = null;
       listAnswers.add(insertNumber.toString());
     }
     question.answersInsertNumbersExercises = listAnswers.toList();
     question.insertNumbersExercise = list;
-
+    question.initControllers();
     return question;
   }
+
 
   List<Question>? createComparisonNumbersExercises(int amountExercises) {
     List<Question> listExercises = [];
