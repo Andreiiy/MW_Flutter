@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'class_settings.dart';
 import 'question.dart';
 import 'test.dart';
 
@@ -9,7 +10,7 @@ abstract class BaseGenerator {
   abstract int maxNumberForInsertQuestion;
   abstract int differenceAnswers;
 
-  Test generateTest(int amountExercises);
+  Test generateTest(ClassSettings classSettings);
 
   List<Question> createExercises(int numberExercises) {
     List<Question> listExercises = [];

@@ -1,6 +1,7 @@
 
 import 'dart:math';
 
+import 'package:math_world/math_generator/models/class_settings.dart';
 import 'package:math_world/math_generator/models/question.dart';
 import 'package:math_world/math_generator/models/test.dart';
 
@@ -17,15 +18,41 @@ class GeneratorForSecondClass extends BaseGenerator {
   int differenceAnswers = 20;
 
   @override
-  Test generateTest(int amountExercises) {
+  Test generateTest(ClassSettings classSettings) {
     Test test = new Test();
     test.numberClass = 2;
-    test.exercises = createExercises(amountExercises);
-    test.questionsWordNumbers = createQuestionsWordNumber(amountExercises);
-    test.questionsWordsAndNumbers = createQuestionsWordsAndNumbers(amountExercises);
-    test.insertNumbersExercises = createInsertNumbersExercises(amountExercises);
-    test.comparisonNumbersExercises =
-        createComparisonNumbersExercises(amountExercises);
+    try {
+      if (classSettings.listItemsSettings.first.active)
+        test.exercises = createExercises(
+            classSettings.listItemsSettings.first.amountQuestions);
+    }catch(Exeption){}
+    /////////////////////////////////////////////////////////////////////////////////////////
+    try {
+      var questionWordNumbers = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_WORD_NUMBERS);
+      if(questionWordNumbers.active)
+        test.questionsWordNumbers = createQuestionsWordNumber(questionWordNumbers.amountQuestions);
+    }catch(Exeption){}
+    /////////////////////////////////////////////////////////////////////////////////////////
+    try {
+      var questionWordsAndNumbers = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_WORDS_AND_NUMBERS);
+      if(questionWordsAndNumbers.active)
+        test.questionsWordsAndNumbers = createQuestionsWordsAndNumbers(questionWordsAndNumbers.amountQuestions);
+    }catch(Exeption){}
+    /////////////////////////////////////////////////////////////////////////////////////////
+    try {
+      var questionInsert = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_INSERT_NUMBERS);
+      if(questionInsert.active)
+        test.insertNumbersExercises = createInsertNumbersExercises(questionInsert.amountQuestions);
+    }catch(Exeption){}
+    /////////////////////////////////////////////////////////////////////////////////////////
+    try {
+      var questionComparison = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_COMPARISON_NUMBERS);
+      if(questionComparison.active)
+        test.comparisonNumbersExercises =
+            createComparisonNumbersExercises(questionComparison.amountQuestions);
+    }catch(Exeption){}
+
+
     return test;
   }
   List<Question>? createQuestionsWordNumber(int amountExercises) {

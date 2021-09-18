@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:math_world/localization/language_constants.dart';
+import 'package:math_world/math_generator/models/class_settings.dart';
 
 import '../math_generator/math_generator.dart';
 import '../math_generator/models/question.dart';
@@ -15,6 +16,9 @@ class TestPage extends StatefulWidget {
   List<Question> listQuestions = [];
   bool buttonVisibility = false;
   bool isCheckTest = false;
+  ClassSettings classSettings;
+
+  TestPage({required this.classSettings});
 
   @override
   _TestPageState createState() => _TestPageState();
@@ -28,7 +32,7 @@ class _TestPageState extends State<TestPage>
   void initState() {
     var now = new DateTime.now();
     Random rnd = new Random(now.millisecondsSinceEpoch);
-    widget.test = widget.generator.createTest(2, 2);
+    widget.test = widget.generator.createTest(widget.classSettings);
     widget.listQuestions = widget.test.getListQuestions();
     widget.listQuestions.forEach((element) {
       element.questionImage =
@@ -54,33 +58,22 @@ class _TestPageState extends State<TestPage>
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      floatingActionButton: Visibility(
-        child: FloatingActionButton.extended(
-          backgroundColor: Colors.deepOrange,
-          onPressed: () {
-            setState(() {
-              widget.isCheckTest = true;
-            });
-            //Navigator.pushNamed(context, createMessagePage);
-          },
-          label: Text(
-            getTranslated(context, "finish_test") ?? " ",
-            style: TextStyle(color: Colors.white, fontSize: 30),
-          ),
-          icon: Icon(Icons.add, color: Theme.of(context).buttonColor),
-        ),
-        visible: widget.buttonVisibility,
-      ),
-      backgroundColor: Colors.green[800],
+
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        backgroundColor: Colors.green[900],
+        backgroundColor: Color(0xff256E59),
         title: Row(
           children: [
             Text(
-                "Answered ${widget.listQuestions.where((q) => q.isAnswered == true).toList().length} from ${widget.listQuestions.length}"),
+
+        widget.isCheckTest == true?
+                getTranslated(context, "correct_answer")??""+"s ${widget.listQuestions.where((q) => q.answerFromUserIsCorrect == true).toList().length}"
+                :
+                "Answered ${widget.listQuestions.where((q) => q.isAnswered == true).toList().length} from ${widget.listQuestions.length}",
+              style: GoogleFonts.courgette(
+                  color: Colors.white
+              ),),
             //Text("${widget.listQuestions.length}"),
           ],
         ),
@@ -91,19 +84,25 @@ class _TestPageState extends State<TestPage>
             labelColor: Colors.red,
             tabs: getTabs()),
       ),
-      body: Padding(
+      body:Container(
+    decoration: BoxDecoration(
+    image: DecorationImage(
+    image: AssetImage('assets/images/background2.png'),
+    fit: BoxFit.cover,
+    ),
+    ),
+        child:  Padding(
         padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
         child: Column(
           children: [
             Expanded(
               flex: 90,
               child: TabBarView(
-                controller: _tabController,
-                children: getQuestionWidgets()
-              ),
+                  controller: _tabController, children: getQuestionWidgets()),
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -173,7 +172,10 @@ class _TestPageState extends State<TestPage>
                 style: GoogleFonts.courgette(
                     //textStyle: Theme.of(context).textTheme.headline4,
                     fontSize: 30,
-                    color: Colors.white
+                    color: widget.isCheckTest &&
+                            question.answerFromUserIsCorrect == false
+                        ? Colors.red
+                        : Colors.white
                     // fontWeight: FontWeight.w700,
                     //fontStyle: FontStyle.italic,
                     )),
@@ -181,19 +183,17 @@ class _TestPageState extends State<TestPage>
               Expanded(
                   child: ListTile(
                 title: Text(
-                  answers[i],
+                 widget.isCheckTest == true? answers[i] == question.answer?answers[i]+"    ${getTranslated(context, "correct_answer")??""}":answers[i]:answers[i],
                   style: GoogleFonts.courgette(
-                      //textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 30,
-                      color: Colors.white
-                      // fontWeight: FontWeight.w700,
-                      //fontStyle: FontStyle.italic,
-                      ),
+                      color: getColorForAnswer(question, answers[i])
+                    ),
                 ),
                 leading: Radio(
                   value: answers[i],
                   groupValue: question.answerOfUser,
                   activeColor: Colors.red,
+                  hoverColor: Colors.white,
                   onChanged: (value) {
                     setState(() {
                       question.answerOfUser = value as String?;
@@ -227,14 +227,16 @@ class _TestPageState extends State<TestPage>
             for (int i = 0; i <= answers.length - 1; i++)
               Expanded(
                   child: ListTile(
-                title: Text(answers[i],
-                    style: GoogleFonts.courgette(
-                        //textStyle: Theme.of(context).textTheme.headline4,
-                        fontSize: 30,
-                        color: Colors.white
-                        // fontWeight: FontWeight.w700,
-                        //fontStyle: FontStyle.italic,
-                        )),
+                title: Text(
+                  widget.isCheckTest == true? answers[i] == question.answer?answers[i]+"    ${getTranslated(context, "correct_answer")??""}":answers[i]:answers[i],
+                  style: GoogleFonts.courgette(
+                    //textStyle: Theme.of(context).textTheme.headline4,
+                      fontSize: 30,
+                      color: getColorForAnswer(question, answers[i])
+                    // fontWeight: FontWeight.w700,
+                    //fontStyle: FontStyle.italic,
+                  ),
+                ),
                 leading: Radio(
                   value: answers[i],
                   groupValue: question.answerOfUser,
@@ -275,14 +277,16 @@ class _TestPageState extends State<TestPage>
             for (int i = 0; i <= answers.length - 1; i++)
               Expanded(
                   child: ListTile(
-                title: Text(answers[i],
-                    style: GoogleFonts.courgette(
-                        //textStyle: Theme.of(context).textTheme.headline4,
-                        fontSize: 30,
-                        color: Colors.white
-                        // fontWeight: FontWeight.w700,
-                        //fontStyle: FontStyle.italic,
-                        )),
+                title: Text(
+                  widget.isCheckTest == true? answers[i] == question.answer?answers[i]+"    ${getTranslated(context, "correct_answer")??""}":answers[i]:answers[i],
+                  style: GoogleFonts.courgette(
+                    //textStyle: Theme.of(context).textTheme.headline4,
+                      fontSize: 30,
+                      color: getColorForAnswer(question, answers[i])
+                    // fontWeight: FontWeight.w700,
+                    //fontStyle: FontStyle.italic,
+                  ),
+                ),
                 leading: Radio(
                   value: answers[i],
                   groupValue: question.answerOfUser,
@@ -533,20 +537,14 @@ class _TestPageState extends State<TestPage>
                               question.checkInsertNumbersQuestionIsAnswered();
                         });
                       },
-                      style: GoogleFonts.courgette(color: Colors.white),
+                      style: GoogleFonts.courgette(color: getColorTextForInsertNumberTextField(question,question.insertNumberControllers[(indexControllers -1)].text) ),
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                       ),
                     )
                   : Text(element.toString(),
-                      style: GoogleFonts.courgette(
-                          //textStyle: Theme.of(context).textTheme.headline4,
-
-                          color: Colors.white
-                          // fontWeight: FontWeight.w700,
-                          //fontStyle: FontStyle.italic,
-                          )))));
+                      style: GoogleFonts.courgette(color: Colors.white)))));
     });
     return rowNames;
   }
@@ -556,56 +554,198 @@ class _TestPageState extends State<TestPage>
         .asMap()
         .keys
         .map((question) => Tab(
-              text: "Question ${++question}",
+              text: "${getTranslated(context, "question") ?? ""} ${++question}",
             ))
         .toList();
 
-      listTabs.add(Tab(
-        text: "Finish test",
-      ));
-      return listTabs;
+    listTabs.add(Tab(
+      text: getTranslated(context, "finish_test"),
+    ));
+    return listTabs;
   }
 
   getQuestionWidgets() {
-    var listWidgets =  widget.listQuestions
-        .map(
-          (question) => Center(
-        child: widgetTestQuestion(question),
-      )
-
-    ).toList();
+    var listWidgets = widget.listQuestions
+        .map((question) => Center(
+              child: widgetTestQuestion(question),
+            ))
+        .toList();
     listWidgets.add(getFinishTestWidget());
 
     return listWidgets;
   }
 
   Center getFinishTestWidget() {
-    return Center(child: Expanded(
-        flex: 1,
-        child :Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/finish.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-        child:Column(
-          children: [
-           Center(child: Text("Congratulations"),) ,
-           Center(child: Text("Well done!"),) ,
-           Center(child: Text("Your points:"),) ,
-            Text(getResultPoints()),
-          ],
-        )
-        )
-        )
-    );
-
+    return Center(
+        child: Expanded(
+            flex: 1,
+            child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/finish.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Center(
+                      child: Text(
+                          getTranslated(context, "congratulations") ?? "",
+                          style: GoogleFonts.courgette(
+                              color: Colors.deepOrange, fontSize: 36)),
+                    ),
+                    Text(
+                        widget.isCheckTest == true
+                            ? getTranslated(context, "well_done") ?? ""
+                            : getTranslated(context, "end_of_the_test") ?? "",
+                        style: GoogleFonts.courgette(
+                            color: Colors.orange, fontSize: 20)),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Visibility(
+                      child: Row(
+                        children: [
+                          SizedBox(width: 15),
+                          Text(getTranslated(context, "your_points") ?? "",
+                              style: GoogleFonts.courgette(
+                                  color: Colors.deepOrangeAccent,
+                                  fontSize: 30)),
+                          Expanded(child: Container())
+                        ],
+                      ),
+                      visible: widget.isCheckTest,
+                    ),
+                    Visibility(
+                      child: Text(getResultPoints(),
+                          style: GoogleFonts.courgette(
+                              color: Colors.pink, fontSize: 70)),
+                      visible: widget.isCheckTest,
+                    ),
+                    Expanded(child: Container()),
+                    Column(
+                      children: [
+                        Visibility(
+                          child: FloatingActionButton.extended(
+                            backgroundColor: Colors.deepOrange,
+                            onPressed: () {
+                              setState(() {
+                                widget.isCheckTest = true;
+                              });
+                              //Navigator.pushNamed(context, createMessagePage);
+                            },
+                            label: Text(
+                              getTranslated(context, "exit") ?? " ",
+                              style: GoogleFonts.courgette(
+                                  color: Colors.white, fontSize: 26),
+                            ),
+                          ),
+                          visible: widget.isCheckTest,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Visibility(
+                          child: FloatingActionButton.extended(
+                            backgroundColor: Colors.amber,
+                            onPressed: () {
+                              setState(() {
+                                _tabController.animateTo(0);
+                              });
+                              //Navigator.pushNamed(context, createMessagePage);
+                            },
+                            label: Text(
+                              getTranslated(context, "check_answers") ?? " ",
+                              style: GoogleFonts.courgette(
+                                  color: Colors.white, fontSize: 26),
+                            ),
+                          ),
+                          visible: widget.isCheckTest,
+                        ),
+                        Visibility(
+                          child: Container(
+                            margin: EdgeInsets.all(20),
+                            child: FloatingActionButton.extended(
+                              backgroundColor: Colors.green,
+                              onPressed: () {
+                                setState(() {});
+                                //Navigator.pushNamed(context, createMessagePage);
+                              },
+                              label: Text(
+                                getTranslated(context, "start_new_test") ?? " ",
+                                style: GoogleFonts.courgette(
+                                    color: Colors.white, fontSize: 26),
+                              ),
+                            ),
+                          ),
+                          visible: widget.isCheckTest,
+                        ),
+                        Visibility(
+                          child: FloatingActionButton.extended(
+                            backgroundColor: Colors.deepOrange,
+                            onPressed: () {
+                              setState(() {
+                                widget.isCheckTest = true;
+                              });
+                              //Navigator.pushNamed(context, createMessagePage);
+                            },
+                            label: Text(
+                              getTranslated(context, "finish_test") ?? " ",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 30),
+                            ),
+                          ),
+                          visible: widget.isCheckTest == false,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ],
+                    ),
+                  ],
+                ))));
   }
 
   String getResultPoints() {
-   int sizeQuestions = widget.test.getListQuestions().length;
-   int amountQuestionsIsCorrect = widget.test.getListQuestions().map((e) => e.answerFromUserIsCorrect == true).length;
-   return ((100 / sizeQuestions) * amountQuestionsIsCorrect).toString();
+    int sizeQuestions = widget.test.getListQuestions().length;
+    int amountQuestionsIsCorrect = widget.test
+        .getListQuestions()
+        .where((e) => e.answerFromUserIsCorrect == true)
+        .length;
+    return ((100 / sizeQuestions) * amountQuestionsIsCorrect)
+        .toInt()
+        .toString();
+  }
+
+  getColorForAnswer(Question question, String answer) {
+    if (widget.isCheckTest == true) {
+      if (question.answerFromUserIsCorrect == true)
+        return question.answerOfUser == answer ? Colors.amber : Colors.white;
+      else {
+        if (answer == question.answerOfUser)
+          return Colors.red;
+        else if (answer == question.answer)
+          return Colors.amber;
+        else
+          return Colors.white;
+      }
+    }
+    return Colors.white;
+  }
+
+  getColorTextForInsertNumberTextField(Question question, String answer) {
+    if (widget.isCheckTest == true) {
+      if (question.answerFromUserIsCorrect == true)
+        return  Colors.amber;
+      else {
+        try{
+          question.answersInsertNumbersExercises?.firstWhere((element) => element == answer);
+          return Colors.amber;
+        }catch(Exeption){
+          return Colors.red;
+        }
+      }
+    }
+    return Colors.white;
   }
 }

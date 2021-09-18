@@ -1,6 +1,7 @@
 
 
 
+import 'package:math_world/math_generator/models/class_settings.dart';
 import 'package:math_world/math_generator/models/generator_for_second_class.dart';
 
 import 'models/generator_for_first_class.dart';
@@ -8,20 +9,20 @@ import 'models/test.dart';
 
 class MathGenerator{
 
-   Test createTest(int numberClass, int amountExercises){
+   Test createTest(ClassSettings classSettings){
 
-      switch(numberClass){
+      switch(classSettings.classNumber){
          case 1 : {
             GeneratorForFirstClass generator = new GeneratorForFirstClass();
-            return generator.generateTest(amountExercises);
+            return generator.generateTest(classSettings);
          }
          case 2 : {
             GeneratorForSecondClass generator = new GeneratorForSecondClass();
-            return generator.generateTest(amountExercises);
+            return generator.generateTest(classSettings);
          }
       }
       GeneratorForFirstClass generator = new GeneratorForFirstClass();
-      return generator.generateTest(amountExercises);
+      return generator.generateTest(classSettings);
    }
 
    static var listStringNumbers =  {

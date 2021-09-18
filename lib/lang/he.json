@@ -1,10 +1,39 @@
 {
   "home_page": "דף הבית",
+  "question": "שְׁאֵלָה",
+  "welcome": "ברוך הבא!",
+  "choose_class": "בחר כיתה",
   "units" : "יחידות",
   "tens" : "עשרות",
   "hundreds" : "מאות",
   "thousand" : "אלף",
   "finish_test" : "סיים מבחן",
+
+  "congratulations" : "מזל טוב!",
+  "end_of_the_test" : "הגעת לסוף הבדיקה!",
+  "well_done" : "כל הכבוד!",
+  "your_points" : "הנקודות שלך",
+
+  "check_answers" : "בדוק תשובות",
+  "start_new_test" : "התחל בדיקה חדשה",
+  "exit" : "יְצִיאָה",
+  "correct_answer" : "תשובה נכונה",
+
+  "amount" : "כַּמוּת",
+  "title_test_settings_page" : "אתה יכול להתחיל בדיקה שתיווצר אוטומטית, לשנות את הגדרות הבדיקה או ליצור קובץ pdf",
+  "title_test_settings" : "בחר את סוגי השאלות הנדרשות ואת מספרן ולחץ על הלחצן התחל את הבדיקה",
+  "generate_test_automaticallly" : "צור בדיקה באופן אוטומטי",
+  "сhange_test_settings" : "שנה את הגדרות הבדיקה",
+  "generate_pdf_file" : "צור קובץ PDF",
+  "start_test" : "התחל במבחן",
+  "сlose_test_settings" : "סגור את הגדרות הבדיקה",
+
+
+  "adding_and_subtracting" : "חיבור וחיסור של מספרים שלמים",
+  "decimal_numbers" : "מספרים עשרוניים",
+  "written_number" : "בחר מספר כתוב",
+  "insert_missing_numbers" : "הכנס מספרים חסרים",
+  "comparing_numbers" : "גדול קטן שוה",
 
   "from": "בין",
   "to": "ל-",

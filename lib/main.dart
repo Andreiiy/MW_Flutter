@@ -114,8 +114,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //   getCompany();
     // }else{
     Future.delayed(const Duration(milliseconds: 2000), () {
-      //Navigator.popAndPushNamed(context, loginRoute);
-      Navigator.popAndPushNamed(context, testPage);
+      Navigator.popAndPushNamed(context, startPage);
     });
 
     //}
@@ -136,7 +135,7 @@ class _SplashScreenState extends State<SplashScreen> {
         height: double.infinity,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/splash2.jpg'),
+            image: AssetImage('assets/images/splash.png'),
             fit: BoxFit.cover,
           ),
         ),
