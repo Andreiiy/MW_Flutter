@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:math_world/localization/language_constants.dart';
+import 'package:math_world/math_generator/math_generator.dart';
 import 'package:math_world/math_generator/models/class_settings.dart';
+import 'package:math_world/pdf_api/pdf_api.dart';
 import 'package:math_world/router/route_constants.dart';
 
 class TestSettingsPage extends StatefulWidget {
@@ -133,10 +135,28 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
                             /////////////////////////////////////////////////////////////////////////////////////////////////////
                             FloatingActionButton.extended(
                               backgroundColor: Colors.blue,
-                              onPressed: () {
-                                setState(() {});
-                                //Navigator.pushNamed(context, createMessagePage);
-                              },
+                              onPressed:() async {
+                                try{
+                                  if(widget.classSettings.listItemsSettings.firstWhere((element) => element.active == true) != null) {
+                                    MathGenerator generator = new MathGenerator();
+                                    var test = generator.createTest(
+                                        widget.classSettings);
+                                    final pdfFile = await  PdfApi.createPDFTest(test,
+                                    [
+                                      getTranslated(context, "adding_and_subtracting")??"",
+                                      getTranslated(context, "insert_missing_numbers")??"",
+                                      getTranslated(context, "comparing_numbers")??"",
+                                      getTranslated(context, "written_number")??"",
+                                      getTranslated(context, "decimal_numbers")??"",
+                                    ]
+                                    );
+                                    PdfApi.openFile(pdfFile);
+                                  }
+                                }catch(Exeption){
+                                  int i = 0;
+                                }
+
+                               },
                               label: Text(
                                 getTranslated(context, "generate_pdf_file") ??
                                     " ",
