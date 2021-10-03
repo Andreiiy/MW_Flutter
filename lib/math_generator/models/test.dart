@@ -1,7 +1,11 @@
 
 
 
+import 'package:flutter/cupertino.dart';
+import 'package:math_world/localization/language_constants.dart';
 import 'package:math_world/math_generator/models/question.dart';
+
+import '../math_generator.dart';
 
 class Test{
 
@@ -34,17 +38,42 @@ class Test{
 
   int? numberClass;
   List<Question>? exercises = [];
-  List<Question>? questionsWordsAndNumbers = [];
-  List<Question>? questionsWordNumbers = [];
-  List<Question>? insertNumbersExercises = [];
-  List<Question>? comparisonNumbersExercises = [];
+  List<Question>? listQuestionsWordsAndNumbers = [];
+  List<Question>? listQuestionsWordNumbers = [];
+  List<Question>? listInsertNumbersExercises = [];
+  List<Question>? listComparisonNumbersExercises = [];
 
 
   List<Question> getListQuestions(){
-    return (exercises ?? []) + (questionsWordNumbers ?? []) + (questionsWordsAndNumbers ?? []) +  (insertNumbersExercises ?? []) + (comparisonNumbersExercises ?? []);
+    return (exercises ?? []) + (listQuestionsWordNumbers ?? []) + (listQuestionsWordsAndNumbers ?? []) +  (listInsertNumbersExercises ?? []) + (listComparisonNumbersExercises ?? []);
   }
+
+
+ void transformTestForPdf(BuildContext context){
+  listQuestionsWordsAndNumbers?.forEach((question) {
+     String result = "";
+     if ((question.exercise?.length ?? 0 > 3) == true) {
+       result = " ${(int.parse(question.exercise!) / 1000)} " +
+           (getTranslated(context, "thousand") ?? "");
+     }
+     if (question.exercise!.length >= 3) {
+       result = result +
+           " ${question.exercise![(question.exercise!.length - 3)]} " +
+           (getTranslated(context, "hundreds") ?? "");
+     }
+
+     result = result +
+         " ${question.exercise![(question.exercise!.length - 2)]} " +
+         (getTranslated(context, "tens") ?? "");
+     result = result +
+         " ${question.exercise![(question.exercise!.length - 1)]} " +
+         (getTranslated(context, "units") ?? "");
+     question.exercise = result;
+   });
+
+  listQuestionsWordNumbers?.forEach((question) {
+    question.exercise = getTranslated(context, MathGenerator.listStringNumbers[int.parse(question.exercise!)] ?? "");
+  });
+ }
+
 }
-
-
-
-

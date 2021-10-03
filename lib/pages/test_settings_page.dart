@@ -141,7 +141,9 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
                                     MathGenerator generator = new MathGenerator();
                                     var test = generator.createTest(
                                         widget.classSettings);
-                                    final pdfFile = await  PdfApi.createPDFTest(test,
+                                    test.transformTestForPdf(context);
+                                    final pdfFile = await  PdfApi.createPDFTest(
+                                        test,
                                     [
                                       getTranslated(context, "adding_and_subtracting")??"",
                                       getTranslated(context, "insert_missing_numbers")??"",

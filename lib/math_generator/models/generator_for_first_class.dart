@@ -30,7 +30,7 @@ class GeneratorForFirstClass extends BaseGenerator {
       try {
         ItemSettings questionInsert = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_INSERT_NUMBERS);
       if(questionInsert.active == true)
-      test.insertNumbersExercises = createInsertNumbersExercises(questionInsert.amountQuestions);
+      test.listInsertNumbersExercises = createlistInsertNumbersExercises(questionInsert.amountQuestions);
       }catch(Exeption){
         var e = Exeption.toString();
       }
@@ -38,7 +38,7 @@ class GeneratorForFirstClass extends BaseGenerator {
       try {
         ItemSettings questionComparison = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_COMPARISON_NUMBERS);
       if(questionComparison.active)
-      test.comparisonNumbersExercises =
+      test.listComparisonNumbersExercises =
           createComparisonNumbersExercises(questionComparison.amountQuestions);
       }catch(Exeption){}
       return test;

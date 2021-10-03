@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:math_world/localization/language_constants.dart';
 import 'package:math_world/math_generator/models/class_settings.dart';
+import 'package:math_world/widgets/custom_radio_widget.dart';
 
 import '../math_generator/math_generator.dart';
 import '../math_generator/models/question.dart';
@@ -59,7 +60,6 @@ class _TestPageState extends State<TestPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Color(0xff256E59),
@@ -189,11 +189,11 @@ class _TestPageState extends State<TestPage>
                       color: getColorForAnswer(question, answers[i])
                     ),
                 ),
-                leading: Radio(
+                leading: CustomRadioWidget(
                   value: answers[i],
                   groupValue: question.answerOfUser,
                   activeColor: Colors.red,
-                  hoverColor: Colors.white,
+
                   onChanged: (value) {
                     setState(() {
                       question.answerOfUser = value as String?;
@@ -215,6 +215,7 @@ class _TestPageState extends State<TestPage>
     return Container(
         alignment: Alignment.center,
         child: Column(
+
           children: <Widget>[
             Text(getTranslated(context, wordTranslation) ?? "",
                 style: GoogleFonts.courgette(
@@ -237,7 +238,7 @@ class _TestPageState extends State<TestPage>
                     //fontStyle: FontStyle.italic,
                   ),
                 ),
-                leading: Radio(
+                leading: CustomRadioWidget(
                   value: answers[i],
                   groupValue: question.answerOfUser,
                   activeColor: Colors.red,
@@ -287,7 +288,7 @@ class _TestPageState extends State<TestPage>
                     //fontStyle: FontStyle.italic,
                   ),
                 ),
-                leading: Radio(
+                leading: CustomRadioWidget(
                   value: answers[i],
                   groupValue: question.answerOfUser,
                   activeColor: Colors.red,
@@ -370,110 +371,110 @@ class _TestPageState extends State<TestPage>
     var operator = question.exercise!.split(' ')[1];
     var indexOperand2 = int.parse(question.exercise!.split(' ')[2]) - 1;
 
-    if (question.type == TYPE_EXERCISE &&
-        int.parse(question.answer!) <= 10 &&
-        int.parse(question.answerNotCorrect1!) <= 10 &&
-        int.parse(question.answerNotCorrect2!) <= 10 &&
-        int.parse(question.answerNotCorrect3!) <= 10 &&
-        (indexOperand1 + 1) <= 9 &&
-        (indexOperand1 + 1) > 0 &&
-        (indexOperand2 + 1) <= 9 &&
-        (indexOperand2 + 1) > 0) {
-      return Container(
-          alignment: Alignment.center,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                  flex: 2,
-                  child: Container(
-                      margin: EdgeInsets.fromLTRB(15, 5, 15, 10),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      widget.test.listStringsImagesQuestions[
-                                          indexOperand1]),
-                                  fit: BoxFit.fitHeight,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              alignment: Alignment.center,
-                              child: Text(
-                                operator,
-                                style: GoogleFonts.courgette(
-                                    //textStyle: Theme.of(context).textTheme.headline4,
-                                    fontSize: 30,
-                                    color: Colors.white
-                                    // fontWeight: FontWeight.w700,
-                                    //fontStyle: FontStyle.italic,
-                                    ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                      widget.test.listStringsImagesQuestions[
-                                          indexOperand2]),
-                                  fit: BoxFit.fitHeight,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ))),
-              //////////////////////////////////////////////////////////////////
-              Expanded(
-                  flex: 8,
-                  child: Column(
-                    children: [
-                      for (int i = 0; i <= answers.length - 1; i++)
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                            child: ListTile(
-                              title: Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          widget.test.listStringsImagesAnswers[
-                                              int.parse(answers[i])]),
-                                      fit: BoxFit.fitHeight,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              leading: Radio(
-                                value: answers[i],
-                                groupValue: question.answerOfUser,
-                                activeColor: Colors.red,
-                                hoverColor: Colors.white,
-                                onChanged: (value) {
-                                  setState(() {
-                                    question.answerOfUser = value as String?;
-                                    if (question.answer == value)
-                                      question.answerFromUserIsCorrect = true;
-                                    question.isAnswered = true;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        )
-                    ],
-                  ))
-            ],
-          ));
-    } else {
+    // if (question.type == TYPE_EXERCISE &&
+    //     int.parse(question.answer!) <= 10 &&
+    //     int.parse(question.answerNotCorrect1!) <= 10 &&
+    //     int.parse(question.answerNotCorrect2!) <= 10 &&
+    //     int.parse(question.answerNotCorrect3!) <= 10 &&
+    //     (indexOperand1 + 1) <= 9 &&
+    //     (indexOperand1 + 1) > 0 &&
+    //     (indexOperand2 + 1) <= 9 &&
+    //     (indexOperand2 + 1) > 0) {
+    //   return Container(
+    //       alignment: Alignment.center,
+    //       child: Column(
+    //         children: <Widget>[
+    //           Expanded(
+    //               flex: 2,
+    //               child: Container(
+    //                   margin: EdgeInsets.fromLTRB(15, 5, 15, 10),
+    //                   child: Row(
+    //                     children: [
+    //                       Expanded(
+    //                         child: Container(
+    //                           decoration: BoxDecoration(
+    //                             image: DecorationImage(
+    //                               image: AssetImage(
+    //                                   widget.test.listStringsImagesQuestions[
+    //                                       indexOperand1]),
+    //                               fit: BoxFit.fitHeight,
+    //                             ),
+    //                           ),
+    //                         ),
+    //                       ),
+    //                       Expanded(
+    //                         child: Container(
+    //                           alignment: Alignment.center,
+    //                           child: Text(
+    //                             operator,
+    //                             style: GoogleFonts.courgette(
+    //                                 //textStyle: Theme.of(context).textTheme.headline4,
+    //                                 fontSize: 30,
+    //                                 color: Colors.white
+    //                                 // fontWeight: FontWeight.w700,
+    //                                 //fontStyle: FontStyle.italic,
+    //                                 ),
+    //                           ),
+    //                         ),
+    //                       ),
+    //                       Expanded(
+    //                         child: Container(
+    //                           decoration: BoxDecoration(
+    //                             image: DecorationImage(
+    //                               image: AssetImage(
+    //                                   widget.test.listStringsImagesQuestions[
+    //                                       indexOperand2]),
+    //                               fit: BoxFit.fitHeight,
+    //                             ),
+    //                           ),
+    //                         ),
+    //                       ),
+    //                     ],
+    //                   ))),
+    //           //////////////////////////////////////////////////////////////////
+    //           Expanded(
+    //               flex: 8,
+    //               child: Column(
+    //                 children: [
+    //                   for (int i = 0; i <= answers.length - 1; i++)
+    //                     Expanded(
+    //                       child: Padding(
+    //                         padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+    //                         child: ListTile(
+    //                           title: Expanded(
+    //                             child: Container(
+    //                               decoration: BoxDecoration(
+    //                                 image: DecorationImage(
+    //                                   image: AssetImage(
+    //                                       widget.test.listStringsImagesAnswers[
+    //                                           int.parse(answers[i])]),
+    //                                   fit: BoxFit.fitHeight,
+    //                                 ),
+    //                               ),
+    //                             ),
+    //                           ),
+    //                           leading: Radio(
+    //                             value: answers[i],
+    //                             groupValue: question.answerOfUser,
+    //                             activeColor: Colors.red,
+    //                             hoverColor: Colors.white,
+    //                             onChanged: (value) {
+    //                               setState(() {
+    //                                 question.answerOfUser = value as String?;
+    //                                 if (question.answer == value)
+    //                                   question.answerFromUserIsCorrect = true;
+    //                                 question.isAnswered = true;
+    //                               });
+    //                             },
+    //                           ),
+    //                         ),
+    //                       ),
+    //                     )
+    //                 ],
+    //               ))
+    //         ],
+    //       ));
+    // } else {
       return Container(
           alignment: Alignment.center,
           child: Column(
@@ -498,7 +499,7 @@ class _TestPageState extends State<TestPage>
                           //fontStyle: FontStyle.italic,
                           ),
                     ),
-                    leading: Radio(
+                    leading: CustomRadioWidget(
                       value: answers[i],
                       groupValue: question.answerOfUser,
                       activeColor: Colors.red,
@@ -515,7 +516,7 @@ class _TestPageState extends State<TestPage>
                 )
             ],
           ));
-    }
+  //  }
   }
 
   List<Widget> getQuestionRaw(

@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:math_world/math_generator/models/class_settings.dart';
@@ -25,36 +24,44 @@ class GeneratorForSecondClass extends BaseGenerator {
       if (classSettings.listItemsSettings.first.active)
         test.exercises = createExercises(
             classSettings.listItemsSettings.first.amountQuestions);
-    }catch(Exeption){}
+    } catch (Exeption) {}
     /////////////////////////////////////////////////////////////////////////////////////////
     try {
-      var questionWordNumbers = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_WORD_NUMBERS);
-      if(questionWordNumbers.active)
-        test.questionsWordNumbers = createQuestionsWordNumber(questionWordNumbers.amountQuestions);
-    }catch(Exeption){}
+      var questionWordNumbers = classSettings.listItemsSettings.firstWhere(
+          (element) => element.typeQuestion == QUESTION_TYPE_WORD_NUMBERS);
+      if (questionWordNumbers.active)
+        test.listQuestionsWordNumbers =
+            createQuestionsWordNumber(questionWordNumbers.amountQuestions);
+    } catch (Exeption) {}
     /////////////////////////////////////////////////////////////////////////////////////////
     try {
-      var questionWordsAndNumbers = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_WORDS_AND_NUMBERS);
-      if(questionWordsAndNumbers.active)
-        test.questionsWordsAndNumbers = createQuestionsWordsAndNumbers(questionWordsAndNumbers.amountQuestions);
-    }catch(Exeption){}
+      var questionWordsAndNumbers = classSettings.listItemsSettings.firstWhere(
+          (element) => element.typeQuestion == QUESTION_TYPE_WORDS_AND_NUMBERS);
+      if (questionWordsAndNumbers.active)
+        test.listQuestionsWordsAndNumbers = createlistQuestionsWordsAndNumbers(
+            questionWordsAndNumbers.amountQuestions);
+    } catch (Exeption) {}
     /////////////////////////////////////////////////////////////////////////////////////////
     try {
-      var questionInsert = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_INSERT_NUMBERS);
-      if(questionInsert.active)
-        test.insertNumbersExercises = createInsertNumbersExercises(questionInsert.amountQuestions);
-    }catch(Exeption){}
+      var questionInsert = classSettings.listItemsSettings.firstWhere(
+          (element) => element.typeQuestion == QUESTION_TYPE_INSERT_NUMBERS);
+      if (questionInsert.active)
+        test.listInsertNumbersExercises =
+            createlistInsertNumbersExercises(questionInsert.amountQuestions);
+    } catch (Exeption) {}
     /////////////////////////////////////////////////////////////////////////////////////////
     try {
-      var questionComparison = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_COMPARISON_NUMBERS);
-      if(questionComparison.active)
-        test.comparisonNumbersExercises =
-            createComparisonNumbersExercises(questionComparison.amountQuestions);
-    }catch(Exeption){}
-
+      var questionComparison = classSettings.listItemsSettings.firstWhere(
+          (element) =>
+              element.typeQuestion == QUESTION_TYPE_COMPARISON_NUMBERS);
+      if (questionComparison.active)
+        test.listComparisonNumbersExercises = createComparisonNumbersExercises(
+            questionComparison.amountQuestions);
+    } catch (Exeption) {}
 
     return test;
   }
+
   List<Question>? createQuestionsWordNumber(int amountExercises) {
     List<Question> listExercises = [];
     while (listExercises.length != amountExercises) {
@@ -69,7 +76,8 @@ class GeneratorForSecondClass extends BaseGenerator {
     }
     return listExercises;
   }
-  List<Question>? createQuestionsWordsAndNumbers(int amountExercises) {
+
+  List<Question>? createlistQuestionsWordsAndNumbers(int amountExercises) {
     List<Question> listExercises = [];
     while (listExercises.length != amountExercises) {
       var question = getQuestionWordsAndNumbers(100);
@@ -83,10 +91,10 @@ class GeneratorForSecondClass extends BaseGenerator {
     }
     return listExercises;
   }
+
   Question getQuestionWordsAndNumbers(int maxNumber) {
     Question question = new Question();
     question.isWordsAndNumbersQuestion = true;
-
 
     var now = new DateTime.now();
     Random rnd = new Random(now.millisecondsSinceEpoch);
@@ -103,11 +111,16 @@ class GeneratorForSecondClass extends BaseGenerator {
     if (maxNumber == 10000) resultThousand = rnd.nextInt(9) + 0;
     if (maxNumber == 100000) resultThousand = rnd.nextInt(99) + 1;
 
-    question.exercise = resultThousand > 0? resultThousand.toString():"" + (resultThousand > 0? resultHundreds.toString():"") + resultTens.toString() + resultUnits.toString();
+    question.exercise = resultThousand > 0
+        ? resultThousand.toString()
+        : "" +
+            (resultThousand > 0 ? resultHundreds.toString() : "") +
+            resultTens.toString() +
+            resultUnits.toString();
 
     question.answer = question.exercise;
 
-    createAnswersNotCorrect(question,maxNumber*2);
+    createAnswersNotCorrect(question, maxNumber * 2);
     question.saveListAnswers();
     return question;
   }
@@ -116,20 +129,18 @@ class GeneratorForSecondClass extends BaseGenerator {
     Question question = new Question();
     question.isWordNumberQuestion = true;
 
-
     var now = new DateTime.now();
     Random rnd = new Random(now.millisecondsSinceEpoch);
 
-   var  result = rnd.nextInt(100) + 21;
-
+    var result = rnd.nextInt(100) + 21;
+    while (result > 100 || result < 21) {
+      result = rnd.nextInt(100) + 21;
+    }
     question.exercise = result.toString();
     question.answer = result.toString();
 
-    createAnswersNotCorrect(question,maxNumber);
+    createAnswersNotCorrect(question, maxNumber);
     question.saveListAnswers();
     return question;
   }
-
-
-
 }

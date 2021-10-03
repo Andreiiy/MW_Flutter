@@ -138,7 +138,7 @@ abstract class BaseGenerator {
     ][rnd.nextInt(10) + 0];
   }
 
-  List<Question>? createInsertNumbersExercises(int amountExercises) {
+  List<Question>? createlistInsertNumbersExercises(int amountExercises) {
     List<Question> listExercises = [];
     while (listExercises.length != amountExercises) {
       var question = getInsertNumbersExercise();
