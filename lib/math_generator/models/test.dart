@@ -42,10 +42,15 @@ class Test{
   List<Question>? listQuestionsWordNumbers = [];
   List<Question>? listInsertNumbersExercises = [];
   List<Question>? listComparisonNumbersExercises = [];
+  List<Question>? listMultiplicationTableExercises = [];
 
 
   List<Question> getListQuestions(){
-    return (exercises ?? []) + (listQuestionsWordNumbers ?? []) + (listQuestionsWordsAndNumbers ?? []) +  (listInsertNumbersExercises ?? []) + (listComparisonNumbersExercises ?? []);
+    return (exercises ?? []) + (listQuestionsWordNumbers ?? [])
+        + (listQuestionsWordsAndNumbers ?? [])
+        +  (listInsertNumbersExercises ?? [])
+        + (listComparisonNumbersExercises ?? [])
+        + (listMultiplicationTableExercises ?? []);
   }
 
 

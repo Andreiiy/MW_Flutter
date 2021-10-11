@@ -30,6 +30,7 @@ class ItemSettings{
  String nameKey;
  int typeQuestion;
  int amountQuestions = 1;
+ int multiTableSize = 5;
  bool active = false;
 
  ItemSettings({required this.nameKey,required this.typeQuestion});
@@ -41,4 +42,5 @@ const int QUESTION_TYPE_WORDS_AND_NUMBERS = 2;
 const int QUESTION_TYPE_WORD_NUMBERS = 3;
 const int QUESTION_TYPE_INSERT_NUMBERS = 4;
 const int QUESTION_TYPE_COMPARISON_NUMBERS = 5;
+const int QUESTION_TYPE_FROM_MULTIPLICATION_TABLE = 6;
 

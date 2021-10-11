@@ -4,6 +4,7 @@
 import 'package:math_world/math_generator/models/class_settings.dart';
 import 'package:math_world/math_generator/models/generator_for_second_class.dart';
 
+import 'models/GeneratorForThirdClass.dart';
 import 'models/generator_for_first_class.dart';
 import 'models/test.dart';
 
@@ -18,6 +19,10 @@ class MathGenerator{
          }
          case 2 : {
             GeneratorForSecondClass generator = new GeneratorForSecondClass();
+            return generator.generateTest(classSettings);
+         }
+         case 3 : {
+            GeneratorForThirdClass generator = new GeneratorForThirdClass();
             return generator.generateTest(classSettings);
          }
       }

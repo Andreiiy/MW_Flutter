@@ -66,14 +66,13 @@ class _TestPageState extends State<TestPage>
         title: Row(
           children: [
             Text(
-
-        widget.isCheckTest == true?
-                getTranslated(context, "correct_answer")??""+"s ${widget.listQuestions.where((q) => q.answerFromUserIsCorrect == true).toList().length}"
-                :
-                "Answered ${widget.listQuestions.where((q) => q.isAnswered == true).toList().length} from ${widget.listQuestions.length}",
-              style: GoogleFonts.courgette(
-                  color: Colors.white
-              ),),
+              widget.isCheckTest == true
+                  ? getTranslated(context, "correct_answer") ??
+                      "" +
+                          "s ${widget.listQuestions.where((q) => q.answerFromUserIsCorrect == true).toList().length}"
+                  : "Answered ${widget.listQuestions.where((q) => q.isAnswered == true).toList().length} from ${widget.listQuestions.length}",
+              style: GoogleFonts.courgette(color: Colors.white),
+            ),
             //Text("${widget.listQuestions.length}"),
           ],
         ),
@@ -84,25 +83,25 @@ class _TestPageState extends State<TestPage>
             labelColor: Colors.red,
             tabs: getTabs()),
       ),
-      body:Container(
-    decoration: BoxDecoration(
-    image: DecorationImage(
-    image: AssetImage('assets/images/background2.png'),
-    fit: BoxFit.cover,
-    ),
-    ),
-        child:  Padding(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        child: Column(
-          children: [
-            Expanded(
-              flex: 90,
-              child: TabBarView(
-                  controller: _tabController, children: getQuestionWidgets()),
-            ),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background2.png'),
+            fit: BoxFit.cover,
+          ),
         ),
-      ),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 90,
+                child: TabBarView(
+                    controller: _tabController, children: getQuestionWidgets()),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -141,7 +140,10 @@ class _TestPageState extends State<TestPage>
             {
               return getWidgetQuestion(question);
             }
-
+          case TYPE_FROM_MULTIPLICATION_TABLE:
+            {
+              return getWidgetQuestion(question);
+            }
           case TYPE_COMPARISON_NUMBERS:
             {
               return getWidgetQuestion(question);
@@ -183,17 +185,20 @@ class _TestPageState extends State<TestPage>
               Expanded(
                   child: ListTile(
                 title: Text(
-                 widget.isCheckTest == true? answers[i] == question.answer?answers[i]+"    ${getTranslated(context, "correct_answer")??""}":answers[i]:answers[i],
+                  widget.isCheckTest == true
+                      ? answers[i] == question.answer
+                          ? answers[i] +
+                              "    ${getTranslated(context, "correct_answer") ?? ""}"
+                          : answers[i]
+                      : answers[i],
                   style: GoogleFonts.courgette(
                       fontSize: 30,
-                      color: getColorForAnswer(question, answers[i])
-                    ),
+                      color: getColorForAnswer(question, answers[i])),
                 ),
                 leading: CustomRadioWidget(
                   value: answers[i],
                   groupValue: question.answerOfUser,
                   activeColor: Colors.red,
-
                   onChanged: (value) {
                     setState(() {
                       question.answerOfUser = value as String?;
@@ -215,7 +220,6 @@ class _TestPageState extends State<TestPage>
     return Container(
         alignment: Alignment.center,
         child: Column(
-
           children: <Widget>[
             Text(getTranslated(context, wordTranslation) ?? "",
                 style: GoogleFonts.courgette(
@@ -229,14 +233,19 @@ class _TestPageState extends State<TestPage>
               Expanded(
                   child: ListTile(
                 title: Text(
-                  widget.isCheckTest == true? answers[i] == question.answer?answers[i]+"    ${getTranslated(context, "correct_answer")??""}":answers[i]:answers[i],
+                  widget.isCheckTest == true
+                      ? answers[i] == question.answer
+                          ? answers[i] +
+                              "    ${getTranslated(context, "correct_answer") ?? ""}"
+                          : answers[i]
+                      : answers[i],
                   style: GoogleFonts.courgette(
-                    //textStyle: Theme.of(context).textTheme.headline4,
+                      //textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 30,
                       color: getColorForAnswer(question, answers[i])
-                    // fontWeight: FontWeight.w700,
-                    //fontStyle: FontStyle.italic,
-                  ),
+                      // fontWeight: FontWeight.w700,
+                      //fontStyle: FontStyle.italic,
+                      ),
                 ),
                 leading: CustomRadioWidget(
                   value: answers[i],
@@ -279,14 +288,19 @@ class _TestPageState extends State<TestPage>
               Expanded(
                   child: ListTile(
                 title: Text(
-                  widget.isCheckTest == true? answers[i] == question.answer?answers[i]+"    ${getTranslated(context, "correct_answer")??""}":answers[i]:answers[i],
+                  widget.isCheckTest == true
+                      ? answers[i] == question.answer
+                          ? answers[i] +
+                              "    ${getTranslated(context, "correct_answer") ?? ""}"
+                          : answers[i]
+                      : answers[i],
                   style: GoogleFonts.courgette(
-                    //textStyle: Theme.of(context).textTheme.headline4,
+                      //textStyle: Theme.of(context).textTheme.headline4,
                       fontSize: 30,
                       color: getColorForAnswer(question, answers[i])
-                    // fontWeight: FontWeight.w700,
-                    //fontStyle: FontStyle.italic,
-                  ),
+                      // fontWeight: FontWeight.w700,
+                      //fontStyle: FontStyle.italic,
+                      ),
                 ),
                 leading: CustomRadioWidget(
                   value: answers[i],
@@ -475,48 +489,48 @@ class _TestPageState extends State<TestPage>
     //         ],
     //       ));
     // } else {
-      return Container(
-          alignment: Alignment.center,
-          child: Column(
-            children: <Widget>[
-              Text(
-                question.exercise!,
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle1!
-                    .copyWith(color: Colors.white, fontSize: 36),
-              ),
-              for (int i = 0; i <= answers.length - 1; i++)
-                Expanded(
-                  child: ListTile(
-                    title: Text(
-                      answers[i],
-                      style: GoogleFonts.courgette(
-                          //textStyle: Theme.of(context).textTheme.headline4,
-                          fontSize: 30,
-                          color: Colors.white
-                          // fontWeight: FontWeight.w700,
-                          //fontStyle: FontStyle.italic,
-                          ),
-                    ),
-                    leading: CustomRadioWidget(
-                      value: answers[i],
-                      groupValue: question.answerOfUser,
-                      activeColor: Colors.red,
-                      onChanged: (value) {
-                        setState(() {
-                          question.answerOfUser = value as String?;
-                          if (question.answer == value)
-                            question.answerFromUserIsCorrect = true;
-                          question.isAnswered = true;
-                        });
-                      },
-                    ),
+    return Container(
+        alignment: Alignment.center,
+        child: Column(
+          children: <Widget>[
+            Text(
+              question.exercise!,
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle1!
+                  .copyWith(color: Colors.white, fontSize: 36),
+            ),
+            for (int i = 0; i <= answers.length - 1; i++)
+              Expanded(
+                child: ListTile(
+                  title: Text(
+                    answers[i],
+                    style: GoogleFonts.courgette(
+                        //textStyle: Theme.of(context).textTheme.headline4,
+                        fontSize: 30,
+                        color: Colors.white
+                        // fontWeight: FontWeight.w700,
+                        //fontStyle: FontStyle.italic,
+                        ),
                   ),
-                )
-            ],
-          ));
-  //  }
+                  leading: CustomRadioWidget(
+                    value: answers[i],
+                    groupValue: question.answerOfUser,
+                    activeColor: Colors.red,
+                    onChanged: (value) {
+                      setState(() {
+                        question.answerOfUser = value as String?;
+                        if (question.answer == value)
+                          question.answerFromUserIsCorrect = true;
+                        question.isAnswered = true;
+                      });
+                    },
+                  ),
+                ),
+              )
+          ],
+        ));
+    //  }
   }
 
   List<Widget> getQuestionRaw(
@@ -538,7 +552,13 @@ class _TestPageState extends State<TestPage>
                               question.checkInsertNumbersQuestionIsAnswered();
                         });
                       },
-                      style: GoogleFonts.courgette(color: getColorTextForInsertNumberTextField(question,question.insertNumberControllers[(indexControllers -1)].text) ),
+                      style: GoogleFonts.courgette(
+                          color: getColorTextForInsertNumberTextField(
+                              question,
+                              question
+                                  .insertNumberControllers[
+                                      (indexControllers - 1)]
+                                  .text)),
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
@@ -737,12 +757,13 @@ class _TestPageState extends State<TestPage>
   getColorTextForInsertNumberTextField(Question question, String answer) {
     if (widget.isCheckTest == true) {
       if (question.answerFromUserIsCorrect == true)
-        return  Colors.amber;
+        return Colors.amber;
       else {
-        try{
-          question.answersInsertNumbersExercises?.firstWhere((element) => element == answer);
+        try {
+          question.answersInsertNumbersExercises
+              ?.firstWhere((element) => element == answer);
           return Colors.amber;
-        }catch(Exeption){
+        } catch (Exeption) {
           return Colors.red;
         }
       }

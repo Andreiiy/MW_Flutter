@@ -18,8 +18,6 @@ class TestSettingsPage extends StatefulWidget {
 }
 
 class _TestSettingsPageState extends State<TestSettingsPage> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +42,8 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
                     child: ListView(children: <Widget>[
                       Visibility(
                         child: Text(
-                          getTranslated(context, "title_test_settings_page") ?? "",
+                          getTranslated(context, "title_test_settings_page") ??
+                              "",
                           style: GoogleFonts.courgette(
                               fontSize: 20, color: Colors.white),
                         ),
@@ -111,17 +110,19 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
                               children: generateListSetingsWidgets(
                                   widget.classSettings.listItemsSettings),
                             ),
+
                             FloatingActionButton.extended(
                               backgroundColor: Colors.green,
                               onPressed: () {
                                 setState(() {});
-                                try{
-                                 if(widget.classSettings.listItemsSettings.firstWhere((element) => element.active == true) != null)
-                                   Navigator.popAndPushNamed(context, testPage,arguments: widget.classSettings);
-                                }catch(Exeption){
+                                try {
+                                  if (widget.classSettings.listItemsSettings
+                                          .firstWhere((element) =>element.active == true) != null)
+                                    Navigator.popAndPushNamed(context, testPage,
+                                        arguments: widget.classSettings);
+                                } catch (Exeption) {
                                   int i = 0;
                                 }
-
                               },
                               label: Text(
                                 getTranslated(context, "start_test") ?? " ",
@@ -135,30 +136,41 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
                             /////////////////////////////////////////////////////////////////////////////////////////////////////
                             FloatingActionButton.extended(
                               backgroundColor: Colors.blue,
-                              onPressed:() async {
-                                try{
-                                  if(widget.classSettings.listItemsSettings.firstWhere((element) => element.active == true) != null) {
-                                    MathGenerator generator = new MathGenerator();
-                                    var test = generator.createTest(
-                                        widget.classSettings);
+                              onPressed: () async {
+                                try {
+                                  if (widget.classSettings.listItemsSettings
+                                          .firstWhere((element) =>
+                                              element.active == true) !=
+                                      null) {
+                                    MathGenerator generator =
+                                        new MathGenerator();
+                                    var test = generator
+                                        .createTest(widget.classSettings);
                                     test.transformTestForPdf(context);
-                                    final pdfFile = await  PdfApi.createPDFTest(
-                                        test,
-                                    [
-                                      getTranslated(context, "adding_and_subtracting")??"",
-                                      getTranslated(context, "insert_missing_numbers")??"",
-                                      getTranslated(context, "comparing_numbers")??"",
-                                      getTranslated(context, "written_number")??"",
-                                      getTranslated(context, "decimal_numbers")??"",
-                                    ]
-                                    );
+                                    final pdfFile =
+                                        await PdfApi.createPDFTest(test, [
+                                      getTranslated(context,
+                                              "adding_and_subtracting") ??
+                                          "",
+                                      getTranslated(context,
+                                              "insert_missing_numbers") ??
+                                          "",
+                                      getTranslated(
+                                              context, "comparing_numbers") ??
+                                          "",
+                                      getTranslated(
+                                              context, "written_number") ??
+                                          "",
+                                      getTranslated(
+                                              context, "decimal_numbers") ??
+                                          "",
+                                    ]);
                                     PdfApi.openFile(pdfFile);
                                   }
-                                }catch(Exeption){
+                                } catch (Exeption) {
                                   int i = 0;
                                 }
-
-                               },
+                              },
                               label: Text(
                                 getTranslated(context, "generate_pdf_file") ??
                                     " ",
@@ -269,7 +281,7 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
                                   });
                               },
                               items: buildDropDownMenuItems(
-                                  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])),
+                                  [for (var i = 1; i <= 50; i++) i])),
                         ])),
                       )),
                   SizedBox(
@@ -277,6 +289,142 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
                   ),
                 ],
               ))
+        ],
+      )),
+    );
+  }
+
+  Widget getWidgetSettingsForMultiplicationTable(ItemSettings itemSettings) {
+    return Card(
+      color: Color(0xff484443),
+      shadowColor: Colors.black,
+      borderOnForeground: true,
+      margin: EdgeInsets.only(bottom: 20),
+      child: Container(
+          child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              getTranslated(context, itemSettings.nameKey) ?? "",
+              style: GoogleFonts.courgette(fontSize: 16, color: Colors.white),
+            ),
+            leading: Checkbox(
+              fillColor: MaterialStateProperty.all(Colors.white),
+              value: itemSettings.active,
+              activeColor: Colors.red,
+              checkColor: Colors.red,
+              onChanged: (value) {
+                setState(() {
+                  itemSettings.active = value ?? false;
+                });
+              },
+            ),
+          ),
+          Row(
+            children: [
+              Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        getTranslated(context, "table_size") ?? "",
+                        style: GoogleFonts.courgette(
+                            fontSize: 12, color: Colors.red),
+                      ),
+                      Container(
+                          padding: const EdgeInsets.fromLTRB(10.0, 5, 10, 0),
+                          child: new Container(
+                            padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+                            decoration: new BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: new BorderRadius.only(
+                                    topLeft: const Radius.circular(5.0),
+                                    bottomLeft: const Radius.circular(5.0),
+                                    bottomRight: const Radius.circular(5.0),
+                                    topRight: const Radius.circular(5.0))),
+                            child: new Center(
+                                child: new Column(children: [
+                              new DropdownButton<String>(
+                                  underline: Text(''),
+                                  icon: Icon(Icons.keyboard_arrow_down),
+                                  hint: Center(child: new Text("0")),
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                  isExpanded: true,
+                                  value: itemSettings.multiTableSize.toString(),
+                                  onChanged: (newValue) {
+                                    if (newValue != null)
+                                      setState(() {
+                                        itemSettings.multiTableSize =
+                                            int.parse(newValue);
+                                      });
+                                  },
+                                  items: buildDropDownMenuItems(
+                                      [for (var i = 1; i <= 50; i++) i])),
+                            ])),
+                          )),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  )),
+              Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        getTranslated(context, "amount") ?? "",
+                        style: GoogleFonts.courgette(
+                            fontSize: 12, color: Colors.red),
+                      ),
+                      Container(
+                          padding: const EdgeInsets.fromLTRB(10.0, 5, 10, 0),
+                          child: new Container(
+                            padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+                            decoration: new BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: new BorderRadius.only(
+                                    topLeft: const Radius.circular(5.0),
+                                    bottomLeft: const Radius.circular(5.0),
+                                    bottomRight: const Radius.circular(5.0),
+                                    topRight: const Radius.circular(5.0))),
+                            child: new Center(
+                                child: new Column(children: [
+                              new DropdownButton<String>(
+                                  underline: Text(''),
+                                  icon: Icon(Icons.keyboard_arrow_down),
+                                  hint: Center(child: new Text("0")),
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                  isExpanded: true,
+                                  value:
+                                      itemSettings.amountQuestions.toString(),
+                                  onChanged: (newValue) {
+                                    if (newValue != null)
+                                      setState(() {
+                                        itemSettings.amountQuestions =
+                                            int.parse(newValue);
+                                      });
+                                  },
+                                  items: buildDropDownMenuItems(
+                                      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])),
+                            ])),
+                          )),
+                      SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ))
+            ],
+          )
         ],
       )),
     );
@@ -299,20 +447,30 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
   }
 
   generateListSetingsWidgets(List<ItemSettings> listItemsSettings) {
-    return listItemsSettings.map((e) => getWidgetSettings(e)).toList();
+    return listItemsSettings
+        .map((e) =>
+            e.typeQuestion == QUESTION_TYPE_FROM_MULTIPLICATION_TABLE
+            ? getWidgetSettingsForMultiplicationTable(e)
+            : getWidgetSettings(e))
+        .toList();
   }
 
   @override
   void initState() {
-    if(widget.classSettings.classNumber > 1)
+    if (widget.classSettings.classNumber > 1) {
       widget.classSettings.listItemsSettings.addAll([
         ItemSettings(
-          nameKey: "decimal_numbers",
-          typeQuestion: QUESTION_TYPE_WORDS_AND_NUMBERS
-      ),
+            nameKey: "decimal_numbers",
+            typeQuestion: QUESTION_TYPE_WORDS_AND_NUMBERS),
         ItemSettings(
             nameKey: "written_number",
-            typeQuestion: QUESTION_TYPE_WORD_NUMBERS
-        ),]);
+            typeQuestion: QUESTION_TYPE_WORD_NUMBERS),
+      ]);
+      if (widget.classSettings.classNumber == 2 ||
+          widget.classSettings.classNumber == 3)
+        widget.classSettings.listItemsSettings.add(ItemSettings(
+            nameKey: "multiplication_table_exercises",
+            typeQuestion: QUESTION_TYPE_FROM_MULTIPLICATION_TABLE));
     }
+  }
 }

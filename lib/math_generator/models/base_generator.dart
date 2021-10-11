@@ -57,7 +57,36 @@ abstract class BaseGenerator {
     question.saveListAnswers();
     return question;
   }
+  Question getMultiplicationTableExercise(int tableSize) {
+    Question question = new Question();
 
+    var now = new DateTime.now();
+    Random rnd = new Random(now.millisecondsSinceEpoch);
+    bool exerciseCreated = false;
+    while (!exerciseCreated) {
+      String functionOperator = "*";
+
+      int operand1 = rnd.nextInt(tableSize) + 1;
+      while(operand1 <= 1 && operand1 >= tableSize)
+        operand1 = rnd.nextInt(tableSize) + 1;
+      int operand2 = rnd.nextInt(10) + 1;
+      while(operand1 <= 1 && operand1 >= 10)
+        operand1 = rnd.nextInt(tableSize) + 1;
+
+      question.exercise =
+      "${operand1.toString()} $functionOperator ${operand2.toString()}";
+      int answer;
+      answer = multiply(operand1, operand2);
+
+      if (answer >= 1 && answer <= (tableSize * 10)) {
+        question.answer = answer.toString();
+        exerciseCreated = true;
+      }
+    }
+    createAnswersNotCorrect(question, (tableSize * 10));
+    question.saveListAnswers();
+    return question;
+  }
   createAnswersNotCorrect(Question question, int maxNumberForExercise) {
     var now = new DateTime.now();
     Random rnd = new Random(now.microsecondsSinceEpoch);
@@ -120,7 +149,9 @@ abstract class BaseGenerator {
   sub(int operand1, int operand2) {
     return operand1 - operand2;
   }
-
+  int multiply(int operand1, int operand2) {
+    return operand1 * operand2;
+  }
   getRandomPlusMinusOperator() {
     var now = new DateTime.now();
     Random rnd = new Random(now.microsecondsSinceEpoch);
@@ -224,5 +255,7 @@ abstract class BaseGenerator {
     question.saveListAnswers();
     return question;
   }
+
+
 
 }

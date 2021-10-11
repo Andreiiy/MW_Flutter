@@ -1,12 +1,12 @@
 import 'dart:math';
 
-import 'package:math_world/math_generator/models/class_settings.dart';
 import 'package:math_world/math_generator/models/question.dart';
-import 'package:math_world/math_generator/models/test.dart';
 
 import 'base_generator.dart';
+import 'class_settings.dart';
+import 'test.dart';
 
-class GeneratorForSecondClass extends BaseGenerator {
+class GeneratorForThirdClass extends BaseGenerator {
   @override
   int maxNumberForClass = 100;
 
@@ -68,10 +68,10 @@ class GeneratorForSecondClass extends BaseGenerator {
           element.typeQuestion == QUESTION_TYPE_FROM_MULTIPLICATION_TABLE);
       if (questionFromMultiplicationTable.active) {
         differenceAnswers = 5;
-    test.listMultiplicationTableExercises = createMultiplicationTableExercises(
-        questionFromMultiplicationTable.multiTableSize,
-        questionFromMultiplicationTable.amountQuestions);
-  }
+        test.listMultiplicationTableExercises = createMultiplicationTableExercises(
+            questionFromMultiplicationTable.multiTableSize,
+            questionFromMultiplicationTable.amountQuestions);
+      }
     } catch (Exeption) {}
 
     return test;
@@ -144,9 +144,9 @@ class GeneratorForSecondClass extends BaseGenerator {
     question.exercise = resultThousand > 0
         ? resultThousand.toString()
         : "" +
-            (resultThousand > 0 ? resultHundreds.toString() : "") +
-            resultTens.toString() +
-            resultUnits.toString();
+        (resultThousand > 0 ? resultHundreds.toString() : "") +
+        resultTens.toString() +
+        resultUnits.toString();
 
     question.answer = question.exercise;
 
