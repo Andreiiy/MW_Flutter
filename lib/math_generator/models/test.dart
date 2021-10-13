@@ -34,6 +34,16 @@ class Test{
     'assets/images/answers/f10.png',
   ];
 
+  var listKysNamesTypesExercises = [
+    'adding_and_subtracting',
+    'insert_missing_numbers',
+    'comparing_numbers',
+    'written_number',
+    'decimal_numbers',
+    'multiplication_table_exercises',
+    'exercises_with_fractions'
+  ];
+
 
 
   int? numberClass;
@@ -43,6 +53,7 @@ class Test{
   List<Question>? listInsertNumbersExercises = [];
   List<Question>? listComparisonNumbersExercises = [];
   List<Question>? listMultiplicationTableExercises = [];
+  List<Question>? listExercisesWithFractions = [];
 
 
   List<Question> getListQuestions(){

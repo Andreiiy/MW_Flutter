@@ -7,6 +7,9 @@ class Question {
 
   int? type;
   String? exercise;
+  String? exerciseOperand1;
+  String? exerciseOperand2;
+  String? operator;
   String? answer;
   String? answerNotCorrect1;
   String? answerNotCorrect2;
@@ -90,4 +93,5 @@ const TYPE_INSERT_NUMBERS = 2;
 const TYPE_COMPARISON_NUMBERS = 3;
 const TYPE_WORD_NUMBER = 4;
 const TYPE_WORD_AND_NUMBER = 5;
-const int TYPE_FROM_MULTIPLICATION_TABLE = 6;
+const TYPE_FROM_MULTIPLICATION_TABLE = 6;
+const TYPE_FRACTIONS = 7;

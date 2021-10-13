@@ -22,13 +22,13 @@ class GeneratorForFirstClass extends BaseGenerator {
       Test test = new Test();
       test.numberClass = classSettings.classNumber;
       try {
-        if (classSettings.listItemsSettings.first.active)
+        if (classSettings.getListItemsSettings().first.active)
           test.exercises = createExercises(
-              classSettings.listItemsSettings.first.amountQuestions);
+              classSettings.getListItemsSettings().first.amountQuestions);
       }catch(Exeption){}
       /////////////////////////////////////////////////////////////////////////////////////////
       try {
-        ItemSettings questionInsert = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_INSERT_NUMBERS);
+        ItemSettings questionInsert = classSettings.getListItemsSettings().firstWhere((element) => element.typeQuestion == QUESTION_TYPE_INSERT_NUMBERS);
       if(questionInsert.active == true)
       test.listInsertNumbersExercises = createlistInsertNumbersExercises(questionInsert.amountQuestions);
       }catch(Exeption){
@@ -36,7 +36,7 @@ class GeneratorForFirstClass extends BaseGenerator {
       }
       /////////////////////////////////////////////////////////////////////////////////////////
       try {
-        ItemSettings questionComparison = classSettings.listItemsSettings.firstWhere((element) => element.typeQuestion == QUESTION_TYPE_COMPARISON_NUMBERS);
+        ItemSettings questionComparison = classSettings.getListItemsSettings().firstWhere((element) => element.typeQuestion == QUESTION_TYPE_COMPARISON_NUMBERS);
       if(questionComparison.active)
       test.listComparisonNumbersExercises =
           createComparisonNumbersExercises(questionComparison.amountQuestions);

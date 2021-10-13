@@ -1,11 +1,12 @@
 import 'dart:math';
 
+import 'package:fraction/fraction.dart';
+
 import 'class_settings.dart';
 import 'question.dart';
 import 'test.dart';
 
 abstract class BaseGenerator {
-
   abstract int maxNumberForClass;
   abstract int maxNumberForInsertQuestion;
   abstract int differenceAnswers;
@@ -40,7 +41,7 @@ abstract class BaseGenerator {
       int operand2 = rnd.nextInt(operand1) + 1;
 
       question.exercise =
-      "${operand1.toString()} $functionOperator ${operand2.toString()}";
+          "${operand1.toString()} $functionOperator ${operand2.toString()}";
       int answer;
       if (functionOperator == "+")
         answer = add(operand1, operand2);
@@ -57,6 +58,7 @@ abstract class BaseGenerator {
     question.saveListAnswers();
     return question;
   }
+
   Question getMultiplicationTableExercise(int tableSize) {
     Question question = new Question();
 
@@ -67,14 +69,14 @@ abstract class BaseGenerator {
       String functionOperator = "*";
 
       int operand1 = rnd.nextInt(tableSize) + 1;
-      while(operand1 <= 1 && operand1 >= tableSize)
+      while (operand1 <= 1 && operand1 >= tableSize)
         operand1 = rnd.nextInt(tableSize) + 1;
       int operand2 = rnd.nextInt(10) + 1;
-      while(operand1 <= 1 && operand1 >= 10)
+      while (operand1 <= 1 && operand1 >= 10)
         operand1 = rnd.nextInt(tableSize) + 1;
 
       question.exercise =
-      "${operand1.toString()} $functionOperator ${operand2.toString()}";
+          "${operand1.toString()} $functionOperator ${operand2.toString()}";
       int answer;
       answer = multiply(operand1, operand2);
 
@@ -87,6 +89,7 @@ abstract class BaseGenerator {
     question.saveListAnswers();
     return question;
   }
+
   createAnswersNotCorrect(Question question, int maxNumberForExercise) {
     var now = new DateTime.now();
     Random rnd = new Random(now.microsecondsSinceEpoch);
@@ -97,9 +100,10 @@ abstract class BaseGenerator {
       int result = getRandomPlusMinusOperator() == "+"
           ? add(int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 0)
           : sub(
-          int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 0);
+              int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 0);
 
-      if (result != int.parse(question.answer!) && result >= 0 &&
+      if (result != int.parse(question.answer!) &&
+          result >= 0 &&
           result <= maxNumberForExercise) {
         question.answerNotCorrect1 = result.toString();
         answerNotCorrect1Created = true;
@@ -112,7 +116,7 @@ abstract class BaseGenerator {
       int result = getRandomPlusMinusOperator() == "+"
           ? add(int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1)
           : sub(
-          int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1);
+              int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1);
 
       if (result != int.parse(question.answer!) &&
           result >= 0 &&
@@ -129,7 +133,7 @@ abstract class BaseGenerator {
       int result = getRandomPlusMinusOperator() == "+"
           ? add(int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1)
           : sub(
-          int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1);
+              int.parse(question.answer!), rnd.nextInt(differenceAnswers) + 1);
 
       if (result != int.parse(question.answer!) &&
           result >= 0 &&
@@ -146,12 +150,22 @@ abstract class BaseGenerator {
     return operand1 + operand2;
   }
 
+  addDouble(double operand1, double operand2) {
+    return operand1 + operand2;
+  }
+
   sub(int operand1, int operand2) {
     return operand1 - operand2;
   }
+
+  subDouble(double operand1, double operand2) {
+    return operand1 - operand2;
+  }
+
   int multiply(int operand1, int operand2) {
     return operand1 * operand2;
   }
+
   getRandomPlusMinusOperator() {
     var now = new DateTime.now();
     Random rnd = new Random(now.microsecondsSinceEpoch);
@@ -201,8 +215,7 @@ abstract class BaseGenerator {
         if (insertNumber <= (tempNumber + 50) && insertNumber >= tempNumber) {
           var index = list.indexOf(insertNumber);
           if (index > 0 && index <= 49) {
-            if (list[index] != null)
-              numberNotCorrect = false;
+            if (list[index] != null) numberNotCorrect = false;
           }
         }
       }
@@ -215,7 +228,6 @@ abstract class BaseGenerator {
     question.initControllers();
     return question;
   }
-
 
   List<Question>? createComparisonNumbersExercises(int amountExercises) {
     List<Question> listExercises = [];
@@ -256,6 +268,84 @@ abstract class BaseGenerator {
     return question;
   }
 
+  Question getFractionExercise(double maxNumber, String? operator) {
+    Question question = new Question();
+    double answer = 0.0;
+    var now = new DateTime.now();
+    Random rnd = new Random(now.millisecondsSinceEpoch);
+    bool exerciseCreated = false;
 
+    while (!exerciseCreated) {
+      String functionOperator = operator ?? getRandomPlusMinusOperator();
 
+      double operand1 =
+          double.parse((rnd.nextDouble() * maxNumber + 0.1).toStringAsFixed(1));
+      while (operand1 < 0.1 || operand1 > maxNumber)
+        operand1 = double.parse(
+            (rnd.nextDouble() * maxNumber + 0.1).toStringAsFixed(1));
+      double operand2 = double.parse((rnd.nextDouble() * operand1 + 0.1).toStringAsFixed(1));
+      while (operand2 > operand1)
+        operand2 = double.parse((rnd.nextDouble() * operand1 + 0.1).toStringAsFixed(1));
+
+      question.exerciseOperand1 = Fraction.fromDouble(operand1).toString();
+      question.exerciseOperand2 = Fraction.fromDouble(operand2).toString();
+      question.operator = functionOperator;
+
+      if (functionOperator == "+")
+        answer = addDouble(operand1, operand2);
+      else
+        answer = subDouble(operand1, operand2);
+
+      if (answer >= 0.1 && answer <= maxNumber) {
+        question.answer = Fraction.fromDouble(answer).toString();
+        exerciseCreated = true;
+      }
+    }
+
+    createFractionAnswersNotCorrect(question, answer, maxNumber);
+    question.saveListAnswers();
+    return question;
+  }
+
+  createFractionAnswersNotCorrect(
+      Question question, double doubleAnswer, double maxNumberForExercise) {
+    _createAnswerFractionNotCorrect(
+        question, doubleAnswer, maxNumberForExercise);
+    _createAnswerFractionNotCorrect(
+        question, doubleAnswer, maxNumberForExercise);
+    _createAnswerFractionNotCorrect(
+        question, doubleAnswer, maxNumberForExercise);
+  }
+
+  void _createAnswerFractionNotCorrect(
+      Question question, double doubleAnswer, double maxNumberForExercise) {
+    var now = new DateTime.now();
+    Random rnd = new Random(now.microsecondsSinceEpoch);
+    bool answerNotCorrectCreated = false;
+    while (!answerNotCorrectCreated) {
+      now = new DateTime.now();
+      rnd = new Random(now.microsecondsSinceEpoch);
+      double result = getRandomPlusMinusOperator() == "+"
+          ? double.parse(addDouble(doubleAnswer, (rnd.nextDouble()) * 0.9 + 0.1)
+              .toStringAsFixed(1))
+          : double.parse(subDouble(doubleAnswer, (rnd.nextDouble()) * 0.9 + 0.1)
+              .toStringAsFixed(1));
+
+      if (result != doubleAnswer &&
+          result >= 0.1 &&
+          result <= maxNumberForExercise) {
+        if (question.answerNotCorrect1 == null) {
+          question.answerNotCorrect1 = Fraction.fromDouble(result).toString();
+        }
+        else if (question.answerNotCorrect2 == null && Fraction.fromDouble(result).toString() != question.answerNotCorrect1) {
+          question.answerNotCorrect2 = Fraction.fromDouble(result).toString();
+        }
+        else if (question.answerNotCorrect3 == null && Fraction.fromDouble(result).toString() != question.answerNotCorrect1
+            && Fraction.fromDouble(result).toString() != question.answerNotCorrect2) {
+          question.answerNotCorrect3 = Fraction.fromDouble(result).toString();
+          answerNotCorrectCreated = true;
+        }
+      }
+    }
+  }
 }

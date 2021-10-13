@@ -108,7 +108,7 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
                             ),
                             Column(
                               children: generateListSetingsWidgets(
-                                  widget.classSettings.listItemsSettings),
+                                  widget.classSettings.getListItemsSettings()),
                             ),
 
                             FloatingActionButton.extended(
@@ -116,7 +116,7 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
                               onPressed: () {
                                 setState(() {});
                                 try {
-                                  if (widget.classSettings.listItemsSettings
+                                  if (widget.classSettings.getListItemsSettings()
                                           .firstWhere((element) =>element.active == true) != null)
                                     Navigator.popAndPushNamed(context, testPage,
                                         arguments: widget.classSettings);
@@ -138,7 +138,7 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
                               backgroundColor: Colors.blue,
                               onPressed: () async {
                                 try {
-                                  if (widget.classSettings.listItemsSettings
+                                  if (widget.classSettings.getListItemsSettings()
                                           .firstWhere((element) =>
                                               element.active == true) !=
                                       null) {
@@ -148,23 +148,7 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
                                         .createTest(widget.classSettings);
                                     test.transformTestForPdf(context);
                                     final pdfFile =
-                                        await PdfApi.createPDFTest(test, [
-                                      getTranslated(context,
-                                              "adding_and_subtracting") ??
-                                          "",
-                                      getTranslated(context,
-                                              "insert_missing_numbers") ??
-                                          "",
-                                      getTranslated(
-                                              context, "comparing_numbers") ??
-                                          "",
-                                      getTranslated(
-                                              context, "written_number") ??
-                                          "",
-                                      getTranslated(
-                                              context, "decimal_numbers") ??
-                                          "",
-                                    ]);
+                                        await PdfApi.createPDFTest(test, test.listKysNamesTypesExercises.map((e) => getTranslated(context,e)?? "").toList());
                                     PdfApi.openFile(pdfFile);
                                   }
                                 } catch (Exeption) {
@@ -455,22 +439,4 @@ class _TestSettingsPageState extends State<TestSettingsPage> {
         .toList();
   }
 
-  @override
-  void initState() {
-    if (widget.classSettings.classNumber > 1) {
-      widget.classSettings.listItemsSettings.addAll([
-        ItemSettings(
-            nameKey: "decimal_numbers",
-            typeQuestion: QUESTION_TYPE_WORDS_AND_NUMBERS),
-        ItemSettings(
-            nameKey: "written_number",
-            typeQuestion: QUESTION_TYPE_WORD_NUMBERS),
-      ]);
-      if (widget.classSettings.classNumber == 2 ||
-          widget.classSettings.classNumber == 3)
-        widget.classSettings.listItemsSettings.add(ItemSettings(
-            nameKey: "multiplication_table_exercises",
-            typeQuestion: QUESTION_TYPE_FROM_MULTIPLICATION_TABLE));
-    }
-  }
 }

@@ -104,11 +104,7 @@ class PdfApi {
       Test test, List<String> listTranslatedHeaders) {
     List<Widget> list = [];
     int sectionNumber = 1;
-    // getTranslated(context, "adding_and_subtracting")??"",
-    // getTranslated(context, "insert_missing_numbers")??"",
-    // getTranslated(context, "comparing_numbers")??"",
-    // getTranslated(context, "written_number")??"",
-    // getTranslated(context, "decimal_numbers")??"",
+
     if (test.exercises?.isNotEmpty == true) {
       list.add(Center(
           child: Text("${sectionNumber++}. ${listTranslatedHeaders.first.toString()}",
@@ -130,10 +126,10 @@ class PdfApi {
       });
       if ((test.listInsertNumbersExercises?.length??1) % 2 == 0) list.add(Container(height: 210));
     }
-    if (list.length % 2 == 0) list.add(Container(height: 180));
+    if (list.length > 0 && list.length % 2 == 0) list.add(Container(height: 180));
     if (test.listComparisonNumbersExercises?.isNotEmpty == true) {
       list.add(Container(
-          child: Text("${sectionNumber++}. ${listTranslatedHeaders.first.toString()}",
+          child: Text("${sectionNumber++}. ${listTranslatedHeaders[2].toString()}",
               style: TextStyle(fontSize: 28,color: PdfColors.red500,))));
       list.add(SizedBox(height: 10));
       test.listComparisonNumbersExercises?.forEach((element) {
@@ -143,7 +139,7 @@ class PdfApi {
     }
     if (test.listQuestionsWordNumbers?.isNotEmpty == true) {
       list.add(Container(
-          child: Text("${sectionNumber++}. ${listTranslatedHeaders.first.toString()}",
+          child: Text("${sectionNumber++}. ${listTranslatedHeaders[3].toString()}",
               style: TextStyle(fontSize: 28,color: PdfColors.red500,))));
       list.add(SizedBox(height: 10));
       test.listQuestionsWordNumbers?.forEach((element) {
@@ -151,11 +147,22 @@ class PdfApi {
       });
       if ((test.listQuestionsWordNumbers?.length??1) % 2 == 0) list.add(Container(height: 210));
     }
-    if (list.length % 2 == 0) list.add(Container(height: 180));
+    if (list.length > 0 && list.length % 2 == 0) list.add(Container(height: 180));
 
     if (test.listQuestionsWordsAndNumbers?.isNotEmpty == true) {
-      list.addAll(getListQuestions("${sectionNumber++}. ${listTranslatedHeaders.first.toString()}",test.listQuestionsWordsAndNumbers!));
+      list.addAll(getListQuestions("${sectionNumber++}. ${listTranslatedHeaders[4].toString()}",test.listQuestionsWordsAndNumbers!));
 
+    }
+    if (list.length > 0 && list.length % 2 == 0) list.add(Container(height: 180));
+    if (test.listMultiplicationTableExercises?.isNotEmpty == true) {
+      list.add(Container(
+          child: Text("${sectionNumber++}. ${listTranslatedHeaders[5].toString()}",
+              style: TextStyle(fontSize: 28,color: PdfColors.red500,))));
+      list.add(SizedBox(height: 10));
+      test.listMultiplicationTableExercises?.forEach((element) {
+        list.add(getWidgetQuestion(test.listMultiplicationTableExercises!.indexOf(element), element));
+      });
+      if ((test.listMultiplicationTableExercises?.length??1) % 2 == 0) list.add(Container(height: 210));
     }
     return list;
   }

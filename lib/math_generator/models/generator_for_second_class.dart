@@ -21,13 +21,13 @@ class GeneratorForSecondClass extends BaseGenerator {
     Test test = new Test();
     test.numberClass = 2;
     try {
-      if (classSettings.listItemsSettings.first.active)
+      if (classSettings.getListItemsSettings().first.active)
         test.exercises = createExercises(
-            classSettings.listItemsSettings.first.amountQuestions);
+            classSettings.getListItemsSettings().first.amountQuestions);
     } catch (Exeption) {}
     /////////////////////////////////////////////////////////////////////////////////////////
     try {
-      var questionWordNumbers = classSettings.listItemsSettings.firstWhere(
+      var questionWordNumbers = classSettings.getListItemsSettings().firstWhere(
               (element) => element.typeQuestion == QUESTION_TYPE_WORD_NUMBERS);
       if (questionWordNumbers.active)
         test.listQuestionsWordNumbers =
@@ -35,7 +35,7 @@ class GeneratorForSecondClass extends BaseGenerator {
     } catch (Exeption) {}
     /////////////////////////////////////////////////////////////////////////////////////////
     try {
-      var questionWordsAndNumbers = classSettings.listItemsSettings.firstWhere(
+      var questionWordsAndNumbers = classSettings.getListItemsSettings().firstWhere(
               (element) =>
           element.typeQuestion == QUESTION_TYPE_WORDS_AND_NUMBERS);
       if (questionWordsAndNumbers.active)
@@ -44,7 +44,7 @@ class GeneratorForSecondClass extends BaseGenerator {
     } catch (Exeption) {}
     /////////////////////////////////////////////////////////////////////////////////////////
     try {
-      var questionInsert = classSettings.listItemsSettings.firstWhere(
+      var questionInsert = classSettings.getListItemsSettings().firstWhere(
               (element) =>
           element.typeQuestion == QUESTION_TYPE_INSERT_NUMBERS);
       if (questionInsert.active)
@@ -53,7 +53,7 @@ class GeneratorForSecondClass extends BaseGenerator {
     } catch (Exeption) {}
     /////////////////////////////////////////////////////////////////////////////////////////
     try {
-      var questionComparison = classSettings.listItemsSettings.firstWhere(
+      var questionComparison = classSettings.getListItemsSettings().firstWhere(
               (element) =>
           element.typeQuestion == QUESTION_TYPE_COMPARISON_NUMBERS);
       if (questionComparison.active)
@@ -62,7 +62,7 @@ class GeneratorForSecondClass extends BaseGenerator {
     } catch (Exeption) {}
     /////////////////////////////////////////////////////////////////////////////////////////
     try {
-      var questionFromMultiplicationTable = classSettings.listItemsSettings
+      var questionFromMultiplicationTable = classSettings.getListItemsSettings()
           .firstWhere(
               (element) =>
           element.typeQuestion == QUESTION_TYPE_FROM_MULTIPLICATION_TABLE);
