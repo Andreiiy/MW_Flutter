@@ -61,7 +61,9 @@ class Test{
         + (listQuestionsWordsAndNumbers ?? [])
         +  (listInsertNumbersExercises ?? [])
         + (listComparisonNumbersExercises ?? [])
-        + (listMultiplicationTableExercises ?? []);
+        + (listMultiplicationTableExercises ?? [])
+        + (listExercisesWithFractions ?? []
+        );
   }
 
 

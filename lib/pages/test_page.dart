@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:math_world/localization/language_constants.dart';
 import 'package:math_world/math_generator/models/class_settings.dart';
 import 'package:math_world/widgets/custom_radio_widget.dart';
+import 'package:math_world/widgets/widget_fraction.dart';
 
 import '../math_generator/math_generator.dart';
 import '../math_generator/models/question.dart';
@@ -131,7 +132,7 @@ class _TestPageState extends State<TestPage>
   }
 
   Widget getQuestionWidget(Question question) {
-    if (question.exercise != null) {
+    if (question.exercise != null || question.exerciseOperand1 != null) {
       if (widget.test.numberClass == 1)
         return getQuestionWidgetForFirstClass(question);
       else {
@@ -157,6 +158,10 @@ class _TestPageState extends State<TestPage>
           case TYPE_WORD_AND_NUMBER:
             {
               return getWidgetWordsAndNumbersQuestion(question);
+            }
+          case TYPE_FRACTIONS:
+            {
+              return getWidgetFractionQuestion(question);
             }
         }
       }
@@ -379,6 +384,43 @@ class _TestPageState extends State<TestPage>
     return rows;
   }
 
+  List<Widget> getQuestionRaw(
+      List<int?> list, Question question, int indexControllers) {
+    List<Widget> rowNames = [];
+    list.forEach((element) {
+      rowNames.add(Expanded(
+          child: Container(
+              alignment: Alignment.center,
+              child: element == null
+                  ? TextField(
+                      controller:
+                          question.insertNumberControllers[indexControllers++],
+                      onChanged: (value) {
+                        setState(() {
+                          question.answerFromUserIsCorrect =
+                              question.checkInsertNumbersQuestionAnswers();
+                          question.isAnswered =
+                              question.checkInsertNumbersQuestionIsAnswered();
+                        });
+                      },
+                      style: GoogleFonts.courgette(
+                          color: getColorTextForInsertNumberTextField(
+                              question,
+                              question
+                                  .insertNumberControllers[
+                                      (indexControllers - 1)]
+                                  .text)),
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                      ),
+                    )
+                  : Text(element.toString(),
+                      style: GoogleFonts.courgette(color: Colors.white)))));
+    });
+    return rowNames;
+  }
+
   Widget getQuestionWidgetForFirstClass(Question question) {
     var answers = question.listAnswers ?? [];
     var indexOperand1 = int.parse(question.exercise!.split(' ')[0]) - 1;
@@ -533,41 +575,70 @@ class _TestPageState extends State<TestPage>
     //  }
   }
 
-  List<Widget> getQuestionRaw(
-      List<int?> list, Question question, int indexControllers) {
-    List<Widget> rowNames = [];
-    list.forEach((element) {
-      rowNames.add(Expanded(
-          child: Container(
-              alignment: Alignment.center,
-              child: element == null
-                  ? TextField(
-                      controller:
-                          question.insertNumberControllers[indexControllers++],
-                      onChanged: (value) {
-                        setState(() {
-                          question.answerFromUserIsCorrect =
-                              question.checkInsertNumbersQuestionAnswers();
-                          question.isAnswered =
-                              question.checkInsertNumbersQuestionIsAnswered();
-                        });
-                      },
+  Widget getWidgetFractionQuestion(Question question) {
+    var answers = question.listAnswers ?? [];
+    return Container(
+        child: ListView(
+      children: <Widget>[
+        Container(
+          alignment: Alignment.topCenter,
+          child: Row(
+            children: [
+              Expanded(child: Container()),
+              FractionWidget(
+                operand: question.exerciseOperand1 ?? "",
+                operator: question.operator,
+                operand2: question.exerciseOperand2,
+                textColor: Colors.white,
+                textSize: 24,
+              ),
+              Expanded(child: Container()),
+            ],
+          ),
+        ),
+
+        for (int i = 0; i <= answers.length - 1; i++)
+          Row(
+            children: [
+              CustomRadioWidget(
+                value: answers[i],
+                groupValue: question.answerOfUser,
+                activeColor: Colors.red,
+                onChanged: (value) {
+                  setState(() {
+                    question.answerOfUser = value as String?;
+                    if (question.answer == value)
+                      question.answerFromUserIsCorrect = true;
+                    question.isAnswered = true;
+                  });
+                },
+              ),
+              Container(
+                alignment: Alignment.topCenter,
+                child: Row(
+                  children: [
+                    FractionWidget(
+                      operand: answers[i] ?? "",
+                      textColor: Colors.white,
+                      textSize: 16,
+                    ),
+                    Text(
+                      widget.isCheckTest == true
+                          ? answers[i] == question.answer
+                          ? "    ${getTranslated(context, "correct_answer") ?? ""}"
+                          : ""
+                          : "",
                       style: GoogleFonts.courgette(
-                          color: getColorTextForInsertNumberTextField(
-                              question,
-                              question
-                                  .insertNumberControllers[
-                                      (indexControllers - 1)]
-                                  .text)),
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      ),
+                          fontSize: 12,
+                          color: getColorForAnswer(question, answers[i])),
                     )
-                  : Text(element.toString(),
-                      style: GoogleFonts.courgette(color: Colors.white)))));
-    });
-    return rowNames;
+                  ],
+                ),
+              ),
+            ],
+          )
+      ],
+    ));
   }
 
   List<Tab> getTabs() {

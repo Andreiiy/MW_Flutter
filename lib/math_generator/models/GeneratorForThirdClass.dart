@@ -25,7 +25,7 @@ class GeneratorForThirdClass extends BaseGenerator {
         test.exercises = createExercises(
             classSettings.getListItemsSettings().first.amountQuestions);
     } catch (Exeption) {}
-    /////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////
     try {
       var questionWordNumbers = classSettings.getListItemsSettings().firstWhere(
               (element) => element.typeQuestion == QUESTION_TYPE_WORD_NUMBERS);
@@ -88,7 +88,7 @@ class GeneratorForThirdClass extends BaseGenerator {
   List<Question> createExercisesWithFractions(int numberExercises) {
     List<Question> listExercises = [];
     while (listExercises.length != numberExercises) {
-      var question = getFractionExercise(1,null);
+      var question = getFractionExercise(5,null);
       question.type = QUESTION_TYPE_FRACTIONS;
       try {
         listExercises

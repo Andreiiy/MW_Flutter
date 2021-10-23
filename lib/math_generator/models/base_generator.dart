@@ -6,6 +6,7 @@ import 'class_settings.dart';
 import 'question.dart';
 import 'test.dart';
 
+
 abstract class BaseGenerator {
   abstract int maxNumberForClass;
   abstract int maxNumberForInsertQuestion;
@@ -280,12 +281,19 @@ abstract class BaseGenerator {
 
       double operand1 =
           double.parse((rnd.nextDouble() * maxNumber + 0.1).toStringAsFixed(1));
-      while (operand1 < 0.1 || operand1 > maxNumber)
+      while (operand1 < 0.1 || operand1 > maxNumber) {
+        now = new DateTime.now();
+        rnd = new Random(now.millisecondsSinceEpoch);
         operand1 = double.parse(
             (rnd.nextDouble() * maxNumber + 0.1).toStringAsFixed(1));
+      }
       double operand2 = double.parse((rnd.nextDouble() * operand1 + 0.1).toStringAsFixed(1));
-      while (operand2 > operand1)
-        operand2 = double.parse((rnd.nextDouble() * operand1 + 0.1).toStringAsFixed(1));
+      while (operand2 > operand1) {
+        now = new DateTime.now();
+        rnd = new Random(now.millisecondsSinceEpoch);
+        operand2 = double.parse(
+            (rnd.nextDouble() * operand1 + 0.1).toStringAsFixed(1));
+      }
 
       question.exerciseOperand1 = Fraction.fromDouble(operand1).toString();
       question.exerciseOperand2 = Fraction.fromDouble(operand2).toString();
@@ -343,8 +351,8 @@ abstract class BaseGenerator {
         else if (question.answerNotCorrect3 == null && Fraction.fromDouble(result).toString() != question.answerNotCorrect1
             && Fraction.fromDouble(result).toString() != question.answerNotCorrect2) {
           question.answerNotCorrect3 = Fraction.fromDouble(result).toString();
-          answerNotCorrectCreated = true;
         }
+        answerNotCorrectCreated = true;
       }
     }
   }
