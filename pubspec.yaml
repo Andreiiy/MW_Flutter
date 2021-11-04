@@ -37,8 +37,7 @@ dependencies:
   # open pdf document
   open_file: ^3.1.0
 
-  # work with fractions
-  fraction: ^3.1.0
+
 
 
 

@@ -618,7 +618,7 @@ class _TestPageState extends State<TestPage>
                 child: Row(
                   children: [
                     FractionWidget(
-                      operand: answers[i] ?? "",
+                      operand: answers[i],
                       textColor: Colors.white,
                       textSize: 16,
                     ),

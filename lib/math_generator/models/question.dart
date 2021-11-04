@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:math_world/math_generator/models/fraction.dart';
 
 class Question {
   String questionImage = "";

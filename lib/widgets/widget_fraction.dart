@@ -69,6 +69,7 @@ class FractionWidget extends StatelessWidget {
             ),
             visible: integer != null,
           ),
+          SizedBox(width: 5,),
           Visibility(
             child: Container(
               child: Column(
