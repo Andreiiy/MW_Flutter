@@ -271,54 +271,55 @@ abstract class BaseGenerator {
   Question getFractionExercise(int maxNumber, String? operator) {
     Question question = new Question();
     Fraction answer = Fraction(numerator: 1, denominator: 1);
-    var now = new DateTime.now();
-    Random rnd = new Random(now.millisecondsSinceEpoch);
     bool exerciseCreated = false;
 
     while (!exerciseCreated) {
       String functionOperator = operator ?? getRandomPlusMinusOperator();
 
       Fraction operand1 = _createFractionOperand(maxNumber);
-      Fraction operand2 = Fraction(
-        numerator: rnd.nextInt(30) + 1,
-        denominator: rnd.nextInt(30) + 1,
-      );
+      Fraction operand2 = _createFractionSecondOperand(maxNumber,operand1);
+      // while (operand1.getFractionString() == "0") {
+      //   operand1 = _createFractionOperand(maxNumber);
+      // }
+      // while (operand1.getFractionString() == operand2.getFractionString() || operand2.getFractionString() == "0" || operand1.checkOtherFractionGreater(operand2)) {
+      //   operand2 = _createFractionSecondOperand(maxNumber,operand1);
+      // }
+      // if (maxNumber == 1) {
+      //   while (operand1.checkOtherFractionGreater(operand2) || operand2.getFractionString() == "0" || operand1.checkOtherFractionGreater(operand2)) {
+      //    operand2 = _createFractionOperand(maxNumber);
+      //   }
+      // } else {
+      //   if (operand2.numerator > operand2.denominator) {
+      //     operand2 = Fraction(
+      //         integer: ((operand1.integer ?? 0) +
+      //                 operand2.numerator / operand1.denominator)
+      //             .toInt(),
+      //         numerator: operand2.numerator % operand2.denominator,
+      //         denominator: operand2.denominator);
+      //   }
+      //   bool operand1Created = false;
+      //   if (!operand1.checkOtherFractionGreater(operand2))
+      //     operand1Created = true;
+      //   if (operand1.getFractionString() != operand2.getFractionString())
+      //     operand1Created = true;
+      //   else
+      //     operand1Created = false;
+      //   if (!operand1Created) {
+      //     while (!operand1Created) {
+      //       operand2 = _createFractionOperand(maxNumber);
+      //       if (!operand1.checkOtherFractionGreater(operand2))
+      //         operand1Created = true;
+      //       if (operand1.getFractionString() != operand2.getFractionString())
+      //         operand1Created = true;
+      //       else
+      //         operand1Created = false;
+      //     }
+      //   }
+      //   operand2 = Fraction.reduceFraction(operand2);
+      // }
 
-      if (maxNumber == 1) {
-        while (operand1.checkOtherFractionGreater(operand2)) {
-          now = new DateTime.now();
-          rnd = new Random(now.millisecondsSinceEpoch);
-          operand2 = Fraction(
-            numerator: rnd.nextInt(30) + 1,
-            denominator: rnd.nextInt(30) + 1,
-          );
-        }
-      }
-      else{
-        if (operand2.numerator > operand2.denominator) {
-          operand2 =  Fraction(integer: ((operand1.integer ?? 0) +
-              operand2.numerator / operand1.denominator).toInt(),
-              numerator: operand2.numerator % operand2.denominator,
-              denominator: operand2.denominator);
-        }
-        while (operand1.checkOtherFractionGreater(operand2) || operand1.getFractionString() == operand2.getFractionString()) {
-          now = new DateTime.now();
-          rnd = new Random(now.millisecondsSinceEpoch);
-          operand2 = Fraction(
-            numerator: rnd.nextInt(30) + 1,
-            denominator: rnd.nextInt(30) + 1,
-          );
-        }
-        if (operand2.numerator > operand2.denominator) {
-          operand2 =  Fraction(integer: ((operand1.integer ?? 0) +
-              operand2.numerator / operand1.denominator).toInt(),
-              numerator: operand2.numerator % operand2.denominator,
-              denominator: operand2.denominator);
-        }
-      }
-
-      answer =
-          Fraction.calculateFractions(functionOperator, operand1, operand2);
+      answer = Fraction.reduceFraction(
+          Fraction.calculateFractions(functionOperator, operand1, operand2));
 
       question.exerciseOperand1 = operand1.getFractionString();
       question.exerciseOperand2 = operand2.getFractionString();
@@ -336,44 +337,94 @@ abstract class BaseGenerator {
     return question;
   }
 
-  Fraction _createFractionOperand(int maxNumber){
+  Fraction _createFractionOperand(int maxNumber) {
     var now = new DateTime.now();
-    Random rnd = new Random(now.millisecondsSinceEpoch);
-   Fraction operand = Fraction(
-      numerator: rnd.nextInt(30) + 1,
-      denominator: rnd.nextInt(30) + 1,
+    Random rnd1 = new Random(now.millisecondsSinceEpoch);
+    Random rnd2 = new Random(now.millisecondsSinceEpoch + now.millisecondsSinceEpoch);
+    bool fractionCreated = false;
+    Fraction operand = Fraction(
+      numerator: rnd1.nextInt(10) + 1,
+      denominator: rnd2.nextInt(10) + 1,
     );
-   if(maxNumber == 1){
-     while (operand.numerator > operand.denominator || operand.numerator == 0 || operand.numerator == operand.denominator) {
-       now = new DateTime.now();
-       rnd = new Random(now.millisecondsSinceEpoch);
-       operand = Fraction(
-         numerator: rnd.nextInt(30) + 1,
-         denominator: rnd.nextInt(30) + 1,
-       );
-     }
-   }else{
-     while (operand.numerator <= 0 || operand.numerator == operand.denominator) {
-       operand = Fraction(
-         numerator: rnd.nextInt(30) + 1,
-         denominator: rnd.nextInt(30) + 1,
-       );
-     }
-     if (operand.numerator > operand.denominator) {
-       operand =  Fraction(integer: ((operand.integer ?? 0) +
-           operand.numerator / operand.denominator).toInt(),
-           numerator: operand.numerator % operand.denominator,
-           denominator: operand.denominator);
-     }
-   }
-   return operand;
-  }
+    while(!fractionCreated){
+    if (maxNumber == 1) {
+      while (operand.numerator > operand.denominator) {
+        now = new DateTime.now();
+        rnd1 = new Random(now.millisecondsSinceEpoch);
+        rnd2 = new Random(now.millisecondsSinceEpoch + now.millisecondsSinceEpoch);
+        operand = Fraction(
+          numerator: rnd1.nextInt(10) + 1,
+          denominator: rnd2.nextInt(10) + 1,
+        );
+      }
+    } else {
+        now = new DateTime.now();
+        rnd1 = new Random(now.millisecondsSinceEpoch);
+        rnd2 = new Random(now.millisecondsSinceEpoch + now.millisecondsSinceEpoch);
+        operand = Fraction(
+          numerator: rnd1.nextInt(10) + 1,
+          denominator: rnd2.nextInt(10) + 1,
+        );
+    }
+    if(operand.getFractionString() == "0") fractionCreated = false;
+    else fractionCreated = true;
+    if(operand.numerator == operand.denominator) fractionCreated = false;
 
+    }
+
+    return Fraction.reduceFraction(operand);
+  }
+  Fraction _createFractionSecondOperand(int maxNumber,Fraction firstOperand) {
+    var now = new DateTime.now();
+    Random rnd1 = new Random(now.millisecondsSinceEpoch);
+    Random rnd2 = new Random(now.millisecondsSinceEpoch + now.millisecondsSinceEpoch);
+    bool operandCreated = false;
+    Fraction secondOperand = Fraction(
+      numerator: rnd1.nextInt(10) + 1,
+      denominator: rnd2.nextInt(10) + 1,
+    );
+    while(!operandCreated) {
+      if (maxNumber == 1) {
+        while (!secondOperand.checkOtherFractionGreater(Fraction(numerator: 1,denominator: 1))){
+          now = new DateTime.now();
+          rnd1 = new Random(now.millisecondsSinceEpoch);
+          rnd2 =
+          new Random(now.millisecondsSinceEpoch + now.millisecondsSinceEpoch);
+          secondOperand = Fraction(
+            numerator: rnd1.nextInt(10) + 1,
+            denominator: rnd2.nextInt(10) + 1,
+          );
+        }
+      } else {
+          now = new DateTime.now();
+          rnd1 = new Random(now.millisecondsSinceEpoch);
+          rnd2 =
+          new Random(now.millisecondsSinceEpoch + now.millisecondsSinceEpoch);
+          secondOperand = Fraction(
+            numerator: rnd1.nextInt(10) + 1,
+            denominator: rnd2.nextInt(firstOperand.denominator +5) + firstOperand.denominator,
+          );
+
+      }
+      operandCreated = checkSecondFractionOperandIsCreated(firstOperand, secondOperand);
+    }
+    return Fraction.reduceFraction(secondOperand);
+  }
+  bool checkSecondFractionOperandIsCreated(Fraction firstOperand, Fraction secondOperand){
+    return firstOperand.checkOtherFractionGreater(secondOperand) == false &&
+        firstOperand.getFractionString() != secondOperand.getFractionString() &&
+        secondOperand.denominator >= firstOperand.denominator &&
+        secondOperand.getFractionString() != "0" && secondOperand.numerator != secondOperand.denominator
+        && firstOperand.getFractionString() != secondOperand.getFractionString()
+    ;
+  }
   createFractionAnswersNotCorrect(
       Question question, Fraction answer, int maxNumberForExercise) {
-    _createAnswerFractionNotCorrect(question, answer, maxNumberForExercise);
-    _createAnswerFractionNotCorrect(question, answer, maxNumberForExercise);
-    _createAnswerFractionNotCorrect(question, answer, maxNumberForExercise);
+    while (question.answerNotCorrect1 == null ||
+        question.answerNotCorrect2 == null ||
+        question.answerNotCorrect3 == null) {
+      _createAnswerFractionNotCorrect(question, answer, maxNumberForExercise);
+    }
   }
 
   void _createAnswerFractionNotCorrect(
@@ -386,7 +437,7 @@ abstract class BaseGenerator {
       rnd = new Random(now.microsecondsSinceEpoch);
       String operator = getRandomPlusMinusOperator();
       int numerator = 0;
-      while (numerator < 1 || numerator > 30) {
+      while (numerator < 1) {
         now = new DateTime.now();
         rnd = new Random(now.microsecondsSinceEpoch);
         operator = getRandomPlusMinusOperator();
@@ -396,7 +447,7 @@ abstract class BaseGenerator {
       }
       operator = getRandomPlusMinusOperator();
       int denominator = 0;
-      while (denominator < 1 || numerator > 30) {
+      while (denominator < 1) {
         now = new DateTime.now();
         rnd = new Random(now.microsecondsSinceEpoch);
         operator = getRandomPlusMinusOperator();
@@ -407,21 +458,21 @@ abstract class BaseGenerator {
       Fraction answerNotCorrect =
           Fraction(numerator: numerator, denominator: denominator);
       if (answerNotCorrect.getFractionString() != answer.getFractionString()) {
-         if (question.answerNotCorrect1 == null) {
-            question.answerNotCorrect1 = answerNotCorrect.getFractionString();
-          } else if (question.answerNotCorrect2 == null &&
-              answerNotCorrect.getFractionString() !=
-                  question.answerNotCorrect1) {
-            question.answerNotCorrect2 = answerNotCorrect.getFractionString();
-          } else if (question.answerNotCorrect3 == null &&
-              answerNotCorrect.getFractionString() !=
-                  question.answerNotCorrect1 &&
-              answerNotCorrect.getFractionString() !=
-                  question.answerNotCorrect2) {
-            question.answerNotCorrect3 = answerNotCorrect.getFractionString();
-          }
-          answerNotCorrectCreated = true;
+        if (question.answerNotCorrect1 == null) {
+          question.answerNotCorrect1 = answerNotCorrect.getFractionString();
+        } else if (question.answerNotCorrect2 == null &&
+            answerNotCorrect.getFractionString() !=
+                question.answerNotCorrect1) {
+          question.answerNotCorrect2 = answerNotCorrect.getFractionString();
+        } else if (question.answerNotCorrect3 == null &&
+            answerNotCorrect.getFractionString() !=
+                question.answerNotCorrect1 &&
+            answerNotCorrect.getFractionString() !=
+                question.answerNotCorrect2) {
+          question.answerNotCorrect3 = answerNotCorrect.getFractionString();
         }
+        answerNotCorrectCreated = true;
+      }
     }
   }
 }

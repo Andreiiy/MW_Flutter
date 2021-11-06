@@ -54,11 +54,11 @@ static Fraction calculateFractions(String operator,Fraction operand1, Fraction o
       operand2.denominator = operand1.denominator;
     }
   }
-static Fraction _reduceFraction(Fraction fraction){
+static Fraction reduceFraction(Fraction fraction){
     Fraction reduceFraction = fraction;
     if(fraction.numerator > fraction.denominator) {
-      reduceFraction = Fraction(integer: ((fraction.integer ?? 0) +
-          fraction.numerator / fraction.denominator).toInt(),
+      reduceFraction = Fraction(integer: (fraction.integer ?? 0) +
+          fraction.numerator ~/ fraction.denominator,
           numerator: fraction.numerator % fraction.denominator,
           denominator: fraction.denominator);
     }
@@ -69,13 +69,14 @@ static Fraction _reduceFraction(Fraction fraction){
         reduceFraction.denominator =reduceFraction.denominator ~/ numberDenominator;
       }
     }
+
   return reduceFraction;
 }
 static Fraction _add(Fraction operand1, Fraction operand2){
-  return _reduceFraction(Fraction(numerator: operand1.numerator + operand2.numerator, denominator: operand1.denominator));
+  return reduceFraction(Fraction(numerator: operand1.numerator + operand2.numerator, denominator: operand1.denominator));
 }
 static Fraction _sub(Fraction operand1, Fraction operand2){
-  return _reduceFraction(Fraction(numerator: operand1.numerator - operand2.numerator, denominator: operand1.denominator));
+  return reduceFraction(Fraction(numerator: operand1.numerator - operand2.numerator, denominator: operand1.denominator));
 }
 
   String getFractionString() {
