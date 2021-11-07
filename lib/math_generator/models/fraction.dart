@@ -59,7 +59,7 @@ static Fraction reduceFraction(Fraction fraction){
     if(fraction.numerator > fraction.denominator) {
       reduceFraction = Fraction(integer: (fraction.integer ?? 0) +
           fraction.numerator ~/ fraction.denominator,
-          numerator: fraction.numerator % fraction.denominator,
+          numerator:fraction.numerator % fraction.denominator == 0? 1 : fraction.numerator % fraction.denominator,
           denominator: fraction.denominator);
     }
     for( int i = 10 ; i > 1; i-- ){
@@ -83,7 +83,7 @@ static Fraction _sub(Fraction operand1, Fraction operand2){
     String fractionString = numerator.toString() +"/"+denominator.toString();
     if(integer != null && integer! > 0)
       fractionString = integer.toString()+"/"+numerator.toString() +"/"+denominator.toString();
-    if(numerator == 0)
+    if(numerator == 0 || denominator == 0)
       fractionString = "0";
     return fractionString;
   }

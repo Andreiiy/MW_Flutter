@@ -88,7 +88,7 @@ class GeneratorForThirdClass extends BaseGenerator {
   List<Question> createExercisesWithFractions(int numberExercises) {
     List<Question> listExercises = [];
     while (listExercises.length != numberExercises) {
-      var question = getFractionExercise(5,null);
+      var question = getFractionExercise(1,null);
       question.type = QUESTION_TYPE_FRACTIONS;
       try {
         listExercises
@@ -98,7 +98,23 @@ class GeneratorForThirdClass extends BaseGenerator {
         listExercises.add(question);
       }
     }
-    return listExercises;
+    return shuffle(listExercises);
+  }
+  List<Question> shuffle(List<Question> items) {
+    var random = new Random();
+
+    // Go through all elements.
+    for (var i = items.length - 1; i > 0; i--) {
+
+      // Pick a pseudorandom number according to the list length
+      var n = random.nextInt(i + 1);
+
+      var temp = items[i];
+      items[i] = items[n];
+      items[n] = temp;
+    }
+
+    return items;
   }
   List<Question> createMultiplicationTableExercises(int tableSize ,int numberExercises) {
     List<Question> listExercises = [];
