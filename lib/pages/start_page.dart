@@ -75,15 +75,29 @@ class _StartPageState extends State<StartPage> {
 
             Center(
           // margin: EdgeInsets.all(20),
-          child: FloatingActionButton.extended(
-            backgroundColor: Colors.green,
-            onPressed: () {
-              Navigator.pushNamed(context, classSelectionPage);
-            },
-            label: Text(
-              "Create test ",
-              style: GoogleFonts.courgette(color: Colors.white, fontSize: 26),
-            ),
+          child:Column(
+            children: [
+              FloatingActionButton.extended(
+                backgroundColor: Colors.green,
+                onPressed: () {
+                  Navigator.pushNamed(context, classSelectionPage);
+                },
+                label: Text(
+                  "Create test ",
+                  style: GoogleFonts.courgette(color: Colors.white, fontSize: 26),
+                ),
+              ),
+              FloatingActionButton.extended(
+                backgroundColor: Colors.green,
+                onPressed: () {
+                  Navigator.pushNamed(context, registrationPage);
+                },
+                label: Text(
+                  getTranslated(context, 'registration')??"",
+                  style: GoogleFonts.courgette(color: Colors.white, fontSize: 26),
+                ),
+              ),
+            ],
           ),
         ),
 
