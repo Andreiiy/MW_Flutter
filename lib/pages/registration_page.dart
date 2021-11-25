@@ -6,7 +6,6 @@ import 'package:math_world/localization/language_constants.dart';
 import 'package:math_world/router/route_constants.dart';
 
 class RegistrationPage extends StatefulWidget {
-
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
@@ -28,8 +27,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
       appBar: AppBar(
         backgroundColor: Color(0xff484443),
         title: Text(
-          getTranslated(context, 'registration')??"",
-          style: GoogleFonts.courgette(color: Colors.white,fontSize: 16),
+          getTranslated(context, 'registration') ?? "",
+          style: GoogleFonts.courgette(color: Colors.white, fontSize: 16),
         ),
       ),
       body: FutureBuilder(
@@ -55,40 +54,60 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(10),
                             child: Text(
-                              getTranslated(context, "registration")??"",
-                                style: GoogleFonts.courgette(color: Colors.white,fontSize: 30)
-                            )),
+                                getTranslated(context, "registration") ?? "",
+                                style: GoogleFonts.courgette(
+                                    color: Colors.white, fontSize: 30))),
                         Container(
                           padding: EdgeInsets.all(10),
                           child: TextField(
+                            cursorColor: Colors.white,
                             controller: firstNameController,
                             decoration: InputDecoration(
-                              enabledBorder: const OutlineInputBorder(
-                                  borderSide: const BorderSide(color: Colors.white, width: 1.0),
-
-                              ),
-                                fillColor: Colors.white, filled: true,
-                              //border: OutlineInputBorder(),
-                              labelText: getTranslated(context, "first_name"),
-
-                            ),
-                            //style: TextStyle(color: Colors.white),
-                            style: GoogleFonts.courgette(color: Colors.white,fontSize: 16),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.white, width: 1.0),
+                                ),
+                                disabledBorder: const OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.white, width: 1.0),
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.white, width: 1.0),
+                                ),
+                                labelText: getTranslated(context, "first_name"),
+                                labelStyle:
+                                    GoogleFonts.courgette(color: Colors.white)),
+                            style: GoogleFonts.courgette(
+                                color: Colors.white, fontSize: 16),
                           ),
                         ),
                         Container(
                           padding: EdgeInsets.all(10),
                           child: TextField(
+                            cursorColor: Colors.white,
                             controller: lastNameController,
                             decoration: InputDecoration(
                               enabledBorder: const OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.white, width: 1.0),
-                            ),
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1.0),
+                              ),
+                              disabledBorder: const OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1.0),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1.0),
+                              ),
                               labelText: getTranslated(context, "last_name"),
-                          ),
+                                labelStyle:
+                                GoogleFonts.courgette(color: Colors.white)
+                            ),
+                            style: GoogleFonts.courgette(
+                                color: Colors.white, fontSize: 16),
                           ),
                         ),
-
                         Container(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: TextField(
@@ -96,10 +115,20 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             controller: passwordController,
                             decoration: InputDecoration(
                               enabledBorder: const OutlineInputBorder(
-                                borderSide: const BorderSide(color: Colors.white, width: 1.0),
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1.0),
+                              ),
+                              disabledBorder: const OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1.0),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1.0),
                               ),
                               labelText: 'Password',
-
+                                labelStyle:
+                                GoogleFonts.courgette(color: Colors.white)
                             ),
                           ),
                         ),
@@ -146,9 +175,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               color: Theme.of(context).accentColor,
                               child: Center(
                                 child: Text(
-                                  getTranslated(context, 'registration')??"",
-                                   style: GoogleFonts.courgette(color: Colors.white,fontSize: 20)
-                                ),
+                                    getTranslated(context, 'registration') ??
+                                        "",
+                                    style: GoogleFonts.courgette(
+                                        color: Colors.white, fontSize: 20)),
                               ),
                             )),
                       ],
