@@ -19,7 +19,7 @@ class GeneratorForThirdClass extends BaseGenerator {
   @override
   Test generateTest(ClassSettings classSettings) {
     Test test = new Test();
-    test.numberClass = 2;
+    test.numberClass = 3;
     try {
       if (classSettings.getListItemsSettings().first.active)
         test.exercises = createExercises(

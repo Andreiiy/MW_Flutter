@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:math_world/localization/language_constants.dart';
+import 'package:math_world/models/user.dart';
+import 'package:math_world/remote/repository.dart';
+import 'package:math_world/remote/responce_from_server.dart';
 import 'package:math_world/router/route_constants.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -11,6 +14,7 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  Repository _repository = Repository();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -167,7 +171,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         Container(
                             padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                             child: MaterialButton(
-                              onPressed: () {
+                              onPressed: () async {
+
+                           ResponseFromServer?  response =  await _repository.login("tatarenkoandrei7@gmail.com","111");
+                           User user = User.fromJson(response?.data);
+
                                 Navigator.pushNamed(context, startPage);
                               },
                               height: 50,

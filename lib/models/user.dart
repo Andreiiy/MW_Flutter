@@ -9,6 +9,7 @@ class User{
   String? email;
   String password;
   String country;
+  String token;
 
 
 
@@ -29,6 +30,7 @@ class User{
         firstName = json['firstName'] as String,
         lastName = json['lastName'] as String,
         password = json['password'] as String,
-        country = json['country'] as String;
+        country = json['country'] as String,
+        token = json['token'] as String;
 
 }

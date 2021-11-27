@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:math_world/math_generator/models/class_settings.dart';
 import 'package:math_world/pages/class_selection_page.dart';
-import 'package:math_world/pages/registration_page.dart';
+import 'package:math_world/pages/registration/registration_page.dart';
 import 'package:math_world/pages/start_page.dart';
 import 'package:math_world/pages/test_page.dart';
 import 'package:math_world/pages/class_selection_page.dart';
