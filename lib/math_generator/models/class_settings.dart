@@ -35,17 +35,25 @@ class ClassSettings {
          nameKey: "written_number",
          typeQuestion: QUESTION_TYPE_WORD_NUMBERS),
     ]);
-    if (classNumber == 2 ||
-        classNumber == 3)
+    if (classNumber >= 2 )
      _listItemsSettings.add(ItemSettings(
          nameKey: "multiplication_table_exercises",
          typeQuestion: QUESTION_TYPE_FROM_MULTIPLICATION_TABLE));
-    if (classNumber >= 3)
+    if (classNumber >= 3){
      _listItemsSettings.add(ItemSettings(
          nameKey: "exercises_with_fractions",
          typeQuestion: QUESTION_TYPE_FRACTIONS));
+
+     _listItemsSettings.add(ItemSettings(
+         nameKey: "exercises_with_multiplication_and_division_fractions",
+         typeQuestion: QUESTION_TYPE__MULTIPLICATION_and_DIVISION_FRACTIONS));
+    }
+
    }
-  }
+
+
+   }
+
    return _listItemsSettings;
  }
 }
@@ -70,4 +78,5 @@ const int QUESTION_TYPE_INSERT_NUMBERS = 4;
 const int QUESTION_TYPE_COMPARISON_NUMBERS = 5;
 const int QUESTION_TYPE_FROM_MULTIPLICATION_TABLE = 6;
 const int QUESTION_TYPE_FRACTIONS = 7;
+const int QUESTION_TYPE__MULTIPLICATION_and_DIVISION_FRACTIONS = 8;
 

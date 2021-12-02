@@ -38,10 +38,8 @@ static Fraction calculateFractions(String operator,Fraction operand1, Fraction o
     switch(operator){
       case "+" :{ return _add(fraction1,fraction2);}
       case "-" :{return _sub(fraction1,fraction2);}
-      break;
-      case "*" :{}
-      break;
-      case "/" :{}
+      case "*" :{return _mult(fraction1,fraction2);}
+      case "/" :{return _div(fraction1,fraction2);}
       break;
     }
     return _add(operand1,operand2);
@@ -78,7 +76,12 @@ static Fraction _add(Fraction operand1, Fraction operand2){
 static Fraction _sub(Fraction operand1, Fraction operand2){
   return reduceFraction(Fraction(numerator: operand1.numerator - operand2.numerator, denominator: operand1.denominator));
 }
-
+  static Fraction _mult(Fraction operand1, Fraction operand2){
+    return reduceFraction(Fraction(numerator: operand1.numerator * operand2.numerator, denominator: operand1.denominator * operand2.denominator));
+  }
+  static Fraction _div(Fraction operand1, Fraction operand2){
+    return reduceFraction(Fraction(numerator: operand1.numerator * operand2.denominator, denominator: operand1.denominator * operand2.numerator));
+  }
   String getFractionString() {
     String fractionString = numerator.toString() +"/"+denominator.toString();
     if(integer != null && integer! > 0)

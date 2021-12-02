@@ -8,10 +8,10 @@ import 'test.dart';
 
 class GeneratorForThirdClass extends BaseGenerator {
   @override
-  int maxNumberForClass = 100;
+  int maxNumberForClass = 1000;
 
   @override
-  int maxNumberForInsertQuestion = 100;
+  int maxNumberForInsertQuestion = 1000;
 
   @override
   int differenceAnswers = 20;
@@ -88,7 +88,7 @@ class GeneratorForThirdClass extends BaseGenerator {
   List<Question> createExercisesWithFractions(int numberExercises) {
     List<Question> listExercises = [];
     while (listExercises.length != numberExercises) {
-      var question = getFractionExercise(1,null);
+      var question = getFractionExercise(1,null,QUESTION_TYPE_FRACTIONS);
       question.type = QUESTION_TYPE_FRACTIONS;
       try {
         listExercises

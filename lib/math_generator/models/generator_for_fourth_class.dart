@@ -7,9 +7,9 @@ import 'package:math_world/math_generator/models/test.dart';
 import 'base_generator.dart';
 import 'class_settings.dart';
 
-class GeneratorForThirdClass extends BaseGenerator {
+class GeneratorForFourthClass extends BaseGenerator {
 @override
-int maxNumberForClass = 1000;
+int maxNumberForClass = 10000;
 
 @override
 int maxNumberForInsertQuestion = 1000;
@@ -81,16 +81,26 @@ Test generateTest(ClassSettings classSettings) {
             (element) =>
         element.typeQuestion == QUESTION_TYPE_FRACTIONS);
     if (questionFraction.active) {
-      test.listExercisesWithFractions = createExercisesWithFractions(questionFraction.amountQuestions);
+      test.listExercisesWithFractions = createExercisesWithFractions(questionFraction.amountQuestions,QUESTION_TYPE_FRACTIONS);
+    }
+  } catch (Exeption) {}
+  /////////////////////////////////////////////////////////////////////////////////////////
+  try {
+    var questionFraction = classSettings.getListItemsSettings()
+        .firstWhere(
+            (element) =>
+        element.typeQuestion == QUESTION_TYPE__MULTIPLICATION_and_DIVISION_FRACTIONS);
+    if (questionFraction.active) {
+      test.listExercisesWithFractions = createExercisesWithFractions(questionFraction.amountQuestions,QUESTION_TYPE__MULTIPLICATION_and_DIVISION_FRACTIONS);
     }
   } catch (Exeption) {}
   return test;
 }
-List<Question> createExercisesWithFractions(int numberExercises) {
+List<Question> createExercisesWithFractions(int numberExercises, int questionTypeFractions) {
   List<Question> listExercises = [];
   while (listExercises.length != numberExercises) {
-    var question = getFractionExercise(1,null);
-    question.type = QUESTION_TYPE_FRACTIONS;
+    var question = getFractionExercise(5,null,questionTypeFractions);
+    question.type = questionTypeFractions;
     try {
       listExercises
           .firstWhere((element) => element.exerciseOperand1 == question.exerciseOperand1

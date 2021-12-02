@@ -163,6 +163,10 @@ class _TestPageState extends State<TestPage>
             {
               return getWidgetFractionQuestion(question);
             }
+            case TYPE__MULTIPLICATION_and_DIVISION_FRACTIONS:
+            {
+              return getWidgetFractionQuestion(question);
+            }
         }
       }
     }

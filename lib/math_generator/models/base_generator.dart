@@ -182,6 +182,22 @@ abstract class BaseGenerator {
       "-"
     ][rnd.nextInt(10) + 0];
   }
+  getRandomMultyDivOperator() {
+    var now = new DateTime.now();
+    Random rnd = new Random(now.microsecondsSinceEpoch);
+    return [
+      "*",
+      "/",
+      "*",
+      "/",
+      "*",
+      "/",
+      "*",
+      "/",
+      "*",
+      "/"
+    ][rnd.nextInt(10) + 0];
+  }
 
   List<Question>? createlistInsertNumbersExercises(int amountExercises) {
     List<Question> listExercises = [];
@@ -268,13 +284,13 @@ abstract class BaseGenerator {
     return question;
   }
 
-  Question getFractionExercise(int maxNumber, String? operator) {
+  Question getFractionExercise(int maxNumber, String? operator, int questionTypeFractions) {
     Question question = new Question();
     Fraction answer = Fraction(numerator: 1, denominator: 1);
     bool exerciseCreated = false;
 
     while (!exerciseCreated) {
-      String functionOperator = operator ?? getRandomPlusMinusOperator();
+      String functionOperator = operator ?? (questionTypeFractions == 7 ? getRandomPlusMinusOperator():getRandomMultyDivOperator());
 
       Fraction operand1 = _createFractionOperand(maxNumber);
       Fraction operand2 = _createFractionSecondOperand(maxNumber,operand1);
