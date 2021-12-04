@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:math_world/localization/language_constants.dart';
 import 'package:math_world/math_generator/models/question.dart';
 import 'package:math_world/math_generator/models/test.dart';
+import 'package:math_world/pdf_api/pdf_fraction_widget.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -12,6 +13,9 @@ import 'package:pdf/widgets.dart';
 import 'widgetCheckBox.dart';
 
 class PdfApi {
+
+  final pdf = Document();
+
   static Future<File> generateCenteredText(String text) async {
     final pdf = Document();
 
@@ -46,6 +50,9 @@ class PdfApi {
 
   static Future<File> createPDFTest(
       Test test, List<String> listTranslatedHeaders) async {
+    final  font = await rootBundle.load("assets/fonts/Nunito-Regular.ttf");
+    final  ttfFont = Font.ttf(font);
+    final currentLanguageCode = await getLanguageCode();
     final pdf = Document();
 
     final imageJpg = (await rootBundle.load('assets/images/bg_pdf.png'))
@@ -54,7 +61,8 @@ class PdfApi {
 
     final pageTheme = PageTheme(
       pageFormat: PdfPageFormat.a4,
-      textDirection: getCurrentLanguageCode == 'he'
+      theme: ThemeData(defaultTextStyle: TextStyle(font:  ttfFont, )),
+      textDirection: currentLanguageCode == 'IL'
           ? TextDirection.rtl
           : TextDirection.ltr,
       buildBackground: (context) {
@@ -72,11 +80,15 @@ class PdfApi {
     pdf.addPage(
       MultiPage(
           pageTheme: pageTheme,
+          // textDirection: currentLanguageCode == 'IL'
+          //     ? TextDirection.rtl
+          //     : TextDirection.ltr,
           build: (context) => [
                 SizedBox(height: 300),
                 Center(
                   child: Text("Class ${test.numberClass}",
-                      style: TextStyle(fontSize: 48)),
+                      textDirection:TextDirection.rtl,
+                   style: TextStyle(fontSize: 48,font: ttfFont)),
                 ),
                 SizedBox(height: 350),
                 Column(
@@ -89,7 +101,7 @@ class PdfApi {
               //margin: EdgeInsets.only(top: 1 * PdfPageFormat.cm),
               child: Text(
                 text,
-                style: TextStyle(color: PdfColors.black),
+                style: TextStyle(color: PdfColors.black,font: ttfFont),
               ),
             );
           }),
@@ -101,14 +113,15 @@ class PdfApi {
   }
 
   static List<Widget> createPDFTestList(
-      Test test, List<String> listTranslatedHeaders) {
+      Test test, List<String> listTranslatedHeaders)  {
     List<Widget> list = [];
     int sectionNumber = 1;
+
 
     if (test.exercises?.isNotEmpty == true) {
       list.add(Center(
           child: Text("${sectionNumber++}. ${listTranslatedHeaders.first.toString()}",
-              style: TextStyle(fontSize: 28,color: PdfColors.red500,))));
+              style: TextStyle(fontSize: 28,color: PdfColors.red500))));
       list.add(SizedBox(height: 10));
       test.exercises?.forEach((element) {
         list.add(getWidgetQuestion(test.exercises!.indexOf(element), element));
@@ -164,6 +177,17 @@ class PdfApi {
       });
       if ((test.listMultiplicationTableExercises?.length??1) % 2 == 0) list.add(Container(height: 210));
     }
+    if (list.length > 0 && list.length % 2 == 0) list.add(Container(height: 180));
+    if (test.listExercisesWithFractions?.isNotEmpty == true) {
+      list.add(Container(
+          child: Text("${sectionNumber++}. ${listTranslatedHeaders[6].toString()}",
+              style: TextStyle(fontSize: 28,color: PdfColors.red500,))));
+      list.add(SizedBox(height: 10));
+      test.listExercisesWithFractions?.forEach((element) {
+        list.add(getWidgetQuestionWithFraction(test.listExercisesWithFractions!.indexOf(element), element));
+      });
+      if ((test.listExercisesWithFractions?.length??1) % 2 == 0) list.add(Container(height: 210));
+    }
     return list;
   }
 
@@ -194,6 +218,52 @@ class PdfApi {
     ];
     question.listAnswers?.forEach((element) {
       widgetList.add(WidgetCheckBox(text: element));
+      widgetList.add(SizedBox(height: 5));
+    });
+    widgetList.add(Divider(color: PdfColors.black));
+    widgetList.add(SizedBox(height: 5));
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: widgetList,
+      ),
+    );
+  }
+
+  static Widget getWidgetQuestionWithFraction(int questionNumber, Question question) {
+    var widgetList = [
+      Row(children: [
+        Text(
+          "${(questionNumber + 1)}.",
+          style: TextStyle(
+            fontSize: 28,
+            color: PdfColors.blue700,
+          ),
+        ),
+        SizedBox(width: 50),
+        Expanded(
+            child:
+            PdfFractionWidget(operand: question.exerciseOperand1??"",
+                operand2: question.exerciseOperand2,
+                operator: question.operator,
+            textSize: 24)),
+      ]
+     ),
+      SizedBox(height: 10),
+    ];
+    question.listAnswers?.forEach((element) {
+      widgetList.add(
+          //WidgetCheckBox(text:""));
+        Row(children: [
+          WidgetCheckBox(text:""),
+          SizedBox(width: 10),
+          Expanded(
+              child:
+              PdfFractionWidget(operand: element,
+                  textSize: 16)),
+        ]
+        ),
+      );
       widgetList.add(SizedBox(height: 5));
     });
     widgetList.add(Divider(color: PdfColors.black));

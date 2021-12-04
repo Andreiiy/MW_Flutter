@@ -39,7 +39,7 @@ static Fraction calculateFractions(String operator,Fraction operand1, Fraction o
       case "+" :{ return _add(fraction1,fraction2);}
       case "-" :{return _sub(fraction1,fraction2);}
       case "*" :{return _mult(fraction1,fraction2);}
-      case "/" :{return _div(fraction1,fraction2);}
+      case ":" :{return _div(fraction1,fraction2);}
       break;
     }
     return _add(operand1,operand2);

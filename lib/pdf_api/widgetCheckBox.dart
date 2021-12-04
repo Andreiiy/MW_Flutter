@@ -59,8 +59,7 @@ class WidgetCheckBox extends StatelessWidget {
                 )),
           ),
           SizedBox(width: 10),
-          Expanded(
-            child: Text(
+           Text(
               text!,
               textAlign: textAlign,
               style: TextStyle(
@@ -68,7 +67,7 @@ class WidgetCheckBox extends StatelessWidget {
                 color: PdfColors.black,
               ),
             ),
-          )
+
         ],
       ),
     );

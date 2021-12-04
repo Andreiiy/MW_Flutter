@@ -187,15 +187,15 @@ abstract class BaseGenerator {
     Random rnd = new Random(now.microsecondsSinceEpoch);
     return [
       "*",
-      "/",
+      ":",
       "*",
-      "/",
+      ":",
       "*",
-      "/",
+      ":",
       "*",
-      "/",
+      ":",
       "*",
-      "/"
+      ":"
     ][rnd.nextInt(10) + 0];
   }
 

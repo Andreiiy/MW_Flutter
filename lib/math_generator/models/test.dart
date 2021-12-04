@@ -41,7 +41,7 @@ class Test{
     'written_number',
     'decimal_numbers',
     'multiplication_table_exercises',
-    'exercises_with_fractions'
+    'fractions_exercises'
   ];
 
 
