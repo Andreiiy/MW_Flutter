@@ -1,5 +1,7 @@
 {
   "home_page": "Home Page",
+
+  "login": "Login",
   "question": "Question",
   "welcome": "Welcome!",
   "registration" : "Registration",
@@ -38,6 +40,8 @@
   "fractions_exercises" : "Exercises with  fractions",
   "exercises_with_multiplication_and_division_fractions" : "Exercises with multiplication and division fractions",
   "table_size" : "Table size",
+
+
 
 
   "from": "from",

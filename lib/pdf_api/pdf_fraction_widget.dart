@@ -59,7 +59,7 @@ class PdfFractionWidget extends StatelessWidget {
       child: Row(
         children: [
       integer != null? Text(
-              integer ?? "",
+              integer,
               style: TextStyle(
                   fontSize: textSize.toDouble(), color: textColor),
             ):Text(""),

@@ -10,15 +10,15 @@ class Repository{
   AppData _appData = AppData();
 
 
-  Future<ResponseFromServer?> register() async {
-      final response = await remoteDataSource.register();
+  Future<ResponseFromServer?> register(String name,String lastName, String password, String country) async {
+      final response = await remoteDataSource.register(name,lastName,password,country);
       if(response.errorCode ==  0)
         _appData.user = User.fromJson(response.data);
     return response;
   }
 
-  Future<ResponseFromServer?> login(String email, String password) async {
-    final response = await remoteDataSource.login(email,password);
+  Future<ResponseFromServer?> login(String lastName, String password) async {
+    final response = await remoteDataSource.login(lastName,password);
     if(response.errorCode ==  0)
       _appData.user = User.fromJson(response.data);
     return response;

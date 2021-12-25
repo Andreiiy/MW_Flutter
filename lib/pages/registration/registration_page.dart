@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:math_world/models/user.dart';
 import 'package:math_world/remote/repository.dart';
 import 'package:math_world/remote/responce_from_server.dart';
 import 'package:math_world/router/route_constants.dart';
+import 'package:math_world/widgets/loading_button.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -18,10 +21,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+
   TextEditingController passwordController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController dateOfBirthController = TextEditingController();
+
+  final RoundedLoadingButtonController submitButtonController =  RoundedLoadingButtonController();
   String phoneNumber = "";
+  bool? nameIsEmpty;
+  bool? lastNameIsEmpty;
+  bool? passwordValid;
 
   @override
   Widget build(BuildContext context) {
@@ -81,9 +88,23 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 ),
                                 labelText: getTranslated(context, "first_name"),
                                 labelStyle:
-                                    GoogleFonts.courgette(color: Colors.white)),
+                                    GoogleFonts.courgette(color: Colors.white),
+                              //error/////////////////////////////////////////////
+                            errorText: nameIsEmpty != null? nameIsEmpty == false?"Enter name":null:null,
+                            errorStyle: GoogleFonts.courgette(color: Colors.red),
+                            errorBorder: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.red, width: 1.0),
+                            ),
+                            focusedErrorBorder: const OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.red, width: 1.0),
+                            ),
+
+                            ),
                             style: GoogleFonts.courgette(
                                 color: Colors.white, fontSize: 16),
+
                           ),
                         ),
                         Container(
@@ -106,7 +127,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               ),
                               labelText: getTranslated(context, "last_name"),
                                 labelStyle:
-                                GoogleFonts.courgette(color: Colors.white)
+                                GoogleFonts.courgette(color: Colors.white),
+                              //error/////////////////////////////////////////////
+                              errorText: lastNameIsEmpty != null? lastNameIsEmpty == false?"Enter last name":null:null,
+                              errorStyle: GoogleFonts.courgette(color: Colors.red),
+                              errorBorder: const OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.red, width: 1.0),
+                              ),
+                              focusedErrorBorder: const OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.red, width: 1.0),
+                              ),
                             ),
                             style: GoogleFonts.courgette(
                                 color: Colors.white, fontSize: 16),
@@ -131,6 +163,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     color: Colors.white, width: 1.0),
                               ),
                               labelText: 'Password',
+                                errorText: passwordValid != null? passwordValid == false?"Enter password":null:null,
+                                errorStyle: GoogleFonts.courgette(color: Colors.red),
+                                errorBorder: const OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.red, width: 1.0),
+                                ),
+                                focusedErrorBorder: const OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.red, width: 1.0),
+                                ),
                                 labelStyle:
                                 GoogleFonts.courgette(color: Colors.white)
                             ),
@@ -147,6 +189,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             appBar: AppBar(
                               backgroundColor: Colors.white,
                               title: Text('Pick your country'),
+                              titleTextStyle:GoogleFonts.courgette(
+                                  color: Colors.white, fontSize: 16) ,
                             ),
 
                             theme: CountryTheme(
@@ -168,27 +212,49 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             },
                           ),
                         ),
-                        Container(
-                            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                            child: MaterialButton(
-                              onPressed: () async {
-
-                           ResponseFromServer?  response =  await _repository.login("tatarenkoandrei7@gmail.com","111");
-                           User user = User.fromJson(response?.data);
-
-                                Navigator.pushNamed(context, startPage);
-                              },
-                              height: 50,
-                              shape: StadiumBorder(),
-                              color: Theme.of(context).accentColor,
-                              child: Center(
-                                child: Text(
-                                    getTranslated(context, 'registration') ??
-                                        "",
-                                    style: GoogleFonts.courgette(
-                                        color: Colors.white, fontSize: 20)),
-                              ),
-                            )),
+                    Container(
+                     // padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                      child:
+                        RoundedLoadingButton(
+                          color: Theme.of(context).accentColor,
+                          successColor: Colors.green,
+                          controller: submitButtonController,
+                          onPressed: () {
+                            if(_validateForm())
+                            _submit(submitButtonController);
+                            else
+                              submitButtonController.reset();
+                          } ,
+                          valueColor: Colors.white,
+                          borderRadius: 30,
+                          child:  Text(
+                              getTranslated(context, 'registration') ??
+                                  "",
+                              style: GoogleFonts.courgette(
+                                  color: Colors.white, fontSize: 20)),
+                        )
+                        ),
+                        // Container(
+                        //     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        //     child: MaterialButton(
+                        //       onPressed: () async {
+                        //
+                        //    ResponseFromServer?  response =  await _repository.login("tatarenkoandrei7@gmail.com","111");
+                        //    User user = User.fromJson(response?.data);
+                        //
+                        //         Navigator.pushNamed(context, startPage);
+                        //       },
+                        //       height: 50,
+                        //       shape: StadiumBorder(),
+                        //       color: Theme.of(context).accentColor,
+                        //       child: Center(
+                        //         child: Text(
+                        //             getTranslated(context, 'registration') ??
+                        //                 "",
+                        //             style: GoogleFonts.courgette(
+                        //                 color: Colors.white, fontSize: 20)),
+                        //       ),
+                        //     )),
                       ],
                     ),
                   ),
@@ -199,11 +265,63 @@ class _RegistrationPageState extends State<RegistrationPage> {
             }
           }),
     );
+
+
+  }
+  _submit(RoundedLoadingButtonController submitButtonController) async {
+     //ResponseFromServer?  response =  await _repository.register(firstNameController.text.toString(),lastNameController.text,passwordController.text);
+    // User user = User.fromJson(response?.data);
+    //
+    // Navigator.pushNamed(context, startPage);
+    Timer(Duration(seconds: 5), () {
+      submitButtonController.error();
+      Timer(Duration(seconds: 1), () {
+        submitButtonController.reset();
+      });
+    });
+
   }
 
+  bool _validateForm(){
+    if(!_validateName(firstNameController.text) || !_validateLastName(lastNameController.text) || !_validatePassword(lastNameController.text)) {
+      setState(() {});
+      return false;
+    }
+    else
+      return true;
+  }
+  bool _validateName(String value) {
+    if (value.isEmpty) {
+      nameIsEmpty = false;
+      return false;
+    }
+    else {
+      nameIsEmpty = true;
+      return true;
+    }
+    }
+  bool _validateLastName(String value) {
+    if (value.isEmpty) {
+      lastNameIsEmpty = false;
+      return false;
+    }
+    else {
+      lastNameIsEmpty = true;
+      return true;
+    }
+  }
+  bool _validatePassword(String value) {
+    if (value.isEmpty) {
+      passwordValid = false;
+      return false;
+    }
+    else {
+      passwordValid = true;
+      return true;
+    }
+  }
   String? _validateEmail(String value) {
     if (value.isEmpty) {
-      // The form is empty
       return "Enter email address";
     }
     // This is just a regular expression for email addresses
@@ -222,3 +340,5 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 }
+
+

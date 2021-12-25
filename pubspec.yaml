@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  rxdart: '>=0.26.0 <0.28.0'
   provider: ^ 6.0.0
   shared_preferences: ^2.0.5
   country_list_pick: ^1.0.1+5
