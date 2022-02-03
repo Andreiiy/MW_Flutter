@@ -2,6 +2,7 @@ library rounded_loading_button;
 
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:rxdart/subjects.dart';
 
 /// States that your button can assume via the controller
 // ignore: public_member_api_docs

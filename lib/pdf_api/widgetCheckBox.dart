@@ -17,7 +17,10 @@ class WidgetCheckBox extends StatelessWidget {
         right: 2.0 * PdfPageFormat.mm,
       ),
       this.bulletShape = BoxShape.rectangle,
-      this.bulletColor = PdfColors.white});
+      this.bulletColor = PdfColors.white,
+      this.directionRTL = false
+      }
+  );
 
   final String? text;
 
@@ -37,9 +40,11 @@ class WidgetCheckBox extends StatelessWidget {
 
   final PdfColor bulletColor;
 
+  final bool directionRTL;
+
   @override
   Widget build(Context context) {
-    return Container(
+    return directionRTL == false? Container(
       margin: margin,
       padding: padding,
       child: Row(
@@ -68,6 +73,37 @@ class WidgetCheckBox extends StatelessWidget {
               ),
             ),
 
+        ],
+      ),
+    ):Container(
+      margin: margin,
+      padding: padding,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Expanded(child: Container()),
+          Text(
+            text!,
+            textAlign: textAlign,
+            style: TextStyle(
+              fontSize: 24,
+              color: PdfColors.black,
+            ),
+          ),
+          SizedBox(width: 10),
+          Container(
+            width: bulletSize,
+            height: bulletSize,
+            margin: bulletMargin,
+            decoration: BoxDecoration(
+                color: bulletColor,
+                border: Border(
+                  bottom: BorderSide(width: 1, color: PdfColors.black),
+                  top: BorderSide(width: 1, color: PdfColors.black),
+                  left: BorderSide(width: 1, color: PdfColors.black),
+                  right: BorderSide(width: 1, color: PdfColors.black),
+                )),
+          ),
         ],
       ),
     );

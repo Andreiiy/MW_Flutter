@@ -8,6 +8,7 @@
   "first_name": "First Name",
   "last_name": "Last name",
   "choose_class": "Choose a class",
+  "class": "Class",
   "units" : "units",
   "tens" : "tens",
   "hundreds" : "hundreds",

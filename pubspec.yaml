@@ -90,6 +90,7 @@ flutter:
      - family: Nunito
        fonts:
          - asset: assets/fonts/Nunito-Regular.ttf
+         - asset: assets/fonts/arial-unicode-ms.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

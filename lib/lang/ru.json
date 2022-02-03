@@ -7,6 +7,7 @@
   "first_name": "Имя",
   "last_name": "Фамилия",
   "choose_class": "Выбери класс",
+  "class": "Класс",
   "units" : "едениц",
   "tens" : "десятков",
   "hundreds" : "сотен",

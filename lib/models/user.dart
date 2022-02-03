@@ -7,7 +7,7 @@ class User{
   String firstName;
   String lastName;
   String? email;
-  String password;
+  String? password;
   String country;
   String token;
 
@@ -27,9 +27,8 @@ class User{
 
   User.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int,
-        firstName = json['firstName'] as String,
-        lastName = json['lastName'] as String,
-        password = json['password'] as String,
+        firstName = json['first_name'] as String,
+        lastName = json['last_name'] as String,
         country = json['country'] as String,
         token = json['token'] as String;
 

@@ -5,6 +5,7 @@ import 'package:math_world/localization/language_constants.dart';
 import 'package:math_world/math_generator/models/question.dart';
 import 'package:math_world/math_generator/models/test.dart';
 import 'package:math_world/pdf_api/pdf_fraction_widget.dart';
+import 'package:math_world/pdf_api/bidi.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -50,7 +51,7 @@ class PdfApi {
 
   static Future<File> createPDFTest(
       Test test, List<String> listTranslatedHeaders) async {
-    final  font = await rootBundle.load("assets/fonts/Nunito-Regular.ttf");
+    final  font = await rootBundle.load("assets/fonts/arial-unicode-ms.ttf");
     final  ttfFont = Font.ttf(font);
     final currentLanguageCode = await getLanguageCode();
     final pdf = Document();
@@ -61,10 +62,13 @@ class PdfApi {
 
     final pageTheme = PageTheme(
       pageFormat: PdfPageFormat.a4,
-      theme: ThemeData(defaultTextStyle: TextStyle(font:  ttfFont, )),
+      theme: ThemeData(
+          defaultTextStyle: TextStyle(font:  ttfFont, ),
+      ),
       textDirection: currentLanguageCode == 'IL'
           ? TextDirection.rtl
           : TextDirection.ltr,
+
       buildBackground: (context) {
         if (context.pageNumber == 1) {
           return FullPage(
@@ -86,7 +90,7 @@ class PdfApi {
           build: (context) => [
                 SizedBox(height: 300),
                 Center(
-                  child: Text("Class ${test.numberClass}",
+                  child: Text(" כיתה ${test.numberClass}".bidi(),
                       textDirection:TextDirection.rtl,
                    style: TextStyle(fontSize: 48,font: ttfFont)),
                 ),
@@ -124,7 +128,10 @@ class PdfApi {
               style: TextStyle(fontSize: 28,color: PdfColors.red500))));
       list.add(SizedBox(height: 10));
       test.exercises?.forEach((element) {
+        if(currentLanguageCode != 'he')
         list.add(getWidgetQuestion(test.exercises!.indexOf(element), element));
+        else
+          list.add(getWidgetQuestionRightToLeft(test.exercises!.indexOf(element), element));
       });
      if ((test.exercises?.length??1) % 2 == 0) list.add(Container(height: 210));
     }
@@ -218,6 +225,35 @@ class PdfApi {
     ];
     question.listAnswers?.forEach((element) {
       widgetList.add(WidgetCheckBox(text: element));
+      widgetList.add(SizedBox(height: 5));
+    });
+    widgetList.add(Divider(color: PdfColors.black));
+    widgetList.add(SizedBox(height: 5));
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: widgetList,
+      ),
+    );
+  }
+  static Widget getWidgetQuestionRightToLeft(int questionNumber, Question question) {
+   List<Widget> widgetList = [
+      Row(
+        children: [
+          Expanded(child: Container()),
+          SizedBox(height: 10),
+          Text(
+            "${question.exercise ?? ""}                  .${(questionNumber + 1)}",
+            style: TextStyle(
+              fontSize: 28,
+              color: PdfColors.blue700,
+            ),
+          ),
+        ]
+      )
+    ];
+    question.listAnswers?.forEach((element) {
+      widgetList.add(WidgetCheckBox(text: element,directionRTL:true));
       widgetList.add(SizedBox(height: 5));
     });
     widgetList.add(Divider(color: PdfColors.black));
