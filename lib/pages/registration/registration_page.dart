@@ -24,10 +24,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   TextEditingController passwordController = TextEditingController();
 
+
   final RoundedLoadingButtonController submitButtonController =  RoundedLoadingButtonController();
   String phoneNumber = "";
   bool? nameIsEmpty;
   bool? lastNameIsEmpty;
+  bool? emailIsEmpty;
   bool? passwordValid;
 
   @override
@@ -145,6 +147,43 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           ),
                         ),
                         Container(
+                          padding: EdgeInsets.all(10),
+                          child: TextField(
+                            cursorColor: Colors.white,
+                            controller: emailController,
+                            decoration: InputDecoration(
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1.0),
+                              ),
+                              disabledBorder: const OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1.0),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 1.0),
+                              ),
+                              labelText: "Email",
+                              labelStyle:
+                              GoogleFonts.courgette(color: Colors.white),
+                              //error/////////////////////////////////////////////
+                              errorText: emailIsEmpty != null? emailIsEmpty == false?"Enter Email":null:null,
+                              errorStyle: GoogleFonts.courgette(color: Colors.red),
+                              errorBorder: const OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.red, width: 1.0),
+                              ),
+                              focusedErrorBorder: const OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.red, width: 1.0),
+                              ),
+                            ),
+                            style: GoogleFonts.courgette(
+                                color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                        Container(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: TextField(
                             obscureText: true,
@@ -212,7 +251,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             },
                           ),
                         ),
-                    Container(
+                        Container(
                      // padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                       child:
                         RoundedLoadingButton(
@@ -283,7 +322,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   bool _validateForm(){
-    if(!_validateName(firstNameController.text) || !_validateLastName(lastNameController.text) || !_validatePassword(lastNameController.text)) {
+    if(!_validateName(firstNameController.text) || !_validateLastName(lastNameController.text)|| !_validateEmail(emailController.text) || !_validatePassword(passwordController.text)) {
       setState(() {});
       return false;
     }
@@ -320,9 +359,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
       return true;
     }
   }
-  String? _validateEmail(String value) {
+  bool _validateEmail(String value) {
+    emailIsEmpty = false;
     if (value.isEmpty) {
-      return "Enter email address";
+      return false;
     }
     // This is just a regular expression for email addresses
     String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
@@ -336,8 +376,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
     if (regExp.hasMatch(value)) {
       // So, the email is valid
-      return null;
+      emailIsEmpty = true;
+      return true;
     }
+    return false;
   }
 }
 
