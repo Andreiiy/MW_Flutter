@@ -87,13 +87,14 @@ class _StartPageState extends State<StartPage> {
                   style: GoogleFonts.courgette(color: Colors.white, fontSize: 26),
                 ),
               ),
+              Expanded(child: Container()),
               FloatingActionButton.extended(
                 backgroundColor: Colors.green,
                 onPressed: () {
-                  Navigator.pushNamed(context, registrationPage);
+                  Navigator.pushNamed(context, loginPage);
                 },
                 label: Text(
-                  getTranslated(context, 'registration')??"",
+                  getTranslated(context, 'login')??"",
                   style: GoogleFonts.courgette(color: Colors.white, fontSize: 26),
                 ),
               ),

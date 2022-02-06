@@ -9,12 +9,12 @@ import 'package:math_world/models/user.dart';
 import 'package:math_world/remote/repository.dart';
 import 'package:math_world/widgets/loading_button.dart';
 
-class RegistrationPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _RegistrationPageState createState() => _RegistrationPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _LoginPageState extends State<LoginPage> {
   Repository _repository = Repository();
   TextEditingController lastNameController = TextEditingController();
 

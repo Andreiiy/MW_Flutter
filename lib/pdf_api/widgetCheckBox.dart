@@ -68,7 +68,7 @@ class WidgetCheckBox extends StatelessWidget {
               text!,
               textAlign: textAlign,
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 18,
                 color: PdfColors.black,
               ),
             ),
@@ -86,7 +86,7 @@ class WidgetCheckBox extends StatelessWidget {
             text!,
             textAlign: textAlign,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 18,
               color: PdfColors.black,
             ),
           ),

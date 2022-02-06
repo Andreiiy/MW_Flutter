@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:math_world/localization/language_constants.dart';
 import 'package:math_world/math_generator/models/question.dart';
 import 'package:math_world/math_generator/models/test.dart';
-import 'package:math_world/pdf_api/pdf_fraction_widget.dart';
 import 'package:math_world/pdf_api/bidi.dart';
+import 'package:math_world/pdf_api/pdf_fraction_widget.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -134,9 +134,16 @@ class PdfApi {
             true,
             false));
       }
-      if ((test.exercises?.length ?? 1) % 2 == 0)
-        list.add(Container(height: 210));
+      int count = 0;
+      if ((test.exercises?.length ?? 0) < 3 && (test.exercises?.length ?? 0) > 0)
+        count = 3 - (test.exercises?.length ?? 0);
+      if ((test.exercises?.length ?? 0) > 3 && (test.exercises?.length ?? 0) % 3 != 0)
+        count = 3 - (test.exercises?.length ?? 0)% 3;
+
+      for(var i = count ; i > 0; i--)
+        list.add(Container(height: 130));
     }
+    ////////////////////////////////////////////////////////////////////////////
     if (test.listInsertNumbersExercises?.isNotEmpty == true) {
       if (currentLanguageCode != 'he') {
         list.add(Container(
@@ -150,16 +157,18 @@ class PdfApi {
                     .bidi(),
                 style: TextStyle(fontSize: 28, color: PdfColors.red500))));
       }
-      list.add(SizedBox(height: 10));
+      list.add(SizedBox(height: 50));
       test.listInsertNumbersExercises?.forEach((element) {
         list.add(getWidgetInsertNumbersQuestion(
-            test.listInsertNumbersExercises!.indexOf(element), element,currentLanguageCode == 'he'));
+            test.listInsertNumbersExercises!.indexOf(element),
+            element,
+            currentLanguageCode == 'he'));
       });
-      if ((test.listInsertNumbersExercises?.length ?? 1) % 2 == 0)
-        list.add(Container(height: 210));
+
+      if ((test.exercises?.length ?? 0) == 1 || (test.exercises?.length ?? 0) > 2 && (test.exercises?.length ?? 0) % 2 != 0)
+           list.add(Container(height: 300));
     }
-    if (list.length > 0 && list.length % 2 == 0)
-      list.add(Container(height: 180));
+
     ////////////////////////////////////////////////////////////////////////////
     if (test.listComparisonNumbersExercises?.isNotEmpty == true) {
       if (currentLanguageCode != 'he') {
@@ -217,7 +226,7 @@ class PdfApi {
     }
     if (list.length > 0 && list.length % 2 == 0)
       list.add(Container(height: 180));
-
+////////////////////////////////////////////////////////////////////////////////
     if (test.listMultiplicationTableExercises?.isNotEmpty == true) {
       if (currentLanguageCode != 'he') {
         list.addAll(getListQuestions(
@@ -236,9 +245,10 @@ class PdfApi {
       if ((test.listMultiplicationTableExercises?.length ?? 1) % 2 == 0)
         list.add(Container(height: 210));
     }
-    ////////////////////////////////////////////////////////////////////////////
     if (list.length > 0 && list.length % 2 == 0)
       list.add(Container(height: 180));
+    ////////////////////////////////////////////////////////////////////////////
+
     if (test.listExercisesWithFractions?.isNotEmpty == true) {
       if (currentLanguageCode != 'he') {
         list.add(Container(
@@ -283,10 +293,10 @@ class PdfApi {
       Container(
           child: Text(!directionRTL ? textSection : textSection.bidi(),
               style: TextStyle(
-                fontSize: 28,
+                fontSize: 22,
                 color: PdfColors.red500,
               ))),
-      SizedBox(height: 10)
+      SizedBox(height: 40)
     ];
     listQuestions.forEach((element) {
       if (!directionRTL)
@@ -304,18 +314,18 @@ class PdfApi {
       Text(
         "${(questionNumber + 1)}.                  ${question.exercise ?? ""}",
         style: TextStyle(
-          fontSize: 28,
+          fontSize: 20,
           color: PdfColors.blue700,
         ),
       ),
-      SizedBox(height: 10),
+      SizedBox(height: 5),
     ];
     question.listAnswers?.forEach((element) {
       widgetList.add(WidgetCheckBox(text: element));
       widgetList.add(SizedBox(height: 5));
     });
     widgetList.add(Divider(color: PdfColors.black));
-    widgetList.add(SizedBox(height: 5));
+    widgetList.add(SizedBox(height: 20));
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,11 +339,11 @@ class PdfApi {
     List<Widget> widgetList = [
       Row(children: [
         Expanded(child: Container()),
-        SizedBox(height: 10),
+        SizedBox(height: 5),
         Text(
           "${questionsWithWords ? (question.exercise ?? "").bidi() : (question.exercise ?? "")}                  .${(questionNumber + 1)}",
           style: TextStyle(
-            fontSize: 28,
+            fontSize: 24,
             color: PdfColors.blue700,
           ),
         ),
@@ -341,10 +351,10 @@ class PdfApi {
     ];
     question.listAnswers?.forEach((element) {
       widgetList.add(WidgetCheckBox(text: element, directionRTL: true));
-      widgetList.add(SizedBox(height: 5));
+      widgetList.add(SizedBox(height: 2));
     });
     widgetList.add(Divider(color: PdfColors.black));
-    widgetList.add(SizedBox(height: 5));
+    widgetList.add(SizedBox(height: 4));
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -360,7 +370,7 @@ class PdfApi {
         Text(
           "${(questionNumber + 1)}.",
           style: TextStyle(
-            fontSize: 28,
+            fontSize: 24,
             color: PdfColors.blue700,
           ),
         ),
@@ -399,6 +409,7 @@ class PdfApi {
       int questionNumber, Question question) {
     var widgetList = [
       Row(children: [
+        Expanded(child:Container()),
         Expanded(
             child: PdfFractionWidget(
                 operand: question.exerciseOperand1 ?? "",
@@ -420,9 +431,10 @@ class PdfApi {
       widgetList.add(
         //WidgetCheckBox(text:""));
         Row(children: [
-          Expanded(child: PdfFractionWidget(operand: element, textSize: 16)),
+          Expanded(child:Container()),
+          PdfFractionWidget(operand: element, textSize: 16),
           SizedBox(width: 10),
-          WidgetCheckBox(text: "", directionRTL: true),
+          WidgetCheckBox(text: ""),
         ]),
       );
       widgetList.add(SizedBox(height: 5));
@@ -444,36 +456,37 @@ class PdfApi {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            directionRTL?
-            Row(children: [
-              Expanded(child: Container()),
-              Text(
-                ".${questionNumber + 1}",
-                style: TextStyle(
-                  fontSize: 26,
-                  color: PdfColors.blue700,
-                ),
-              ),
-            ]):
-            Text(
-              "${questionNumber + 1}.",
-              style: TextStyle(
-                fontSize: 26,
-                color: PdfColors.blue700,
-              ),
-            ),
-            SizedBox(height: 5),
+            directionRTL
+                ? Row(children: [
+                    Expanded(child: Container()),
+                    Text(
+                      ".${questionNumber + 1}",
+                      style: TextStyle(
+                        fontSize: 26,
+                        color: PdfColors.blue700,
+                      ),
+                    ),
+                  ])
+                : Text(
+                    "${questionNumber + 1}.",
+                    style: TextStyle(
+                      fontSize: 26,
+                      color: PdfColors.blue700,
+                    ),
+                  ),
+            SizedBox(height: 20),
             rows[0],
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             rows[1],
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             rows[2],
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             rows[3],
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             rows[4],
-            SizedBox(height: 5),
+            SizedBox(height: 15),
             Divider(color: PdfColors.black),
+            SizedBox(height: 15),
           ]),
     );
   }
