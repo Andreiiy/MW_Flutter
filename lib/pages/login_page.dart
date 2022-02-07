@@ -16,13 +16,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   Repository _repository = Repository();
-  TextEditingController lastNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
 
   final RoundedLoadingButtonController submitButtonController =  RoundedLoadingButtonController();
 
-  bool? lastNameIsEmpty;
+  bool? emailIsEmpty;
   bool? passwordValid;
 
   @override
@@ -63,12 +63,12 @@ class _LoginPageState extends State<LoginPage> {
                                 getTranslated(context, "registration") ?? "",
                                 style: GoogleFonts.courgette(
                                     color: Colors.white, fontSize: 30))),
-
+                        //Email
                         Container(
                           padding: EdgeInsets.all(10),
                           child: TextField(
                             cursorColor: Colors.white,
-                            controller: lastNameController,
+                            controller: emailController,
                             decoration: InputDecoration(
                               enabledBorder: const OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -82,11 +82,11 @@ class _LoginPageState extends State<LoginPage> {
                                 borderSide: const BorderSide(
                                     color: Colors.white, width: 1.0),
                               ),
-                              labelText: getTranslated(context, "last_name"),
+                              labelText: "Email",
                               labelStyle:
                               GoogleFonts.courgette(color: Colors.white),
                               //error/////////////////////////////////////////////
-                              errorText: lastNameIsEmpty != null? lastNameIsEmpty == false?"Enter last name":null:null,
+                              errorText: emailIsEmpty != null? emailIsEmpty == false?"Enter Email":null:null,
                               errorStyle: GoogleFonts.courgette(color: Colors.red),
                               errorBorder: const OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -101,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                                 color: Colors.white, fontSize: 16),
                           ),
                         ),
+                        //Password
                         Container(
                           padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: TextField(
@@ -135,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-
+                        SizedBox(height: 20,),
                         Container(
                           // padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                             child:
@@ -187,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool _validateForm(){
-    if(!_validateLastName(lastNameController.text) || !_validatePassword(lastNameController.text)) {
+    if(!_validateEmail(emailController.text) || !_validatePassword(passwordController.text)) {
       setState(() {});
       return false;
     }
@@ -195,16 +196,7 @@ class _LoginPageState extends State<LoginPage> {
       return true;
   }
 
-  bool _validateLastName(String value) {
-    if (value.isEmpty) {
-      lastNameIsEmpty = false;
-      return false;
-    }
-    else {
-      lastNameIsEmpty = true;
-      return true;
-    }
-  }
+
   bool _validatePassword(String value) {
     if (value.isEmpty) {
       passwordValid = false;
@@ -215,9 +207,10 @@ class _LoginPageState extends State<LoginPage> {
       return true;
     }
   }
-  String? _validateEmail(String value) {
+  bool _validateEmail(String value) {
+    emailIsEmpty = false;
     if (value.isEmpty) {
-      return "Enter email address";
+      return false;
     }
     // This is just a regular expression for email addresses
     String p = "[a-zA-Z0-9\+\.\_\%\-\+]{1,256}" +
@@ -231,9 +224,12 @@ class _LoginPageState extends State<LoginPage> {
 
     if (regExp.hasMatch(value)) {
       // So, the email is valid
-      return null;
+      emailIsEmpty = true;
+      return true;
     }
+    return false;
   }
-}
+  }
+
 
 

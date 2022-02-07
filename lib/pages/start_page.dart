@@ -77,6 +77,7 @@ class _StartPageState extends State<StartPage> {
           // margin: EdgeInsets.all(20),
           child:Column(
             children: [
+              SizedBox(height: 20,),
               FloatingActionButton.extended(
                 backgroundColor: Colors.green,
                 onPressed: () {
@@ -89,15 +90,33 @@ class _StartPageState extends State<StartPage> {
               ),
               Expanded(child: Container()),
               FloatingActionButton.extended(
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.deepOrange,
                 onPressed: () {
-                  Navigator.pushNamed(context, loginPage);
+                  Navigator.pushNamed(context, registrationPage);
                 },
                 label: Text(
-                  getTranslated(context, 'login')??"",
-                  style: GoogleFonts.courgette(color: Colors.white, fontSize: 26),
+                  getTranslated(context, 'registration')??"",
+                  style: GoogleFonts.courgette(color: Colors.white, fontSize: 18),
                 ),
               ),
+
+              Row(children: [
+                Expanded(child: Container()),
+                Text(
+                  getTranslated(context, 'already_registered')??"",
+                  style: GoogleFonts.courgette(color: Colors.limeAccent, fontSize: 14),
+                ),
+                TextButton(
+                    onPressed:() {
+                      Navigator.pushNamed(context, loginPage);
+                },
+                    child: Text(
+                      getTranslated(context, 'login')??"",
+                      style: GoogleFonts.courgette(color: Colors.green, fontSize: 16),
+                    ),),
+                Expanded(child: Container()),
+              ],),
+              SizedBox(height: 20,),
             ],
           ),
         ),
