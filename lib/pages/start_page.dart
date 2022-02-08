@@ -92,7 +92,8 @@ class _StartPageState extends State<StartPage> {
               FloatingActionButton.extended(
                 backgroundColor: Colors.deepOrange,
                 onPressed: () {
-                  Navigator.pushNamed(context, registrationPage);
+                  //Navigator.pushNamed(context, registrationPage);
+                  Navigator.pushNamed(context, testHistoryPage);
                 },
                 label: Text(
                   getTranslated(context, 'registration')??"",

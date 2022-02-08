@@ -5,6 +5,7 @@ const String classSelectionPage = "class_selection_page";
 const String testSettingsPage = "test_settings_page";
 const String registrationPage = "registration_page";
 const String loginPage = "login_page";
+const String testHistoryPage = "test_history_page";
 
 
 

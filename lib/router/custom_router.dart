@@ -4,6 +4,7 @@ import 'package:math_world/pages/class_selection_page.dart';
 import 'package:math_world/pages/login_page.dart';
 import 'package:math_world/pages/registration/registration_page.dart';
 import 'package:math_world/pages/start_page.dart';
+import 'package:math_world/pages/test_history_paga.dart';
 import 'package:math_world/pages/test_page.dart';
 import 'package:math_world/pages/class_selection_page.dart';
 import 'package:math_world/pages/test_settings_page.dart';
@@ -30,6 +31,8 @@ class MathAppRouter {
         return MaterialPageRoute(builder: (_) => RegistrationPage());
         case loginPage:
         return MaterialPageRoute(builder: (_) => LoginPage());
+        case testHistoryPage:
+        return MaterialPageRoute(builder: (_) => TestHistoryPage());
       // case registrationRoute:
       //   return MaterialPageRoute(
       //       builder: (_) => RegistrationPage(settings.arguments != null
