@@ -139,6 +139,19 @@
   "ninety_seven" : "תשעים ושבה",
   "ninety_eight" : "תשעים ושמונה",
   "ninety_nine"  : "תשעים ותשע",
-  "hundred"  : "מאה"
+  "hundred"  : "מאה",
+
+  "january" : "ינואר",
+  "february" : "פברואר",
+  "march" : "מרץ",
+  "april" : "אפריל",
+  "may" : "מאי",
+  "june" : "יוני",
+  "july" : "יולי",
+  "august" : "אוגוסט",
+  "september" : "ספטמבר",
+  "october" : "אוקטובר",
+  "november" : "נובמבר",
+  "december" : "דצמבר"
 
 }

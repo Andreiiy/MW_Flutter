@@ -136,6 +136,19 @@
   "ninety_seven" : "девяносто семь",
   "ninety_eight" : "девяносто восемь",
   "ninety_nine"  : "девяносто девять",
-  "hundred"  : "сто"
+  "hundred"  : "сто",
+
+  "january" : "январь",
+  "february" : "февраль",
+  "march" : "март",
+  "april" : "апрель",
+  "may" : "май",
+  "june" : "июнь",
+  "july" : "июль",
+  "august" : "август",
+  "september" : "сентябрь",
+  "october" : "октябрь",
+  "november" : "ноябрь",
+  "december" : "Декабрь"
 
 }
