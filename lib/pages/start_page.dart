@@ -5,6 +5,7 @@ import 'package:math_world/classes/language.dart';
 import 'package:math_world/localization/language_constants.dart';
 import 'package:math_world/math_generator/math_generator.dart';
 import 'package:math_world/math_generator/models/generator_for_first_class.dart';
+import 'package:math_world/models/app_data.dart';
 import 'package:math_world/router/route_constants.dart';
 
 import '../main.dart';
@@ -84,67 +85,47 @@ class _StartPageState extends State<StartPage> {
                   Navigator.pushNamed(context, classSelectionPage);
                 },
                 label: Text(
-                  "Create test ",
+                  getTranslated(context, "create_test")??"",
                   style: GoogleFonts.courgette(color: Colors.white, fontSize: 26),
                 ),
               ),
               Expanded(child: Container()),
-              FloatingActionButton.extended(
-                backgroundColor: Colors.deepOrange,
-                onPressed: () {
-                  //Navigator.pushNamed(context, registrationPage);
-                  Navigator.pushNamed(context, testHistoryPage);
-                },
-                label: Text(
-                  getTranslated(context, 'registration')??"",
-                  style: GoogleFonts.courgette(color: Colors.white, fontSize: 18),
+              Visibility(child:
+              Column(children: [
+                FloatingActionButton.extended(
+                  backgroundColor: Colors.deepOrange,
+                  onPressed: () {
+                    Navigator.pushNamed(context, registrationPage);
+                  },
+                  label: Text(
+                    getTranslated(context, 'registration')??"",
+                    style: GoogleFonts.courgette(color: Colors.white, fontSize: 18),
+                  ),
                 ),
-              ),
 
-              Row(children: [
-                Expanded(child: Container()),
-                Text(
-                  getTranslated(context, 'already_registered')??"",
-                  style: GoogleFonts.courgette(color: Colors.limeAccent, fontSize: 14),
-                ),
-                TextButton(
+                Row(children: [
+                  Expanded(child: Container()),
+                  Text(
+                    getTranslated(context, 'already_registered')??"",
+                    style: GoogleFonts.courgette(color: Colors.limeAccent, fontSize: 14),
+                  ),
+                  TextButton(
                     onPressed:() {
                       Navigator.pushNamed(context, loginPage);
-                },
+                    },
                     child: Text(
                       getTranslated(context, 'login')??"",
                       style: GoogleFonts.courgette(color: Colors.green, fontSize: 16),
                     ),),
-                Expanded(child: Container()),
+                  Expanded(child: Container()),
+                ],),
               ],),
+                visible: true,
+              ),
               SizedBox(height: 20,),
             ],
           ),
         ),
-
-        // Visibility(
-        //   child: FloatingActionButton.extended(
-        //     backgroundColor: Colors.deepOrange,
-        //     onPressed: () {
-        //       setState(() {
-        //         widget.isCheckTest = true;
-        //       });
-        //       //Navigator.pushNamed(context, createMessagePage);
-        //     },
-        //     label: Text(
-        //       getTranslated(context, "finish_test") ?? " ",
-        //       style:
-        //       TextStyle(color: Colors.white, fontSize: 30),
-        //     ),
-        //   ),
-        //   visible: widget.isCheckTest == false,
-        // ),
-
-        //SizedBox(
-        //   height: 20,
-        //  )
-        // ],
-        // ),
       ),
     );
   }

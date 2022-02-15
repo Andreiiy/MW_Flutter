@@ -97,7 +97,7 @@ class _SplashScreenState extends State<SplashScreen> {
   startTime() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // prefs.setString('user',jsonEncode(AppData.user));
-    var _duration = new Duration(seconds: 2);
+    var _duration = new Duration(seconds: 1);
     return new Timer(_duration, checkUser);
   }
 
@@ -113,7 +113,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //   AppData.user = User.fromJson(jsonDecode(jsonUser));
     //   getCompany();
     // }else{
-    Future.delayed(const Duration(milliseconds: 2000), () {
+    Future.delayed(const Duration(milliseconds: 1000), () {
       Navigator.popAndPushNamed(context, startPage);
     });
 

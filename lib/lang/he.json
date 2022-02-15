@@ -47,6 +47,10 @@
 
   "table_size" : "גודל טבלה",
 
+  "average_grade" : "ציון ממוצה",
+  "history_tests" : "מבחני היסטוריה",
+  "create_test" : "צור מבחן",
+
   "from": "בין",
   "to": "ל-",
   "i": "אני",

@@ -6,6 +6,7 @@ import 'package:math_world/localization/language_constants.dart';
 import 'package:math_world/math_generator/math_generator.dart';
 import 'package:math_world/math_generator/models/point.dart';
 import 'package:math_world/router/route_constants.dart';
+import 'package:intl/intl.dart';
 
 class TestHistoryPage extends StatefulWidget {
   Map<String, int> listMonths = {
@@ -49,83 +50,7 @@ class TestHistoryPage extends StatefulWidget {
     Point(dateTimestemp: 1642392340000, number: 70),
   ];
 
-  final List<ChartTest> data = [
-    ChartTest(
-      number: 1,
-      points: 80,
-      barColor: charts.ColorUtil.fromDartColor(Colors.yellow),
-    ),
-    ChartTest(
-      number: 2,
-      points: 95,
-      barColor: charts.ColorUtil.fromDartColor(Colors.green),
-    ),
-    ChartTest(
-      number: 3,
-      points: 45,
-      barColor: charts.ColorUtil.fromDartColor(Colors.red),
-    ),
-    ChartTest(
-      number: 4,
-      points: 10,
-      barColor: charts.ColorUtil.fromDartColor(Colors.red),
-    ),
-    ChartTest(
-      number: 5,
-      points: 70,
-      barColor: charts.ColorUtil.fromDartColor(Colors.yellow),
-    ),
-    ChartTest(
-      number: 6,
-      points: 80,
-      barColor: charts.ColorUtil.fromDartColor(Colors.yellow),
-    ),
-    ChartTest(
-      number: 7,
-      points: 95,
-      barColor: charts.ColorUtil.fromDartColor(Colors.green),
-    ),
-    ChartTest(
-      number: 8,
-      points: 45,
-      barColor: charts.ColorUtil.fromDartColor(Colors.red),
-    ),
-    ChartTest(
-      number: 9,
-      points: 10,
-      barColor: charts.ColorUtil.fromDartColor(Colors.red),
-    ),
-    ChartTest(
-      number: 10,
-      points: 70,
-      barColor: charts.ColorUtil.fromDartColor(Colors.yellow),
-    ),
-    ChartTest(
-      number: 11,
-      points: 80,
-      barColor: charts.ColorUtil.fromDartColor(Colors.yellow),
-    ),
-    ChartTest(
-      number: 12,
-      points: 95,
-      barColor: charts.ColorUtil.fromDartColor(Colors.green),
-    ),
-    ChartTest(
-      number: 13,
-      points: 45,
-      barColor: charts.ColorUtil.fromDartColor(Colors.red),
-    ),
-    ChartTest(
-      number: 14,
-      points: 10,
-      barColor: charts.ColorUtil.fromDartColor(Colors.red),
-    ),
-    ChartTest(
-      number: 15,
-      points: 70,
-      barColor: charts.ColorUtil.fromDartColor(Colors.yellow),
-    ),
-  ];
+
 
   @override
   _TestHistoryPageState createState() => _TestHistoryPageState();
@@ -191,8 +116,7 @@ class _TestHistoryPageState extends State<TestHistoryPage> {
                               widget.listMonths.keys.toList())),
                     ])),
                   )),
-              Expanded(
-                  child: new PointsChart(
+               new PointsChart(
                       data: widget.currentListPoints
                           .map((point) => ChartTest(
                               number: indexList++,
@@ -204,18 +128,37 @@ class _TestHistoryPageState extends State<TestHistoryPage> {
                                           Colors.yellow)
                                       : charts.ColorUtil.fromDartColor(
                                           Colors.green)))
-                          .toList())),
-              FloatingActionButton.extended(
-                backgroundColor: Colors.deepOrange,
-                onPressed: () {
-                  Navigator.pushNamed(context, registrationPage);
-                },
-                label: Text(
-                  getTranslated(context, 'registration') ?? "",
-                  style:
-                      GoogleFonts.courgette(color: Colors.white, fontSize: 18),
-                ),
-              ),
+                          .toList()),
+              Expanded(child: Container(
+                color: Color(0xff256E59),
+                padding: EdgeInsets.all(10),
+                child: new ListView.builder(
+                    itemCount: widget.currentListPoints.length,
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      return ListTile(
+                        title:Row(children: [
+                          Text(DateFormat('d.M.y').format(DateTime.fromMicrosecondsSinceEpoch(widget.currentListPoints[index].dateTimestemp * 1000)),style:TextStyle(color: Colors.white)),
+                          Expanded(child: Container()),
+                          Text(widget.currentListPoints[index].number.toString(),style:TextStyle(fontSize: 18, color: widget.currentListPoints[index].number <= 50
+                              ? Colors.red
+                              : widget.currentListPoints[index].number < 80
+                              ? Colors.yellow
+                              : Colors.green))
+                        ],)
+                      );
+                    }),
+              ),),
+              // FloatingActionButton.extended(
+              //   backgroundColor: Colors.deepOrange,
+              //   onPressed: () {
+              //     Navigator.pushNamed(context, registrationPage);
+              //   },
+              //   label: Text(
+              //     getTranslated(context, 'registration') ?? "",
+              //     style:
+              //         GoogleFonts.courgette(color: Colors.white, fontSize: 18),
+              //   ),
+              // ),
               SizedBox(height: 20),
             ],
           ),
@@ -290,7 +233,7 @@ class _PointsChartState extends State<PointsChart> {
           child: Column(
             children: <Widget>[
               Text(
-                "Yearly Growth in the Flutter Community",
+                (getTranslated(context, 'average_grade')??"")+" "+getAverageGrade().toString(),
                 style: Theme.of(context).textTheme.body2,
               ),
               Expanded(
@@ -301,7 +244,17 @@ class _PointsChartState extends State<PointsChart> {
         ),
       ),
     );
+
+
   }
 
-
+ int getAverageGrade() {
+    int pointsSum = 0;
+    widget.data.forEach((element) {
+      pointsSum+=element.points;
+    });
+    return pointsSum ~/ widget.data.length;
+  }
 }
+
+

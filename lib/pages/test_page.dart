@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:math_world/localization/language_constants.dart';
 import 'package:math_world/math_generator/models/class_settings.dart';
+import 'package:math_world/router/route_constants.dart';
 import 'package:math_world/widgets/custom_radio_widget.dart';
 import 'package:math_world/widgets/widget_fraction.dart';
 
@@ -760,7 +761,7 @@ class _TestPageState extends State<TestPage>
                         ),
                         Visibility(
                           child: Container(
-                            margin: EdgeInsets.all(20),
+                            margin: EdgeInsets.all(10),
                             child: FloatingActionButton.extended(
                               backgroundColor: Colors.green,
                               onPressed: () {
@@ -771,6 +772,23 @@ class _TestPageState extends State<TestPage>
                                 getTranslated(context, "start_new_test") ?? " ",
                                 style: GoogleFonts.courgette(
                                     color: Colors.white, fontSize: 26),
+                              ),
+                            ),
+                          ),
+                          visible: widget.isCheckTest,
+                        ),
+                        Visibility(
+                          child: Container(
+                            margin: EdgeInsets.all(10),
+                            child: FloatingActionButton.extended(
+                              backgroundColor: Colors.blue,
+                              onPressed: () {
+                                Navigator.pushNamed(context, testHistoryPage);
+                              },
+                              label: Text(
+                                getTranslated(context, "history_tests") ?? " ",
+                                style: GoogleFonts.courgette(
+                                    color: Colors.white, fontSize: 20),
                               ),
                             ),
                           ),
